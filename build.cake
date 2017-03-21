@@ -29,7 +29,7 @@ var buildNumber                 = HasArgument("BuildNumber") ? Argument<int>("Bu
 //////////////////////////////////////////////////////////////////////
 // DEFINE FILES & DIRECTORIES
 //////////////////////////////////////////////////////////////////////
-var packDirs                    = new [] { Directory("./src/App.Metrics.Extensions.Reporting.Console"), Directory("./src/App.Metrics.Extensions.Reporting.TextFile"), Directory("./src/App.Metrics.Extensions.Reporting.InfluxDB") };
+var packDirs                    = new [] { Directory("./src/App.Metrics.Extensions.Reporting.Console"), Directory("./src/App.Metrics.Extensions.Reporting.TextFile"), Directory("./src/App.Metrics.Extensions.Reporting.InfluxDB"), Directory("./src/App.Metrics.Extensions.Reporting.Prometheus") };
 var artifactsDir                = (DirectoryPath) Directory("./artifacts");
 var testResultsDir              = (DirectoryPath) artifactsDir.Combine("test-results");
 var coverageResultsDir          = (DirectoryPath) artifactsDir.Combine("coverage");
@@ -63,18 +63,18 @@ var excludeFromCoverage			= "*.AppMetricsExcludeFromCodeCoverage*";
 Task("Clean")
     .Does(() =>
 {
-    CleanDirectory(artifactsDir); 
+    CleanDirectory(artifactsDir);
 	CleanDirectory(coverageResultsDir);
 	CleanDirectory(testResultsDir);
 });
 
 Task("Restore")
-    .IsDependentOn("Clean")    
+    .IsDependentOn("Clean")
     .Does(() =>
-{	
+{
 	var settings = new DotNetCoreRestoreSettings
-    {        
-        Sources = new [] { "https://api.nuget.org/v3/index.json", "https://www.myget.org/F/alhardy/api/v3/index.json" }	
+    {
+        Sources = new [] { "https://api.nuget.org/v3/index.json", "https://www.myget.org/F/alhardy/api/v3/index.json" }
     };
 
 	var projects = solution.GetProjects();
@@ -82,19 +82,19 @@ Task("Restore")
 	foreach(var project in projects)
 	{
 	    DotNetCoreRestore(project.Path.ToString(), settings);
-    }    
+    }
 });
 
-Task("Build")    
+Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
-{	
+{
 	var projects = solution.GetProjects();
-    
+
 	var settings = new DotNetCoreBuildSettings  { Configuration = configuration };
 
     foreach(var project in projects)
-    {		
+    {
 		if (!IsRunningOnWindows())
         {
 			// Ignore Net452 on non-windows environments
@@ -106,8 +106,8 @@ Task("Build")
 			var parsedProject = ParseProject(new FilePath(project.Path.ToString()), configuration);
 
 			if (parsedProject.IsLibrary() && !project.Path.ToString().Contains(".Facts") && !project.Path.ToString().Contains(".Benchmarks"))
-			{				
-				settings.Framework = "netstandard1.6";				
+			{
+				settings.Framework = "netstandard1.6";
 			}
 			else
 			{
@@ -115,14 +115,14 @@ Task("Build")
 			}
 
 			Context.Information("Building as " + settings.Framework + ": " +  project.Path.ToString());
-        }	 
+        }
 
         DotNetCoreBuild(project.Path.ToString(), settings);
-    }    
+    }
 });
 
 Task("Pack")
-    .IsDependentOn("Restore")    
+    .IsDependentOn("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
@@ -144,11 +144,11 @@ Task("Pack")
         VersionSuffix = versionSuffix,
 		NoBuild = true
     };
-    
+
     foreach(var packDir in packDirs)
     {
         DotNetCorePack(packDir, settings);
-    }    
+    }
 });
 
 Task("RunInspectCode")
@@ -161,7 +161,7 @@ Task("RunInspectCode")
 
 Task("RunTests")
 	.WithCriteria(() => coverWith == "None" || !IsRunningOnWindows())
-    .IsDependentOn("Build")	
+    .IsDependentOn("Build")
     .Does(() =>
 {
     var projects = GetFiles("./test/**/*.csproj");
@@ -171,8 +171,8 @@ Task("RunTests")
     Context.Information("Found " + projects.Count() + " projects");
 
     foreach (var project in projects)
-    {		
-		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;				
+    {
+		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;
         var settings = new DotNetCoreTestSettings
 		{
 			Configuration = configuration,
@@ -188,16 +188,16 @@ Task("RunTests")
 		if (!IsRunningOnWindows())
         {
 			settings.Framework = "netcoreapp1.1";
-        }	 
+        }
 
 		DotNetCoreTest(project.FullPath, settings);
     }
 });
 
-Task("HtmlCoverageReport")    
-    .WithCriteria(() => FileExists(testCoverageOutputFilePath) && coverWith != "None" && IsRunningOnWindows())    
+Task("HtmlCoverageReport")
+    .WithCriteria(() => FileExists(testCoverageOutputFilePath) && coverWith != "None" && IsRunningOnWindows())
     .IsDependentOn("RunTests")
-    .Does(() => 
+    .Does(() =>
 {
     if (coverWith == "DotCover")
 	{
@@ -216,7 +216,7 @@ Task("HtmlCoverageReport")
 
 Task("RunTestsWithOpenCover")
 	.WithCriteria(() => coverWith == "OpenCover" && IsRunningOnWindows())
-    .IsDependentOn("Build")	
+    .IsDependentOn("Build")
     .Does(() =>
 {
 	var projects = GetFiles("./test/**/*.csproj");
@@ -232,12 +232,12 @@ Task("RunTestsWithOpenCover")
     };
 
     foreach (var project in projects)
-    {		
-		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;				
-        
+    {
+		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;
+
 		Action<ICakeContext> testAction = tool => { tool.DotNetCoreTest(project.ToString(), settings); };
 
-		var openCoverSettings = new OpenCoverSettings { 
+		var openCoverSettings = new OpenCoverSettings {
 			ReturnTargetCodeOffset = 1,
 			SkipAutoProps = true,
 			Register = "user",
@@ -250,7 +250,7 @@ Task("RunTestsWithOpenCover")
 		openCoverSettings.ExcludeByAttribute(excludeFromCoverage);
 		openCoverSettings.ExcludeByFile(openCoverExcludeFile);
 
-		OpenCover(testAction, testOCoverageOutputFilePath, openCoverSettings);			
+		OpenCover(testAction, testOCoverageOutputFilePath, openCoverSettings);
     }
 });
 
@@ -261,14 +261,14 @@ Task("PublishTestResults")
     .Does(() =>
 {
 	if (IsRunningOnWindows())
-	{		
+	{
 		CreateDirectory(testResultsDir);
 
 		var projects = GetFiles("./test/**/*.csproj");
-	
+
 		foreach (var project in projects)
-		{		
-			var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;		
+		{
+			var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;
 
 			IEnumerable<FilePath> filePaths = GetFiles(System.IO.Path.GetDirectoryName(project.ToString()) + "/TestResults" + "/*.trx");
 
@@ -281,17 +281,17 @@ Task("PublishTestResults")
 				MoveFiles(filePath.FullPath, testResultsDir);
 				MoveFile(testResultsDir + "/" + filePath.GetFilename(), testResultsDir + "/" + folderName + ".trx");
 			}
-		}	
+		}
 	}
 });
 
 Task("RunTestsWithDotCover")
 	.WithCriteria(() => coverWith == "DotCover" && IsRunningOnWindows())
-    .IsDependentOn("Build")	
+    .IsDependentOn("Build")
     .Does(() =>
 {
 	var projects = GetFiles("./test/**/*.csproj");
-    
+
     CreateDirectory(coverageResultsDir);
 
     Context.Information("Found " + projects.Count() + " projects");
@@ -303,33 +303,33 @@ Task("RunTestsWithDotCover")
     };
 
     foreach (var project in projects)
-    {		
-		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;				
-        
+    {
+		var folderName = new System.IO.DirectoryInfo(System.IO.Path.GetDirectoryName(project.ToString())).Name;
+
 		Action<ICakeContext> testAction = tool => { tool.DotNetCoreTest(project.ToString(), settings); };
 
-		var dotCoverSettings = new DotCoverCoverSettings 
+		var dotCoverSettings = new DotCoverCoverSettings
 		{
 			ArgumentCustomization = args => args.Append(@"/HideAutoProperties")
 				.Append(@"/AttributeFilters=" + excludeFromCoverage)
-				.Append(@"/ReturnTargetExitCode")								
+				.Append(@"/ReturnTargetExitCode")
 		};
-					
+
 		dotCoverSettings.WithFilter(coverIncludeFilter).WithFilter(coverExcludeFilter);
 
-		var coverageFile = coverageResultsDir.FullPath + folderName + ".dcvr";					
+		var coverageFile = coverageResultsDir.FullPath + folderName + ".dcvr";
 
-		DotCoverCover(testAction, new FilePath(coverageFile), dotCoverSettings);	
+		DotCoverCover(testAction, new FilePath(coverageFile), dotCoverSettings);
 
-		MoveFiles(coverageFile, coverageResultsDir);				
-    }    
+		MoveFiles(coverageFile, coverageResultsDir);
+    }
 
-	var snapshots = GetFiles(coverageResultsDir.FullPath + "/*.dcvr");		
+	var snapshots = GetFiles(coverageResultsDir.FullPath + "/*.dcvr");
 
-	if (snapshots != null && snapshots.Any()) 
+	if (snapshots != null && snapshots.Any())
 	{
 		DotCoverMerge(snapshots,
-			new FilePath(mergedCoverageSnapshots), null);			
+			new FilePath(mergedCoverageSnapshots), null);
 
 		DotCoverReport(
 			mergedCoverageSnapshots,
@@ -339,13 +339,13 @@ Task("RunTestsWithDotCover")
 });
 
 
-Task("PublishCoverage")    
+Task("PublishCoverage")
     .WithCriteria(() => FileExists(testOCoverageOutputFilePath))
     .WithCriteria(() => !BuildSystem.IsLocalBuild)
 	.WithCriteria(() => coverWith == "OpenCover")
     .WithCriteria(() => !string.IsNullOrEmpty(coverallsToken))
     .IsDependentOn("RunTests")
-    .Does(() => 
+    .Does(() =>
 {
     CoverallsIo(testOCoverageOutputFilePath, new CoverallsIoSettings()
     {
@@ -357,19 +357,19 @@ Task("PublishCoverage")
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Default")	
+Task("Default")
     .IsDependentOn("Build")
-	.IsDependentOn("PublishTestResults")	
+	.IsDependentOn("PublishTestResults")
     .IsDependentOn("Pack")
 	.IsDependentOn("HtmlCoverageReport")
-	.IsDependentOn("RunInspectCode");	
+	.IsDependentOn("RunInspectCode");
 
 Task("AppVeyor")
     .IsDependentOn("Build")
-	.IsDependentOn("PublishTestResults")	
+	.IsDependentOn("PublishTestResults")
     .IsDependentOn("Pack")
 	.IsDependentOn("HtmlCoverageReport")
-	.IsDependentOn("RunInspectCode")	
+	.IsDependentOn("RunInspectCode")
     .IsDependentOn("PublishCoverage");
 
 //////////////////////////////////////////////////////////////////////
