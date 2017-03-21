@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <Description>Provides prometheus reporter as asp.net core middleware to App Metrics</Description>
+    <Copyright>Allan Hardy 2016</Copyright>
+    <AssemblyTitle>App.Metrics.Extensions.Reporting.Prometheus</AssemblyTitle>
+    <Authors>Allan Hardy</Authors>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>App.Metrics.Extensions.Reporting.Prometheus</AssemblyName>
+    <PackageId>App.Metrics.Extensions.Reporting.Prometheus</PackageId>
+    <PackageTags>Metrics;Monitoring;Instrumentation;Reporting;Prometheus</PackageTags>
+    <PackageIconUrl>https://alhardy.github.io/app-metrics-docs/logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://alhardy.github.io/app-metrics-docs/getting-started/reporting/index.html#console-reporter</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/alhardy/AppMetrics.Reporting/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/alhardy/AppMetrics.Reporting</RepositoryUrl>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <CodeAnalysisRuleSet>..\..\AppMetrics.ruleset</CodeAnalysisRuleSet>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="App.Metrics" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.0" />
+    <PackageReference Include="protobuf-net" Version="2.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+</Project>

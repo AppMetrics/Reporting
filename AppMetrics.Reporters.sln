@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D805782-756E-4C98-B22E-F502BEE95318}"
 EndProject
@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{4199989A-27B
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Reporting.Prometheus", "src\App.Metrics.Extensions.Reporting.Prometheus\App.Metrics.Extensions.Reporting.Prometheus.csproj", "{5E279991-F1C4-46A5-A228-32534F915D78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{84005F55-AF0E-40F4-A596-129E19C418CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84005F55-AF0E-40F4-A596-129E19C418CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84005F55-AF0E-40F4-A596-129E19C418CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E279991-F1C4-46A5-A228-32534F915D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E279991-F1C4-46A5-A228-32534F915D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E279991-F1C4-46A5-A228-32534F915D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E279991-F1C4-46A5-A228-32534F915D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,5 +79,6 @@ Global
 		{84005F55-AF0E-40F4-A596-129E19C418CE} = {DD2E4647-7125-4CE3-9BA5-B45A26113A31}
 		{E1A943F7-5493-4B64-A448-3E9EEA582E20} = {31A4DDB1-952E-4EED-96EF-29C669279A86}
 		{4199989A-27B6-4A6A-99C2-1AF6B01DA5EB} = {31A4DDB1-952E-4EED-96EF-29C669279A86}
+		{5E279991-F1C4-46A5-A228-32534F915D78} = {2D805782-756E-4C98-B22E-F502BEE95318}
 	EndGlobalSection
 EndGlobal
