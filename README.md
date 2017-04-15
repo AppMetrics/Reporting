@@ -18,6 +18,7 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 ## Other Reporters for App Metrics
 
 - [InfluxDB](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
+- [Elasticsearch](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
 
 ## How to build
 
@@ -74,6 +75,7 @@ See the [contribution guidlines](https://github.com/alhardy/AppMetrics/blob/mast
 ## Acknowledgements
 
 * [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/)
+* [Elasticsearch](https://www.elastic.co/)
 * [DocFX](https://dotnet.github.io/docfx/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [XUnit](https://xunit.github.io/)
