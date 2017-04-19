@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using App.Metrics.Tagging;
 
 namespace App.Metrics.Extensions.Reporting.Graphite.Client
@@ -95,9 +96,9 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
             var builder = new StringBuilder();
             foreach (var token in _tokens)
             {
-                builder.Append(token.GetValue(context));
+                builder.Append(GraphiteName.Escape(token.GetValue(context), true));
             }
-            return builder.ToString().Trim('.');
+            return Regex.Replace(builder.ToString().Trim('.'), "[.]{2,}", ".");
         }
     }
 }
