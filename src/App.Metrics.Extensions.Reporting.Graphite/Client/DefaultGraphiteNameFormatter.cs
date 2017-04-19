@@ -9,39 +9,22 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
 {
     public class DefaultGraphiteNameFormatter : IGraphiteNameFormatter
     {
-        private abstract class Token
-        {
-            protected readonly string Key;
+        private delegate string RenderToken(Dictionary<string, string> context);
 
-            protected Token(string key)
-            {
-                Key = key;
-            }
+        private readonly List<RenderToken> _tokens;
 
-            public abstract string GetValue(Dictionary<string, string> context);
-        }
+        private static RenderToken Const(string value) => _=>value;
 
-        private class ConstToken : Token
-        {
-            public ConstToken(string key) : base(key) { }
-            public override string GetValue(Dictionary<string, string> context) => Key;
-        }
-
-        private class VarToken : Token
-        {
-            public VarToken(string key) : base(key) { }
-            public override string GetValue(Dictionary<string, string> context) => context.TryGetValue(Key, out var value) ? value : string.Empty;
-        }
-
-        private readonly List<Token> _tokens;
+        private static RenderToken Variable(string name)
+            => context => context.TryGetValue(name, out var result) ? result : string.Empty;
 
         public DefaultGraphiteNameFormatter()
         {
-            _tokens = new List<Token>(3)
+            _tokens = new List<RenderToken>(3)
             {
-                new VarToken("type"),
-                new VarToken("context"),
-                new VarToken("nameWithUnit")
+                Variable("type"),
+                Variable("context"),
+                Variable("nameWithUnit")
             };
         }
 
@@ -73,30 +56,33 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
             tagsDictionary["nameWithUnit"] = nameWithUnit;
             tagsDictionary["context"] = context;
 
-            return BuildTemplate(tagsDictionary);
+            return Render(tagsDictionary);
         }
 
-        private static List<Token> CreateTemplate(string template)
+        private static List<RenderToken> CreateTemplate(string template)
         {
             var templateItems = template.Split('{', '}');
-            var result = new List<Token>(templateItems.Length);
+            var result = new List<RenderToken>(templateItems.Length);
             var isVar = template.StartsWith("{", StringComparison.Ordinal);
             
             foreach (var item in templateItems)
             {
-                result.Add(isVar ? (Token)new VarToken(item) : new ConstToken(item));
+                if (!string.IsNullOrEmpty(item))
+                {
+                    result.Add(isVar ? Variable(item) : Const(item));
+                }
                 isVar = !isVar;
             }
 
             return result;
         }
 
-        private string BuildTemplate(Dictionary<string, string> context)
+        private string Render(Dictionary<string, string> context)
         {
             var builder = new StringBuilder();
             foreach (var token in _tokens)
             {
-                builder.Append(GraphiteName.Escape(token.GetValue(context), true));
+                builder.Append(GraphiteName.Escape(token(context), true));
             }
             return Regex.Replace(builder.ToString().Trim('.'), "[.]{2,}", ".");
         }
