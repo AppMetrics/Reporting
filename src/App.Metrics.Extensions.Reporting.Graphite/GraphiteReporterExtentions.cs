@@ -28,8 +28,9 @@ namespace App.Metrics.Extensions.Reporting.Graphite
                 Host = host,
                 Port = port,
                 ConnectionType = connectionType,
-                NameFormatter = string.IsNullOrEmpty(metricTemplate) ? 
-                    new DefaultGraphiteNameFormatter(): new DefaultGraphiteNameFormatter(metricTemplate)
+                MetricNameFormatter = string.IsNullOrEmpty(metricTemplate)
+                    ? new GraphiteMetricNameFormatter()
+                    : new GraphiteMetricNameFormatter(metricTemplate)
             };
 
             factory.AddGraphite(settings, filter);

@@ -8,10 +8,12 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
         {
             return new GraphiteLongValue { Value = value };
         }
+
         public static GraphiteValue ToGraphiteValue(this double value)
         {
             return new GraphiteDoubleValue { Value = value };
         }
+
         public static GraphiteValue ToGraphiteValue<T>(this T value)
         {
             return new GraphiteValue<T> { Value = value };

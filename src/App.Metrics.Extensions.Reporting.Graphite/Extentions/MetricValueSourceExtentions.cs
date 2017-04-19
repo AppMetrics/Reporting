@@ -12,9 +12,9 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
 {
     internal static class MetricValueSourceExtentions
     {
-        internal static GraphiteName ToGraphiteName<T>(this MetricValueSourceBase<T> valueSource, MetricType type) => GraphiteName.From(type, valueSource.Unit).WithFolder(valueSource.Name);
+        public static GraphiteMetricName ToGraphiteName<T>(this MetricValueSourceBase<T> valueSource, MetricType type) => GraphiteMetricName.From(type, valueSource.Unit).WithFolder(valueSource.Name);
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetCounterItemsToSend(this CounterValueSource valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetCounterItemsToSend(this CounterValueSource valueSource)
         {
             var name = valueSource.ToGraphiteName(MetricType.Counter);
 
@@ -36,7 +36,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             }
         }
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetHistogramItemsToSend(this MetricValueSourceBase<HistogramValue> valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetHistogramItemsToSend(this MetricValueSourceBase<HistogramValue> valueSource)
         {
             var name = valueSource.ToGraphiteName(MetricType.Histogram);
             var value = valueSource.Value;
@@ -55,7 +55,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             yield return (name.WithFolder("p99,9"), value.Percentile999.ToGraphiteValue());
         }
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetMeterItemsToSend(this MetricValueSourceBase<MeterValue> valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetMeterItemsToSend(this MetricValueSourceBase<MeterValue> valueSource)
         {
             var name = valueSource.ToGraphiteName(MetricType.Meter);
             var value = valueSource.Value;
@@ -79,7 +79,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             }
         }
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetTimerItemsToSend(this TimerValueSource valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetTimerItemsToSend(this TimerValueSource valueSource)
         {
             var name = valueSource.ToGraphiteName(MetricType.Timer);
             var value = valueSource.Value;
@@ -109,7 +109,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             yield return (name.WithFolder("Duration-p999"), value.Histogram.Percentile999.ToGraphiteValue());
         }
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetGaugeItemsToSend(this MetricValueSourceBase<double> valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetGaugeItemsToSend(this MetricValueSourceBase<double> valueSource)
         {
             if (!double.IsNaN(valueSource.Value) && !double.IsInfinity(valueSource.Value))
             {
@@ -117,7 +117,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             }
         }
 
-        public static IEnumerable<(GraphiteName name, GraphiteValue value)> GetApdexItemsToSend(this MetricValueSourceBase<ApdexValue> valueSource)
+        public static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetApdexItemsToSend(this MetricValueSourceBase<ApdexValue> valueSource)
         {
             var name = valueSource.ToGraphiteName(MetricType.Apdex);
             var value = valueSource.Value;
@@ -134,7 +134,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Extentions
             yield return (name.WithFolder("Frustrating"), value.Frustrating.ToGraphiteValue());
         }
 
-        private static IEnumerable<(GraphiteName name, GraphiteValue value)> GetMeterItemsToSend(this MeterValue value, GraphiteName name)
+        private static IEnumerable<(GraphiteMetricName name, GraphiteValue value)> GetMeterItemsToSend(this MeterValue value, GraphiteMetricName name)
         {
             var rateUnit = value.RateUnit;
             name = name.WithRate(rateUnit);

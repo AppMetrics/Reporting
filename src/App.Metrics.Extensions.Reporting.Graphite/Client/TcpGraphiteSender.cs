@@ -45,7 +45,11 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
             try
             {
                 await InitClient();
-                if (_client == null) return;
+                if (_client == null)
+                {
+                    return;
+                }
+
                 await _client.GetStream().WriteAsync(bytes, 0, bytes.Length);
             }
             catch (Exception ex)
@@ -72,7 +76,6 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
                     _client = null;
                     _logger.LogError((int)LoggingEvents.TcpClientCreateError, ex, "Unable to create TcpClient");
                 }
-                
             }
         }
     }

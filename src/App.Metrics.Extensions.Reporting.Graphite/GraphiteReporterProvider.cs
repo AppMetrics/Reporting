@@ -38,7 +38,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite
                     throw new InvalidOperationException("Unknown ConnectionType");
             }
 
-            return new GraphiteReporter(sender, _settings.NameFormatter, name, _settings.ReportInterval, loggerFactory);
+            return new GraphiteReporter(sender, _settings.MetricNameFormatter, name, _settings.ReportInterval, loggerFactory);
         }
 
         /// <inheritdoc />

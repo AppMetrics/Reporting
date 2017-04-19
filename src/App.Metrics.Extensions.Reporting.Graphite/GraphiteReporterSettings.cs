@@ -15,7 +15,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite
 
         public ConnectionType ConnectionType { get; set; }
 
-        public IGraphiteNameFormatter NameFormatter { get; set; } = new DefaultGraphiteNameFormatter();
+        public IGraphiteMetricNameFormatter MetricNameFormatter { get; set; } = new GraphiteMetricNameFormatter();
     }
 
     public enum ConnectionType
@@ -24,10 +24,11 @@ namespace App.Metrics.Extensions.Reporting.Graphite
         /// Tcp (Recommended)
         /// </summary>
         Tcp,
+
        /// <summary>
        /// Udp
        /// </summary>
-       /// 
+       ///
         Udp
     }
 }

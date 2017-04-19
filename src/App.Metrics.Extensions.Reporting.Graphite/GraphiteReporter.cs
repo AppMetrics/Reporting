@@ -19,15 +19,15 @@ namespace App.Metrics.Extensions.Reporting.Graphite
 {
     public class GraphiteReporter : IMetricReporter
     {
-        private readonly IGraphiteNameFormatter _nameFormatter;
+        private readonly IGraphiteMetricNameFormatter _metricNameFormatter;
         private readonly GraphiteSender _graphiteSender;
         private readonly ILogger<GraphiteReporter> _logger;
 
-        public GraphiteReporter(GraphiteSender graphiteSender, IGraphiteNameFormatter nameFormatter, string name, TimeSpan reportInterval, ILoggerFactory loggerFactory)
+        public GraphiteReporter(GraphiteSender graphiteSender, IGraphiteMetricNameFormatter metricNameFormatter, string name, TimeSpan reportInterval, ILoggerFactory loggerFactory)
         {
             _graphiteSender = graphiteSender;
-            _nameFormatter = nameFormatter;
-            _logger = loggerFactory.CreateLogger< GraphiteReporter>();
+            _metricNameFormatter = metricNameFormatter;
+            _logger = loggerFactory.CreateLogger<GraphiteReporter>();
 
             Name = name;
             ReportInterval = reportInterval;
@@ -40,13 +40,13 @@ namespace App.Metrics.Extensions.Reporting.Graphite
         public TimeSpan ReportInterval { get; }
 
         /// <inheritdoc />
-        public void Dispose() => _graphiteSender.Dispose(); 
+        public void Dispose() => _graphiteSender.Dispose();
 
         /// <inheritdoc />
         public Task<bool> EndAndFlushReportRunAsync(IMetrics metrics) => _graphiteSender.Flush().ContinueWith(t => t.IsCompleted);
 
         /// <inheritdoc />
-        public void StartReportRun(IMetrics metrics) {  }
+        public void StartReportRun(IMetrics metrics) { }
 
         /// <inheritdoc />
         public void ReportEnvironment(EnvironmentInfo environmentInfo) { }
@@ -103,7 +103,6 @@ namespace App.Metrics.Extensions.Reporting.Graphite
             }
 
             _logger.LogTrace($"Metric {typeof(T)} for {Name} was not sent");
-
         }
 
         private void ReportApdex(string context, MetricValueSourceBase<ApdexValue> valueSource)
@@ -167,10 +166,10 @@ namespace App.Metrics.Extensions.Reporting.Graphite
                 Send(context, valueSource.Tags, item.name, item.value);
             }
         }
-        
-        private void Send(string context, MetricTags tags, GraphiteName name, GraphiteValue value)
+
+        private void Send(string context, MetricTags tags, GraphiteMetricName name, GraphiteValue value)
         {
-            _graphiteSender.Send(_nameFormatter.Format(context, tags, name), value.ToString());
+            _graphiteSender.Send(_metricNameFormatter.Format(context, tags, name), value.ToString());
         }
     }
 }
