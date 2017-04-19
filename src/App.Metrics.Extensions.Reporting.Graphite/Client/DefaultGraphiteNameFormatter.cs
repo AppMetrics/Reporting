@@ -41,8 +41,7 @@ namespace App.Metrics.Extensions.Reporting.Graphite.Client
             var unit = GraphiteName.Escape(name.Unit.Name);
 
             var escapedName = string.Join(".",
-                name.Folder.Select(x => x.Split('|').First())
-                    .Select(x => GraphiteName.Escape(x))
+                name.Folder.Select(x => GraphiteName.Escape(x))
                     .Where(x => !string.IsNullOrEmpty(x)));
 
             string nameWithUnit;
