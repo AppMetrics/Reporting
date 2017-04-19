@@ -42,6 +42,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Repo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Reporting.ElasticSearch", "src\App.Metrics.Extensions.Reporting.ElasticSearch\App.Metrics.Extensions.Reporting.ElasticSearch.csproj", "{681A90A6-CE3B-41D0-93FE-5C57849A120D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Metrics.Extensions.Reporting.Graphite", "src\App.Metrics.Extensions.Reporting.Graphite\App.Metrics.Extensions.Reporting.Graphite.csproj", "{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{681A90A6-CE3B-41D0-93FE-5C57849A120D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{681A90A6-CE3B-41D0-93FE-5C57849A120D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{681A90A6-CE3B-41D0-93FE-5C57849A120D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 		{F07C2053-2AD0-4FA0-8265-761FCE289F59} = {2D805782-756E-4C98-B22E-F502BEE95318}
 		{84005F55-AF0E-40F4-A596-129E19C418CE} = {DD2E4647-7125-4CE3-9BA5-B45A26113A31}
 		{681A90A6-CE3B-41D0-93FE-5C57849A120D} = {2D805782-756E-4C98-B22E-F502BEE95318}
+		{B41B06A8-4F15-4E51-B9E4-4DAD10162E8F} = {2D805782-756E-4C98-B22E-F502BEE95318}
 	EndGlobalSection
 EndGlobal
