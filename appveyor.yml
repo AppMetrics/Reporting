@@ -11,6 +11,7 @@ environment:
   GitPassword: 5cff922c1ae8d1842661777b5e71bd911d3963db
 build_script:
 - ps: .\build.ps1 -Target AppVeyor
+test: off
 artifacts:
 - path: artifacts/packages/*.nupkg
 - path: artifacts/coverage/*.xml
