@@ -17,10 +17,12 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 
 ## Other Reporters for App Metrics
 
-- [InfluxDB](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
-- [Elasticsearch](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
-- [Prometheus](https://github.com/alhardy/AppMetrics.Extensions.Prometheus)
-- [Graphite](https://github.com/alhardy/AppMetrics.Extensions.Graphite)
+For metric reporting capabilities see:
+
+- [InfluxDB Extensions](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
+- [Elasticsearch Extensions](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
+- [Prometheus Extensions](https://github.com/alhardy/AppMetrics.Extensions.Prometheus)
+- [Graphite Extensions](https://github.com/alhardy/AppMetrics.Extensions.Graphite) - *Work in Progress*
 
 ## How to build
 
