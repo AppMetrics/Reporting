@@ -3,24 +3,23 @@ image: Visual Studio 2017
 environment:
   COVERALLS_REPO_TOKEN:
     secure: /E0lZiubAjZhemO2k7Y0q7oJZivfJaFrFrcNHCCtNiGkTuJj50HWsgzIN9YZGQ6x
-  PreReleaseSuffix: alpha
-  CoverWith: OpenCover
+  PreReleaseSuffix: stable
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  GitUser: al_hardy@live.com.au
+  GitOwner: alhardy
+  GitPassword: 5cff922c1ae8d1842661777b5e71bd911d3963db
 build_script:
 - ps: .\build.ps1 -Target AppVeyor
-test: off
 artifacts:
 - path: artifacts/packages/*.nupkg
 - path: artifacts/coverage/*.xml
-- path: artifacts/test-results/*.trx
+- path: artifacts/test-results/*.xml
 - path: artifacts/resharper-reports/*.xml
 - path: artifacts/resharper-reports/*.html
-- path: artifacts/coverage/coverage.dcvr
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/alhardy/api/v2/package
   api_key:
     secure: gIAiACgNj+JzXyLLTe3rLxZyrAB9RpC8Lw81xEjdOLXqotprqEwGiFWRipEqkpps
   skip_symbols: true
-  symbol_server: https://www.myget.org/F/alhardy/symbol
