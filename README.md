@@ -17,8 +17,12 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 
 ## Other Reporters for App Metrics
 
-- [InfluxDB](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
-- [Elasticsearch](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
+For metric reporting capabilities see:
+
+- [InfluxDB Extensions](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
+- [Elasticsearch Extensions](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
+- [Prometheus Extensions](https://github.com/alhardy/AppMetrics.Extensions.Prometheus)
+- [Graphite Extensions](https://github.com/alhardy/AppMetrics.Extensions.Graphite) - *Work in Progress*
 
 ## How to build
 
@@ -74,8 +78,6 @@ See the [contribution guidlines](https://github.com/alhardy/AppMetrics/blob/mast
 
 ## Acknowledgements
 
-* [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/)
-* [Elasticsearch](https://www.elastic.co/)
 * [DocFX](https://dotnet.github.io/docfx/)
 * [Fluent Assertions](http://www.fluentassertions.com/)
 * [XUnit](https://xunit.github.io/)
@@ -93,7 +95,3 @@ See the [contribution guidlines](https://github.com/alhardy/AppMetrics/blob/mast
 ## License
 
 This library is release under Apache 2.0 License ( see LICENSE ) Copyright (c) 2016 Allan Hardy
-
-----------
-
-[![](https://codescene.io/projects/868/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/868/jobs/latest-successful/results)
