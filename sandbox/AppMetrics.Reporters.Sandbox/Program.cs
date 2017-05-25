@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Extensions.Reporting.Console;
 using App.Metrics.Extensions.Reporting.TextFile;
+using App.Metrics.Formatting.Ascii;
 using App.Metrics.Health;
 using App.Metrics.Reporting.Abstractions;
 using App.Metrics.Scheduling;
+using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
 using Metrics.Samples;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -137,11 +139,18 @@ namespace AppMetrics.Reporters.Sandbox
                      AddReporting(
                          factory =>
                          {
+                             // factory.AddConsole(
+                             //    new ConsoleReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //    }, new AsciiMetricPayloadBuilder((context, name) => $"{context}-{name}"));
+
                              factory.AddConsole(
                                  new ConsoleReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
-                                 });
+                                 },
+                                 new CustomMetricPayloadBuilder());
 
                              factory.AddTextFile(
                                  new TextFileReporterSettings
@@ -185,7 +194,7 @@ namespace AppMetrics.Reporters.Sandbox
 
         public IMetrics Metrics { get; }
 
-        public IReporter Reporter { get;}
+        public IReporter Reporter { get; }
 
         public CancellationToken Token { get; }
     }

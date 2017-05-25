@@ -26,7 +26,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <CodeAnalysisRuleSet>..\..\AppMetrics.ruleset</CodeAnalysisRuleSet>
     <DebugType>full</DebugType>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionPrefix>1.2.0</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
@@ -50,7 +50,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="App.Metrics" Version="1.1.0" />
+    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0520" />
     <PackageReference Include="App.Metrics.Concurrency" Version="1.1.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0">
       <PrivateAssets>All</PrivateAssets>
