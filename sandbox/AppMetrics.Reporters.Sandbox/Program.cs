@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Extensions.Reporting.Console;
 using App.Metrics.Extensions.Reporting.TextFile;
-using App.Metrics.Formatting.Ascii;
 using App.Metrics.Health;
 using App.Metrics.Reporting.Abstractions;
 using App.Metrics.Scheduling;
@@ -152,12 +151,20 @@ namespace AppMetrics.Reporters.Sandbox
                                  },
                                  new CustomMetricPayloadBuilder());
 
-                             factory.AddTextFile(
+                             // factory.AddTextFile(
+                             //    new TextFileReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //        FileName = @"C:\metrics\sample.txt"
+                             //    });
+
+                             factory.AddConsole(
                                  new TextFileReporterSettings
                                  {
-                                     ReportInterval = TimeSpan.FromSeconds(30),
+                                     ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
-                                 });
+                                 },
+                                 new CustomMetricPayloadBuilder());
                          });
         }
 

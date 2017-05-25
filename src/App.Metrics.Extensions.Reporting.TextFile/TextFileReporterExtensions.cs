@@ -3,6 +3,7 @@
 // </copyright>
 
 using App.Metrics.Abstractions.Filtering;
+using App.Metrics.Formatting.Ascii;
 using App.Metrics.Reporting.Abstractions;
 
 namespace App.Metrics.Extensions.Reporting.TextFile
@@ -14,7 +15,18 @@ namespace App.Metrics.Extensions.Reporting.TextFile
             TextFileReporterSettings settings,
             IFilterMetrics filter = null)
         {
-            factory.AddProvider(new TextFileReporterProvider(settings, filter));
+            var payloadBuilder = new AsciiMetricPayloadBuilder(settings.MetricNameFormatter, settings.DataKeys);
+            factory.AddProvider(new TextFileReporterProvider<AsciiMetricPayload>(settings, payloadBuilder, filter));
+            return factory;
+        }
+
+        public static IReportFactory AddConsole<TPayload>(
+            this IReportFactory factory,
+            TextFileReporterSettings settings,
+            IMetricPayloadBuilder<TPayload> payloadBuilder,
+            IFilterMetrics filter = null)
+        {
+            factory.AddProvider(new TextFileReporterProvider<TPayload>(settings, payloadBuilder, filter));
             return factory;
         }
 

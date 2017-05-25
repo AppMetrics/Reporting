@@ -19,9 +19,8 @@ namespace App.Metrics.Extensions.Reporting.Console
 
         public ConsoleReporterProvider(ConsoleReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics filter)
         {
-            _payloadBuilder = payloadBuilder;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-
+            _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
             Filter = filter;
         }
 

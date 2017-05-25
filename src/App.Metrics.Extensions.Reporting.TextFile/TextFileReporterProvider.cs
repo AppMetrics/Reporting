@@ -3,24 +3,25 @@
 // </copyright>
 
 using System;
+using System.IO;
+using System.Threading.Tasks;
 using App.Metrics.Abstractions.Filtering;
 using App.Metrics.Abstractions.Reporting;
+using App.Metrics.Reporting;
+using App.Metrics.Reporting.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace App.Metrics.Extensions.Reporting.TextFile
 {
-    public class TextFileReporterProvider : IReporterProvider
+    public class TextFileReporterProvider<TPayload> : IReporterProvider
     {
+        private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly TextFileReporterSettings _settings;
 
-        public TextFileReporterProvider(TextFileReporterSettings settings, IFilterMetrics fitler)
+        public TextFileReporterProvider(TextFileReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics fitler)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            _settings = settings;
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
             Filter = fitler;
         }
 
@@ -28,7 +29,20 @@ namespace App.Metrics.Extensions.Reporting.TextFile
 
         public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
         {
-            return new TextFileReporter(name, _settings.FileName, _settings.ReportInterval, loggerFactory);
+            var file = new FileInfo(_settings.FileName);
+            file.Directory?.Create();
+
+            return new ReportRunner<TPayload>(
+                p =>
+                {
+                    File.WriteAllText(_settings.FileName, p.PayloadFormatted());
+
+                    return AppMetricsTaskCache.SuccessTask;
+                },
+                _payloadBuilder,
+                _settings.ReportInterval,
+                name,
+                loggerFactory);
         }
     }
 }
