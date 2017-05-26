@@ -16,8 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0520" />
+    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0521" />
     <PackageReference Include="App.Metrics.Concurrency" Version="1.1.0" />
+    <PackageReference Include="App.Metrics.Formatting.InfluxDB" Version="1.0.0-alpha-0374" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.0" />

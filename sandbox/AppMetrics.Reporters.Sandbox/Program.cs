@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Extensions.Reporting.Console;
 using App.Metrics.Extensions.Reporting.TextFile;
+using App.Metrics.Formatting.InfluxDB;
 using App.Metrics.Health;
 using App.Metrics.Reporting.Abstractions;
 using App.Metrics.Scheduling;
@@ -144,12 +145,19 @@ namespace AppMetrics.Reporters.Sandbox
                              //        ReportInterval = TimeSpan.FromSeconds(5),
                              //    }, new AsciiMetricPayloadBuilder((context, name) => $"{context}-{name}"));
 
+                             // factory.AddConsole(
+                             //     new ConsoleReporterSettings
+                             //     {
+                             //         ReportInterval = TimeSpan.FromSeconds(5),
+                             //     },
+                             //     new CustomMetricPayloadBuilder());
+
                              factory.AddConsole(
                                  new ConsoleReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
                                  },
-                                 new CustomMetricPayloadBuilder());
+                                 new LineProtocolPayloadBuilder());
 
                              // factory.AddTextFile(
                              //    new TextFileReporterSettings
@@ -158,13 +166,21 @@ namespace AppMetrics.Reporters.Sandbox
                              //        FileName = @"C:\metrics\sample.txt"
                              //    });
 
+                             //factory.AddConsole(
+                             //    new TextFileReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //        FileName = @"C:\metrics\sample.txt"
+                             //    },
+                             //    new CustomMetricPayloadBuilder());
+
                              factory.AddConsole(
                                  new TextFileReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
                                  },
-                                 new CustomMetricPayloadBuilder());
+                                 new LineProtocolPayloadBuilder());
                          });
         }
 
