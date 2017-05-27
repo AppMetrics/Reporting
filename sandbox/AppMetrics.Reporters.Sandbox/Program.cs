@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Extensions.Reporting.Console;
+using App.Metrics.Extensions.Reporting.Http;
+using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Extensions.Reporting.TextFile;
 using App.Metrics.Formatting.InfluxDB;
 using App.Metrics.Health;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Serilog;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AppMetrics.Reporters.Sandbox
 {
@@ -101,11 +104,20 @@ namespace AppMetrics.Reporters.Sandbox
                 },
                 cancellationTokenSource.Token);
 
-            application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
+            Task.Run(() =>
+                {
+                    application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
 
-            Console.WriteLine("Report Cancelled...");
+                    Console.WriteLine("Report Cancelled...");
+                },
+                cancellationToken: cancellationTokenSource.Token);
 
-            Console.ReadKey();
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
         }
 
         private static void ConfigureMetrics(IServiceCollection services)
@@ -155,7 +167,7 @@ namespace AppMetrics.Reporters.Sandbox
                              factory.AddConsole(
                                  new ConsoleReporterSettings
                                  {
-                                     ReportInterval = TimeSpan.FromSeconds(5),
+                                     ReportInterval = TimeSpan.FromSeconds(20),
                                  },
                                  new LineProtocolPayloadBuilder());
 
@@ -166,21 +178,34 @@ namespace AppMetrics.Reporters.Sandbox
                              //        FileName = @"C:\metrics\sample.txt"
                              //    });
 
-                             //factory.AddConsole(
-                             //    new TextFileReporterSettings
-                             //    {
-                             //        ReportInterval = TimeSpan.FromSeconds(5),
-                             //        FileName = @"C:\metrics\sample.txt"
-                             //    },
-                             //    new CustomMetricPayloadBuilder());
-
                              factory.AddConsole(
                                  new TextFileReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
                                  },
-                                 new LineProtocolPayloadBuilder());
+                                 new CustomMetricPayloadBuilder());
+
+                             //factory.AddConsole(
+                             //    new TextFileReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //        FileName = @"C:\metrics\sample.txt"
+                             //    },
+                             //    new LineProtocolPayloadBuilder());
+
+                             factory.AddHttp(
+                                 new HttpReporterSettings
+                                 {
+                                     HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive")),
+                                     ReportInterval = TimeSpan.FromSeconds(5),
+                                     HttpPolicy = new HttpPolicy
+                                                  {
+                                                      BackoffPeriod = TimeSpan.FromSeconds(30),
+                                                      FailuresBeforeBackoff = 5,
+                                                      Timeout = TimeSpan.FromSeconds(3)
+                                                  }
+                                 }, new LineProtocolPayloadBuilder());
                          });
         }
 

@@ -1,29 +1,15 @@
 ﻿<!--EXTERNAL_PROPERTIES: TargetFramework-->
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\build\common.props" />
+    
   <PropertyGroup>
     <Description>Provides console reporting capability to App Metrics</Description>
-    <Copyright>Allan Hardy 2016</Copyright>
     <AssemblyTitle>App.Metrics.Extensions.Reporting.Console</AssemblyTitle>
-    <Authors>Allan Hardy</Authors>
     <TargetFrameworks>netstandard1.6;net452</TargetFrameworks>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>App.Metrics.Extensions.Reporting.Console</AssemblyName>
     <PackageId>App.Metrics.Extensions.Reporting.Console</PackageId>
     <PackageTags>Metrics;Monitoring;Instrumentation;Reporting;Console</PackageTags>
-    <PackageIconUrl>https://alhardy.github.io/app-metrics-docs/logo.png</PackageIconUrl>
-    <PackageProjectUrl>https://alhardy.github.io/app-metrics-docs/getting-started/reporting/index.html#console-reporter</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/alhardy/AppMetrics.Reporting/blob/master/LICENSE</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>git://github.com/alhardy/AppMetrics.Reporting</RepositoryUrl>    
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <CodeAnalysisRuleSet>..\..\AppMetrics.ruleset</CodeAnalysisRuleSet>
-    <DebugType>full</DebugType>
     <VersionPrefix>1.2.0</VersionPrefix>
   </PropertyGroup>
 
@@ -48,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0520" />
+    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0524" />
     <PackageReference Include="App.Metrics.Concurrency" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0">

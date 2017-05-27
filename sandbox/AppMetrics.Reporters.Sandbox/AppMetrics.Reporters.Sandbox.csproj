@@ -16,14 +16,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0521" />
+    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0524" />
     <PackageReference Include="App.Metrics.Concurrency" Version="1.1.0" />
-    <PackageReference Include="App.Metrics.Formatting.InfluxDB" Version="1.0.0-alpha-0374" />
+    <PackageReference Include="App.Metrics.Formatting.InfluxDB" Version="1.0.0-alpha-0379" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="1.4.0-dev-10136" />
     <PackageReference Include="Serilog.Extensions.Logging.File" Version="1.0.0" />
@@ -33,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\App.Metrics.Extensions.Reporting.Console\App.Metrics.Extensions.Reporting.Console.csproj" />
+    <ProjectReference Include="..\..\src\App.Metrics.Extensions.Reporting.Http\App.Metrics.Extensions.Reporting.Http.csproj" />
     <ProjectReference Include="..\..\src\App.Metrics.Extensions.Reporting.TextFile\App.Metrics.Extensions.Reporting.TextFile.csproj" />
   </ItemGroup>
 
