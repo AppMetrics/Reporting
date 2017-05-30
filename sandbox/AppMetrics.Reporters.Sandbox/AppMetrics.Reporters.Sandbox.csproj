@@ -16,9 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics" Version="1.2.0-*" />
-    <PackageReference Include="App.Metrics.Concurrency" Version="1.1.0" />
-    <PackageReference Include="App.Metrics.Formatting.InfluxDB" Version="1.0.0-*" />
+    <PackageReference Include="App.Metrics" Version="1.2.0-alpha-0540" />
+    <PackageReference Include="App.Metrics.Concurrency" Version="1.2.0-alpha-0540" />
+    <PackageReference Include="App.Metrics.Formatting.InfluxDB" Version="1.0.0-alpha-0394" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
