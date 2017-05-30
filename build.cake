@@ -34,7 +34,7 @@ var skipHtmlCoverageReport		= Argument("SkipHtmlCoverageReport", true) || !IsRun
 //////////////////////////////////////////////////////////////////////
 // DEFINE FILES & DIRECTORIES
 //////////////////////////////////////////////////////////////////////
-var packDirs                    = new [] { Directory("./src/App.Metrics.Extensions.Reporting.Console"), Directory("./src/App.Metrics.Extensions.Reporting.TextFile") };
+var packDirs                    = new [] { Directory("./src/App.Metrics.Extensions.Reporting.Console"), Directory("./src/App.Metrics.Extensions.Reporting.TextFile"), Directory("./src/App.Metrics.Extensions.Reporting.Http") };
 var artifactsDir                = (DirectoryPath) Directory("./artifacts");
 var testResultsDir              = (DirectoryPath) artifactsDir.Combine("test-results");
 var coverageResultsDir          = (DirectoryPath) artifactsDir.Combine("coverage");
