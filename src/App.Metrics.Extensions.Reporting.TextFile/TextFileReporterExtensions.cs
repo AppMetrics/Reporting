@@ -20,7 +20,7 @@ namespace App.Metrics.Extensions.Reporting.TextFile
             return factory;
         }
 
-        public static IReportFactory AddConsole<TPayload>(
+        public static IReportFactory AddTextFile<TPayload>(
             this IReportFactory factory,
             TextFileReporterSettings settings,
             IMetricPayloadBuilder<TPayload> payloadBuilder,

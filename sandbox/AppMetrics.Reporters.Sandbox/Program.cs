@@ -8,17 +8,18 @@ using App.Metrics.Extensions.Reporting.Console;
 using App.Metrics.Extensions.Reporting.Http;
 using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Extensions.Reporting.TextFile;
+using App.Metrics.Formatting.Ascii;
 using App.Metrics.Formatting.InfluxDB;
 using App.Metrics.Health;
 using App.Metrics.Reporting.Abstractions;
 using App.Metrics.Scheduling;
 using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
 using Metrics.Samples;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Serilog;
-using Microsoft.AspNetCore.Hosting;
 
 namespace AppMetrics.Reporters.Sandbox
 {
@@ -104,7 +105,8 @@ namespace AppMetrics.Reporters.Sandbox
                 },
                 cancellationTokenSource.Token);
 
-            Task.Run(() =>
+            Task.Run(
+                () =>
                 {
                     application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
 
@@ -112,10 +114,7 @@ namespace AppMetrics.Reporters.Sandbox
                 },
                 cancellationToken: cancellationTokenSource.Token);
 
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseStartup<Startup>()
-                .Build();
+            var host = new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build();
 
             host.Run();
         }
@@ -178,13 +177,13 @@ namespace AppMetrics.Reporters.Sandbox
                              //        FileName = @"C:\metrics\sample.txt"
                              //    });
 
-                             factory.AddConsole(
+                             factory.AddTextFile(
                                  new TextFileReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
                                  },
-                                 new CustomMetricPayloadBuilder());
+                                 new AsciiMetricPayloadBuilder());
 
                              //factory.AddConsole(
                              //    new TextFileReporterSettings
@@ -205,7 +204,8 @@ namespace AppMetrics.Reporters.Sandbox
                                                       FailuresBeforeBackoff = 5,
                                                       Timeout = TimeSpan.FromSeconds(3)
                                                   }
-                                 }, new LineProtocolPayloadBuilder());
+                                 },
+                                 new AsciiMetricPayloadBuilder());
                          });
         }
 
