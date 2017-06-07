@@ -15,6 +15,9 @@ namespace App.Metrics.Extensions.Reporting.TextFile
         /// <inheritdoc />
         public MetricValueDataKeys DataKeys { get; set; }
 
+        public Func<string, string, string> MetricNameFormatter { get; set; }
+
+        /// <inheritdoc />
         public TimeSpan ReportInterval { get; set; } = TimeSpan.FromSeconds(5);
     }
 }

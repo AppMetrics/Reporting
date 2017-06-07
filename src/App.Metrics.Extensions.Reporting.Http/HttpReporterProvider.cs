@@ -1,23 +1,23 @@
-﻿// <copyright file="ConsoleReporterProvider.cs" company="Allan Hardy">
+﻿// <copyright file="HttpReporterProvider.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
 using App.Metrics.Abstractions.Filtering;
 using App.Metrics.Abstractions.Reporting;
+using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.Abstractions;
 using Microsoft.Extensions.Logging;
 
-namespace App.Metrics.Extensions.Reporting.Console
+namespace App.Metrics.Extensions.Reporting.Http
 {
-    public class ConsoleReporterProvider<TPayload> : IReporterProvider
+    public class HttpReporterProvider<TPayload> : IReporterProvider
     {
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
-        private readonly ConsoleReporterSettings _settings;
+        private readonly HttpReporterSettings _settings;
 
-        public ConsoleReporterProvider(ConsoleReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics filter)
+        public HttpReporterProvider(HttpReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics filter)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
@@ -28,11 +28,17 @@ namespace App.Metrics.Extensions.Reporting.Console
 
         public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
         {
+            var httpClient = new DefaultHttpClient(
+                loggerFactory,
+                _settings.HttpSettings,
+                _settings.HttpPolicy,
+                _settings.InnerHttpMessageHandler);
+
             return new ReportRunner<TPayload>(
-                p =>
+                async p =>
                 {
-                    System.Console.WriteLine(p.PayloadFormatted());
-                    return AppMetricsTaskCache.SuccessTask;
+                    var result = await httpClient.WriteAsync(p.PayloadFormatted());
+                    return result.Success;
                 },
                 _payloadBuilder,
                 _settings.ReportInterval,

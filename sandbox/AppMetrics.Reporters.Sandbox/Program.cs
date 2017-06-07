@@ -5,11 +5,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.Extensions.Reporting.Console;
+using App.Metrics.Extensions.Reporting.Http;
+using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Extensions.Reporting.TextFile;
+using App.Metrics.Formatting.Ascii;
+using App.Metrics.Formatting.InfluxDB;
 using App.Metrics.Health;
 using App.Metrics.Reporting.Abstractions;
 using App.Metrics.Scheduling;
+using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
 using Metrics.Samples;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -99,11 +105,18 @@ namespace AppMetrics.Reporters.Sandbox
                 },
                 cancellationTokenSource.Token);
 
-            application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
+            Task.Run(
+                () =>
+                {
+                    application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
 
-            Console.WriteLine("Report Cancelled...");
+                    Console.WriteLine("Report Cancelled...");
+                },
+                cancellationToken: cancellationTokenSource.Token);
 
-            Console.ReadKey();
+            var host = new WebHostBuilder().UseKestrel().UseStartup<Startup>().Build();
+
+            host.Run();
         }
 
         private static void ConfigureMetrics(IServiceCollection services)
@@ -137,18 +150,62 @@ namespace AppMetrics.Reporters.Sandbox
                      AddReporting(
                          factory =>
                          {
+                             // factory.AddConsole(
+                             //    new ConsoleReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //    }, new AsciiMetricPayloadBuilder((context, name) => $"{context}-{name}"));
+
+                             // factory.AddConsole(
+                             //     new ConsoleReporterSettings
+                             //     {
+                             //         ReportInterval = TimeSpan.FromSeconds(5),
+                             //     },
+                             //     new CustomMetricPayloadBuilder());
+
                              factory.AddConsole(
                                  new ConsoleReporterSettings
                                  {
-                                     ReportInterval = TimeSpan.FromSeconds(5),
-                                 });
+                                     ReportInterval = TimeSpan.FromSeconds(20),
+                                 },
+                                 new LineProtocolPayloadBuilder());
+
+                             // factory.AddTextFile(
+                             //    new TextFileReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //        FileName = @"C:\metrics\sample.txt"
+                             //    });
 
                              factory.AddTextFile(
                                  new TextFileReporterSettings
                                  {
-                                     ReportInterval = TimeSpan.FromSeconds(30),
+                                     ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
-                                 });
+                                 },
+                                 new AsciiMetricPayloadBuilder());
+
+                             //factory.AddConsole(
+                             //    new TextFileReporterSettings
+                             //    {
+                             //        ReportInterval = TimeSpan.FromSeconds(5),
+                             //        FileName = @"C:\metrics\sample.txt"
+                             //    },
+                             //    new LineProtocolPayloadBuilder());
+
+                             factory.AddHttp(
+                                 new HttpReporterSettings
+                                 {
+                                     HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive")),
+                                     ReportInterval = TimeSpan.FromSeconds(5),
+                                     HttpPolicy = new HttpPolicy
+                                                  {
+                                                      BackoffPeriod = TimeSpan.FromSeconds(30),
+                                                      FailuresBeforeBackoff = 5,
+                                                      Timeout = TimeSpan.FromSeconds(3)
+                                                  }
+                                 },
+                                 new AsciiMetricPayloadBuilder());
                          });
         }
 
@@ -185,7 +242,7 @@ namespace AppMetrics.Reporters.Sandbox
 
         public IMetrics Metrics { get; }
 
-        public IReporter Reporter { get;}
+        public IReporter Reporter { get; }
 
         public CancellationToken Token { get; }
     }

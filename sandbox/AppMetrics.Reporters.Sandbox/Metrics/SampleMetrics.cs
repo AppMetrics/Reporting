@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using App.Metrics;
-using App.Metrics.Core;
 using App.Metrics.Counter;
 using App.Metrics.Counter.Abstractions;
-using App.Metrics.Data;
 using App.Metrics.Gauge;
 using App.Metrics.Histogram.Abstractions;
+using App.Metrics.Meter;
 using App.Metrics.Meter.Abstractions;
-using App.Metrics.Meter.Extensions;
 using App.Metrics.Timer.Abstractions;
 
 namespace Metrics.Samples
@@ -63,9 +61,10 @@ namespace Metrics.Samples
             // define a simple gauge that will provide the instant value of someValue when requested
             _metrics.Measure.Gauge.SetValue(SampleMetricsRegistry.Gauges.DataValue, () => _someValue);
 
-            _metrics.Measure.Gauge.SetValue(SampleMetricsRegistry.Gauges.CustomRatioGauge, 
+            _metrics.Measure.Gauge.SetValue(
+                SampleMetricsRegistry.Gauges.CustomRatioGauge,
                 () => _totalRequestsCounter.GetValueOrDefault().Count / _meter.GetValueOrDefault().FiveMinuteRate);
-            
+
             _metrics.Measure.Gauge.SetValue(SampleMetricsRegistry.Gauges.Ratio, () => new HitRatioGauge(_meter, _timer, m => m.OneMinuteRate));
         }
 
@@ -82,7 +81,7 @@ namespace Metrics.Samples
 
             using (_timer.NewContext(i.ToString())) // measure until disposed
             {
-                _someValue *= (i + 1); // will be reflected in the gauge 
+                _someValue *= i + 1; // will be reflected in the gauge 
 
                 _concurrentRequestsCounter.Increment(); // increment concurrent requests counter
 
@@ -98,7 +97,7 @@ namespace Metrics.Samples
                 _setMeter.Mark(item);
 
                 // simulate doing some work
-                var ms = Math.Abs((int)(new Random().Next(3000)));
+                var ms = Math.Abs((int)new Random().Next(3000));
                 Thread.Sleep(ms);
 
                 _concurrentRequestsCounter.Decrement(); // decrement number of concurrent requests
