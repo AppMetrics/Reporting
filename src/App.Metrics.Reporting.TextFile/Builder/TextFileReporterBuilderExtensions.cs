@@ -7,8 +7,6 @@ using App.Metrics.Filters;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.TextFile;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 // ReSharper disable CheckNamespace
 namespace App.Metrics.Builder
@@ -19,38 +17,32 @@ namespace App.Metrics.Builder
         public static IReportFactory AddTextFile(
             this IReportFactory factory,
             TextFileReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             var payloadBuilder = new AsciiMetricPayloadBuilder(settings.MetricNameFormatter, settings.DataKeys);
-            factory.AddProvider(new TextFileReporterProvider<AsciiMetricPayload>(settings, loggerFactory, payloadBuilder, filter));
+            factory.AddProvider(new TextFileReporterProvider<AsciiMetricPayload>(settings, payloadBuilder, filter));
             return factory;
         }
 
         public static IReportFactory AddTextFile<TPayload>(
             this IReportFactory factory,
             TextFileReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IMetricPayloadBuilder<TPayload> payloadBuilder,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            factory.AddProvider(new TextFileReporterProvider<TPayload>(settings, loggerFactory, payloadBuilder, filter));
+            factory.AddProvider(new TextFileReporterProvider<TPayload>(settings, payloadBuilder, filter));
             return factory;
         }
 
         public static IReportFactory AddTextFile(
             this IReportFactory factory,
-            ILoggerFactory loggerFactory,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             var settings = new TextFileReporterSettings();
-            factory.AddTextFile(settings, loggerFactory, filter);
+            factory.AddTextFile(settings, filter);
             return factory;
         }
     }

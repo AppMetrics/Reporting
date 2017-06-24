@@ -7,8 +7,6 @@ using App.Metrics.Filters;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.Console;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 // ReSharper disable CheckNamespace
 namespace App.Metrics.Builder
@@ -19,38 +17,32 @@ namespace App.Metrics.Builder
         public static IReportFactory AddConsole(
             this IReportFactory factory,
             ConsoleReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             var payloadBuilder = new AsciiMetricPayloadBuilder(settings.MetricNameFormatter, settings.DataKeys);
-            factory.AddProvider(new ConsoleReporterProvider<AsciiMetricPayload>(settings, payloadBuilder, loggerFactory, filter));
+            factory.AddProvider(new ConsoleReporterProvider<AsciiMetricPayload>(settings, payloadBuilder, filter));
             return factory;
         }
 
         public static IReportFactory AddConsole<TPayload>(
             this IReportFactory factory,
             ConsoleReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IMetricPayloadBuilder<TPayload> payloadBuilder,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            factory.AddProvider(new ConsoleReporterProvider<TPayload>(settings, payloadBuilder, loggerFactory, filter));
+            factory.AddProvider(new ConsoleReporterProvider<TPayload>(settings, payloadBuilder, filter));
             return factory;
         }
 
         public static IReportFactory AddConsole(
             this IReportFactory factory,
-            ILoggerFactory loggerFactory,
             IFilterMetrics filter = null)
         {
             filter = filter ?? new NoOpMetricsFilter();
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             var settings = new ConsoleReporterSettings();
-            factory.AddConsole(settings, loggerFactory, filter);
+            factory.AddConsole(settings, filter);
             return factory;
         }
     }

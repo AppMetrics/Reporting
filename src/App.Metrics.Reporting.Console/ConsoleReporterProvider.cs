@@ -7,22 +7,18 @@ using System.Threading.Tasks;
 using App.Metrics.Core.Filtering;
 using App.Metrics.Filters;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace App.Metrics.Reporting.Console
 {
     public class ConsoleReporterProvider<TPayload> : IReporterProvider
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly ConsoleReporterSettings _settings;
 
         public ConsoleReporterProvider(
             ConsoleReporterSettings settings,
-            IMetricPayloadBuilder<TPayload> payloadBuilder,
-            ILoggerFactory loggerFactory)
+            IMetricPayloadBuilder<TPayload> payloadBuilder)
         {
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
             Filter = new NoOpMetricsFilter();
@@ -31,10 +27,8 @@ namespace App.Metrics.Reporting.Console
         public ConsoleReporterProvider(
             ConsoleReporterSettings settings,
             IMetricPayloadBuilder<TPayload> payloadBuilder,
-            ILoggerFactory loggerFactory,
             IFilterMetrics filter)
         {
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
             Filter = filter ?? new NoOpMetricsFilter();
@@ -42,7 +36,7 @@ namespace App.Metrics.Reporting.Console
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name)
+        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
         {
             return new ReportRunner<TPayload>(
                 p =>
@@ -53,7 +47,7 @@ namespace App.Metrics.Reporting.Console
                 _payloadBuilder,
                 _settings.ReportInterval,
                 name,
-                _loggerFactory);
+                loggerFactory);
         }
     }
 }

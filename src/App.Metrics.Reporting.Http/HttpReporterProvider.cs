@@ -13,17 +13,14 @@ namespace App.Metrics.Reporting.Http
 {
     public class HttpReporterProvider<TPayload> : IReporterProvider
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly HttpReporterSettings _settings;
 
         public HttpReporterProvider(
             HttpReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IMetricPayloadBuilder<TPayload> payloadBuilder,
             IFilterMetrics filter)
         {
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
             Filter = filter ?? new NoOpMetricsFilter();
@@ -31,10 +28,10 @@ namespace App.Metrics.Reporting.Http
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name)
+        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
         {
             var httpClient = new DefaultHttpClient(
-                _loggerFactory,
+                loggerFactory,
                 _settings.HttpSettings,
                 _settings.HttpPolicy,
                 _settings.InnerHttpMessageHandler);
@@ -48,7 +45,7 @@ namespace App.Metrics.Reporting.Http
                 _payloadBuilder,
                 _settings.ReportInterval,
                 name,
-                _loggerFactory);
+                loggerFactory);
         }
     }
 }

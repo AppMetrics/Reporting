@@ -8,32 +8,28 @@ using System.Threading.Tasks;
 using App.Metrics.Core.Filtering;
 using App.Metrics.Filters;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace App.Metrics.Reporting.TextFile
 {
     public class TextFileReporterProvider<TPayload> : IReporterProvider
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly TextFileReporterSettings _settings;
 
         public TextFileReporterProvider(
             TextFileReporterSettings settings,
-            ILoggerFactory loggerFactory,
             IMetricPayloadBuilder<TPayload> payloadBuilder,
             IFilterMetrics filter)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
 
-            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Filter = filter ?? new NoOpMetricsFilter();
         }
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name)
+        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
         {
             var file = new FileInfo(_settings.FileName);
             file.Directory?.Create();
@@ -55,7 +51,7 @@ namespace App.Metrics.Reporting.TextFile
                 _payloadBuilder,
                 _settings.ReportInterval,
                 name,
-                _loggerFactory);
+                loggerFactory);
         }
     }
 }

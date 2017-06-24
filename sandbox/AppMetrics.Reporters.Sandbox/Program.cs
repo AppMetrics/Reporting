@@ -162,7 +162,6 @@ namespace AppMetrics.Reporters.Sandbox
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(20),
                                  },
-                                 new LoggerFactory(),
                                  new LineProtocolPayloadBuilder());
 
                              factory.AddTextFile(
@@ -172,7 +171,6 @@ namespace AppMetrics.Reporters.Sandbox
                                      FileName = @"C:\metrics\sample.txt",
                                      AppendMetricsToTextFile = true
                                  },
-                                 new LoggerFactory(),
                                  new AsciiMetricPayloadBuilder());
 
                              // factory.AddTextFile(
@@ -195,7 +193,6 @@ namespace AppMetrics.Reporters.Sandbox
                                                       Timeout = TimeSpan.FromSeconds(3)
                                                   }
                                  },
-                                 new LoggerFactory(),
                                  new AsciiMetricPayloadBuilder());
                          });
         }
