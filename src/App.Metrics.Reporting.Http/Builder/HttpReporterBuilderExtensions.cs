@@ -3,9 +3,9 @@
 // </copyright>
 
 using App.Metrics.Core.Filtering;
-using App.Metrics.Extensions.Reporting.Http;
 using App.Metrics.Filters;
 using App.Metrics.Reporting;
+using App.Metrics.Reporting.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 

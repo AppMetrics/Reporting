@@ -7,11 +7,10 @@ using System.IO;
 using System.Threading.Tasks;
 using App.Metrics.Core.Filtering;
 using App.Metrics.Filters;
-using App.Metrics.Reporting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace App.Metrics.Extensions.Reporting.TextFile
+namespace App.Metrics.Reporting.TextFile
 {
     public class TextFileReporterProvider<TPayload> : IReporterProvider
     {

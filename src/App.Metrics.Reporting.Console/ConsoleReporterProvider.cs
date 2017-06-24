@@ -6,11 +6,10 @@ using System;
 using System.Threading.Tasks;
 using App.Metrics.Core.Filtering;
 using App.Metrics.Filters;
-using App.Metrics.Reporting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace App.Metrics.Extensions.Reporting.Console
+namespace App.Metrics.Reporting.Console
 {
     public class ConsoleReporterProvider<TPayload> : IReporterProvider
     {

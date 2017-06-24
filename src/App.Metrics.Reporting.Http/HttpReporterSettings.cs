@@ -4,10 +4,9 @@
 
 using System;
 using System.Net.Http;
-using App.Metrics.Extensions.Reporting.Http.Client;
-using App.Metrics.Reporting;
+using App.Metrics.Reporting.Http.Client;
 
-namespace App.Metrics.Extensions.Reporting.Http
+namespace App.Metrics.Reporting.Http
 {
     public class HttpReporterSettings : IReporterSettings
     {

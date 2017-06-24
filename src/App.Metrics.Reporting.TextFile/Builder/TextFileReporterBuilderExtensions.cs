@@ -3,10 +3,10 @@
 // </copyright>
 
 using App.Metrics.Core.Filtering;
-using App.Metrics.Extensions.Reporting.TextFile;
 using App.Metrics.Filters;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Reporting;
+using App.Metrics.Reporting.TextFile;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 

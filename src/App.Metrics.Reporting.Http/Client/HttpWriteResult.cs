@@ -2,7 +2,7 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
-namespace App.Metrics.Extensions.Reporting.Http.Client
+namespace App.Metrics.Reporting.Http.Client
 {
     public struct HttpWriteResult
     {

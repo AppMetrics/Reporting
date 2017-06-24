@@ -2,7 +2,7 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
-namespace App.Metrics.Extensions.Reporting.Http
+namespace App.Metrics.Reporting.Http
 {
     public class LoggingEvents
     {

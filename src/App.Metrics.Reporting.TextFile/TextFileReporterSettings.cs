@@ -3,9 +3,8 @@
 // </copyright>
 
 using System;
-using App.Metrics.Reporting;
 
-namespace App.Metrics.Extensions.Reporting.TextFile
+namespace App.Metrics.Reporting.TextFile
 {
     public class TextFileReporterSettings : IReporterSettings
     {

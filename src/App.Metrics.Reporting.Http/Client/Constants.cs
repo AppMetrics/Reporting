@@ -4,7 +4,7 @@
 
 using System;
 
-namespace App.Metrics.Extensions.Reporting.Http.Client
+namespace App.Metrics.Reporting.Http.Client
 {
     internal static class Constants
     {

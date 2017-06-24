@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace App.Metrics.Extensions.Reporting.Http.Client
+namespace App.Metrics.Reporting.Http.Client
 {
     public class DefaultHttpClient
     {

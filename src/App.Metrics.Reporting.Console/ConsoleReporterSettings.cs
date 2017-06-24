@@ -3,9 +3,8 @@
 // </copyright>
 
 using System;
-using App.Metrics.Reporting;
 
-namespace App.Metrics.Extensions.Reporting.Console
+namespace App.Metrics.Reporting.Console
 {
     public class ConsoleReporterSettings : IReporterSettings
     {
