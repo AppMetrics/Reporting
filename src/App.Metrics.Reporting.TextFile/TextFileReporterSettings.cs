@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Text;
 
 namespace App.Metrics.Reporting.TextFile
 {
@@ -17,5 +18,9 @@ namespace App.Metrics.Reporting.TextFile
 
         /// <inheritdoc />
         public TimeSpan ReportInterval { get; set; } = TimeSpan.FromSeconds(5);
+
+        public bool AppendMetricsToTextFile { get; set; } = false;
+
+        public Encoding TextFileEncoding { get; set; } = Encoding.UTF8;
     }
 }

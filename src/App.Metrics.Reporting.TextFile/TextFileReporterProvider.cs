@@ -41,7 +41,14 @@ namespace App.Metrics.Reporting.TextFile
             return new ReportRunner<TPayload>(
                 p =>
                 {
-                    File.WriteAllText(_settings.FileName, p.PayloadFormatted());
+                    if (_settings.AppendMetricsToTextFile)
+                    {
+                        File.AppendAllText(_settings.FileName, p.PayloadFormatted(), _settings.TextFileEncoding);
+                    }
+                    else
+                    {
+                        File.WriteAllText(_settings.FileName, p.PayloadFormatted(), _settings.TextFileEncoding);
+                    }
 
                     return Task.FromResult(true);
                 },

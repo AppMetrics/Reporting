@@ -169,7 +169,8 @@ namespace AppMetrics.Reporters.Sandbox
                                  new TextFileReporterSettings
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(5),
-                                     FileName = @"C:\metrics\sample.txt"
+                                     FileName = @"C:\metrics\sample.txt",
+                                     AppendMetricsToTextFile = true
                                  },
                                  new LoggerFactory(),
                                  new AsciiMetricPayloadBuilder());
