@@ -1,14 +1,17 @@
-﻿using System;
-using App.Metrics;
-using App.Metrics.Histogram.Abstractions;
+﻿// <copyright file="UserValueHistogramSample.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
 
-namespace Metrics.Samples
+using System;
+using App.Metrics;
+using App.Metrics.Histogram;
+
+namespace AppMetrics.Reporters.Sandbox.Metrics
 {
     public class UserValueHistogramSample
     {
-        private readonly IHistogram _histogram;
-
         private static IMetrics _metrics;
+        private readonly IHistogram _histogram;
 
         public UserValueHistogramSample(IMetrics metrics)
         {
@@ -30,12 +33,9 @@ namespace Metrics.Samples
                 var documentId = new Random().Next() % 10;
                 var sample = new UserValueHistogramSample(_metrics);
                 sample.Process("document-" + documentId);
-        }
+            }
         }
 
-        private int[] GetResultsForDocument(string documentId)
-        {
-            return new int[new Random().Next() % 100];
-        }
+        private int[] GetResultsForDocument(string documentId) { return new int[new Random().Next() % 100]; }
     }
 }

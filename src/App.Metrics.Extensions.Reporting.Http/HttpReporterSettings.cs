@@ -4,7 +4,6 @@
 
 using System;
 using System.Net.Http;
-using App.Metrics.Abstractions.Reporting;
 using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Reporting;
 

@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -19,7 +18,6 @@ namespace App.Metrics.Extensions.Reporting.Http.Client
         private static long _failureAttempts;
         private static long _failuresBeforeBackoff;
         private static TimeSpan _backOffPeriod;
-
         private readonly HttpClient _httpClient;
         private readonly HttpSettings _httpSettings;
         private readonly ILogger<DefaultHttpClient> _logger;
@@ -83,7 +81,8 @@ namespace App.Metrics.Extensions.Reporting.Http.Client
                 {
                     Interlocked.Increment(ref _failureAttempts);
 
-                    var errorMessage = $"Failed to write to {_httpSettings.RequestUri} - StatusCode: {response.StatusCode} Reason: {response.ReasonPhrase}";
+                    var errorMessage =
+                        $"Failed to write to {_httpSettings.RequestUri} - StatusCode: {response.StatusCode} Reason: {response.ReasonPhrase}";
                     _logger.LogError(LoggingEvents.HttpWriteError, errorMessage);
 
                     return new HttpWriteResult(false, errorMessage);
@@ -96,7 +95,7 @@ namespace App.Metrics.Extensions.Reporting.Http.Client
             catch (Exception ex)
             {
                 Interlocked.Increment(ref _failureAttempts);
-                _logger.LogError(LoggingEvents.HttpWriteError, ex,$"Failed to write to {_httpSettings.RequestUri}");
+                _logger.LogError(LoggingEvents.HttpWriteError, ex, $"Failed to write to {_httpSettings.RequestUri}");
                 return new HttpWriteResult(false, ex.ToString());
             }
         }

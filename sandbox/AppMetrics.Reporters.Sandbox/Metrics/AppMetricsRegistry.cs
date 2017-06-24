@@ -1,9 +1,15 @@
-﻿using App.Metrics;
-using App.Metrics.Core.Options;
-using App.Metrics.Tagging;
+﻿// <copyright file="AppMetricsRegistry.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
 
-namespace AppMetrics.Reporters.Sandbox
+using App.Metrics;
+using App.Metrics.Apdex;
+using App.Metrics.Gauge;
+
+namespace AppMetrics.Reporters.Sandbox.Metrics
 {
+#pragma warning disable SA1401 // Fields must be private
+#pragma warning disable SA1202 // Elements must be ordered by access
     public static class AppMetricsRegistry
     {
         public static class ApdexScores
@@ -49,7 +55,7 @@ namespace AppMetrics.Reporters.Sandbox
                                                       };
         }
 
-        //https://msdn.microsoft.com/en-us/library/system.diagnostics.process(v=vs.110).aspx
+        // https://msdn.microsoft.com/en-us/library/system.diagnostics.process(v=vs.110).aspx
         public static class ProcessMetrics
         {
             private static readonly string Context = "Process";
@@ -127,4 +133,6 @@ namespace AppMetrics.Reporters.Sandbox
                                                                     };
         }
     }
+#pragma warning restore SA1202 // Elements must be ordered by access
+#pragma warning restore SA1401 // Fields must be private
 }

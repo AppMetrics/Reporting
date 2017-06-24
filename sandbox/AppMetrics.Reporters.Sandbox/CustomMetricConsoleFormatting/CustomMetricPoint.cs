@@ -1,7 +1,11 @@
+// <copyright file="CustomMetricPoint.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using App.Metrics.Tagging;
+using App.Metrics;
 
 namespace AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting
 {
@@ -30,7 +34,7 @@ namespace AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting
                 throw new ArgumentNullException(nameof(textWriter));
             }
 
-            textWriter.Write((string)Measurement);
+            textWriter.Write(Measurement);
 
             if (Tags.Count > 0)
             {

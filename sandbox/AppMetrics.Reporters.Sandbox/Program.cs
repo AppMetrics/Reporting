@@ -1,29 +1,29 @@
-﻿using System;
+﻿// <copyright file="Program.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
+
+using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics;
+using App.Metrics.Builder;
+using App.Metrics.Core.Scheduling;
 using App.Metrics.Extensions.Reporting.Console;
 using App.Metrics.Extensions.Reporting.Http;
 using App.Metrics.Extensions.Reporting.Http.Client;
 using App.Metrics.Extensions.Reporting.TextFile;
-using App.Metrics.Formatting.Ascii;
-using App.Metrics.Formatting.InfluxDB;
+using App.Metrics.Formatters.Ascii;
+using App.Metrics.Formatters.InfluxDB;
 using App.Metrics.Health;
-using App.Metrics.Reporting.Abstractions;
-using App.Metrics.Scheduling;
-using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
-using Metrics.Samples;
+using AppMetrics.Reporters.Sandbox.Metrics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
-using Serilog;
 
 namespace AppMetrics.Reporters.Sandbox
 {
-    public class Host
+    public class Program
     {
         public static void Main()
         {
@@ -49,7 +49,7 @@ namespace AppMetrics.Reporters.Sandbox
 
             var cancellationTokenSource = new CancellationTokenSource();
 
-            //cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
+            // cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
 
             var task = scheduler.Interval(
                 TimeSpan.FromMilliseconds(300),
@@ -151,12 +151,6 @@ namespace AppMetrics.Reporters.Sandbox
                          factory =>
                          {
                              // factory.AddConsole(
-                             //    new ConsoleReporterSettings
-                             //    {
-                             //        ReportInterval = TimeSpan.FromSeconds(5),
-                             //    }, new AsciiMetricPayloadBuilder((context, name) => $"{context}-{name}"));
-
-                             // factory.AddConsole(
                              //     new ConsoleReporterSettings
                              //     {
                              //         ReportInterval = TimeSpan.FromSeconds(5),
@@ -168,14 +162,8 @@ namespace AppMetrics.Reporters.Sandbox
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(20),
                                  },
+                                 new LoggerFactory(),
                                  new LineProtocolPayloadBuilder());
-
-                             // factory.AddTextFile(
-                             //    new TextFileReporterSettings
-                             //    {
-                             //        ReportInterval = TimeSpan.FromSeconds(5),
-                             //        FileName = @"C:\metrics\sample.txt"
-                             //    });
 
                              factory.AddTextFile(
                                  new TextFileReporterSettings
@@ -183,15 +171,16 @@ namespace AppMetrics.Reporters.Sandbox
                                      ReportInterval = TimeSpan.FromSeconds(5),
                                      FileName = @"C:\metrics\sample.txt"
                                  },
+                                 new LoggerFactory(),
                                  new AsciiMetricPayloadBuilder());
 
-                             //factory.AddConsole(
-                             //    new TextFileReporterSettings
-                             //    {
-                             //        ReportInterval = TimeSpan.FromSeconds(5),
-                             //        FileName = @"C:\metrics\sample.txt"
-                             //    },
-                             //    new LineProtocolPayloadBuilder());
+                             // factory.AddTextFile(
+                             //     new TextFileReporterSettings
+                             //     {
+                             //         ReportInterval = TimeSpan.FromSeconds(5),
+                             //         FileName = @"C:\metrics\sample.txt"
+                             //     },
+                             //     new LineProtocolPayloadBuilder());
 
                              factory.AddHttp(
                                  new HttpReporterSettings
@@ -205,45 +194,20 @@ namespace AppMetrics.Reporters.Sandbox
                                                       Timeout = TimeSpan.FromSeconds(3)
                                                   }
                                  },
+                                 new LoggerFactory(),
                                  new AsciiMetricPayloadBuilder());
                          });
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            var env = PlatformServices.Default.Application;
-
-            Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().
-                                                   WriteTo.RollingFile(Path.Combine($@"C:\logs\{env.ApplicationName}", "log-{Date}.txt")).
-                                                   CreateLogger();
-
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole((l, s) => s == LogLevel.Trace);
-            loggerFactory.AddSerilog(Log.Logger);
-
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddLogging();
+
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole();
         }
 
         private static int GetFreeDiskSpace() { return 1024; }
-    }
-
-    public class Application
-    {
-        public Application(IServiceProvider provider)
-        {
-            Metrics = provider.GetRequiredService<IMetrics>();
-
-            var reporterFactory = provider.GetRequiredService<IReportFactory>();
-            Reporter = reporterFactory.CreateReporter();
-
-            Token = new CancellationToken();
-        }
-
-        public IMetrics Metrics { get; }
-
-        public IReporter Reporter { get; }
-
-        public CancellationToken Token { get; }
     }
 }

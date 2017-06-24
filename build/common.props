@@ -1,31 +1,38 @@
 <Project>
-	<PropertyGroup>
-		<Copyright>Allan Hardy 2016</Copyright>
-		<Authors>Allan Hardy;</Authors>
-		<NoWarn>$(NoWarn);1701;1702;1705;CS1591;CS1570</NoWarn>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<PackageIconUrl>http://app-metrics.io/logo.png</PackageIconUrl>
-	  <PackageProjectUrl>https://alhardy.github.io/app-metrics-docs/getting-started/reporting/index.html</PackageProjectUrl>
-	  <PackageLicenseUrl>https://github.com/alhardy/AppMetrics.Reporting/blob/master/LICENSE</PackageLicenseUrl>
-	  <RepositoryType>git</RepositoryType>
-	  <RepositoryUrl>git://github.com/alhardy/AppMetrics.Reporting</RepositoryUrl>
+  <Import Project="dependencies.props" />
+  <Import Project="..\version.props" />
+
+  <PropertyGroup>
+    <Product>App Metrics</Product>
+    <Copyright>Allan Hardy 2016</Copyright>
+    <Authors>Allan Hardy</Authors>
+    <NoWarn>$(NoWarn);1701;1702;1705;CS1591;CS1570</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageIconUrl>http://app-metrics.io/logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://alhardy.github.io/app-metrics-docs/getting-started/reporting/index.html</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/alhardy/AppMetrics.Reporting/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/alhardy/AppMetrics.Reporting</RepositoryUrl>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-		<GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
-		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-		<CodeAnalysisRuleSet>..\..\AppMetrics.ruleset</CodeAnalysisRuleSet>		
-		<DebugType>full</DebugType>
-	</PropertyGroup>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <CodeAnalysisRuleSet>..\..\AppMetrics.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />		
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)'=='.NETFramework'">
+    <PackageReference Include="NETStandard.Library.NETFramework" Version="$(NETStandardLibraryNETFrameworkVersion)" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="StyleCop.Analyzers" Version="1.0.0">
-		  <PrivateAssets>All</PrivateAssets>
-		</PackageReference>
-	</ItemGroup>
-  
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

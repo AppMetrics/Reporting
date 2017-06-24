@@ -1,15 +1,18 @@
-﻿using System;
+﻿// <copyright file="UserValueTimerSample.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
+
+using System;
 using System.Threading;
 using App.Metrics;
-using App.Metrics.Timer.Abstractions;
+using App.Metrics.Timer;
 
-namespace Metrics.Samples
+namespace AppMetrics.Reporters.Sandbox.Metrics
 {
     public class UserValueTimerSample
     {
-        private readonly ITimer _timer;
-
         private static IMetrics _metrics;
+        private readonly ITimer _timer;
 
         public UserValueTimerSample(IMetrics metrics)
         {
@@ -24,7 +27,7 @@ namespace Metrics.Samples
             {
                 ActualProcessingOfTheRequest(documentId);
 
-                // if needed elapsed time is available in context.Elapsed 
+                // if needed elapsed time is available in context.Elapsed
             }
         }
 
@@ -37,13 +40,8 @@ namespace Metrics.Samples
             }
         }
 
-        private void ActualProcessingOfTheRequest(string documentId)
-        {
-            Thread.Sleep(new Random().Next(1000));
-        }
+        private void ActualProcessingOfTheRequest(string documentId) { Thread.Sleep(new Random().Next(1000)); }
 
-        private void LogDuration(TimeSpan time)
-        {
-        }
+        private void LogDuration(TimeSpan time) { }
     }
 }

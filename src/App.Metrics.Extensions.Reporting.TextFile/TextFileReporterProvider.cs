@@ -5,29 +5,36 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using App.Metrics.Abstractions.Filtering;
-using App.Metrics.Abstractions.Reporting;
+using App.Metrics.Core.Filtering;
+using App.Metrics.Filters;
 using App.Metrics.Reporting;
-using App.Metrics.Reporting.Abstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace App.Metrics.Extensions.Reporting.TextFile
 {
     public class TextFileReporterProvider<TPayload> : IReporterProvider
     {
+        private readonly ILoggerFactory _loggerFactory;
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly TextFileReporterSettings _settings;
 
-        public TextFileReporterProvider(TextFileReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics fitler)
+        public TextFileReporterProvider(
+            TextFileReporterSettings settings,
+            ILoggerFactory loggerFactory,
+            IMetricPayloadBuilder<TPayload> payloadBuilder,
+            IFilterMetrics filter)
         {
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
-            Filter = fitler;
+
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            Filter = filter ?? new NoOpMetricsFilter();
         }
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
+        public IMetricReporter CreateMetricReporter(string name)
         {
             var file = new FileInfo(_settings.FileName);
             file.Directory?.Create();
@@ -37,12 +44,12 @@ namespace App.Metrics.Extensions.Reporting.TextFile
                 {
                     File.WriteAllText(_settings.FileName, p.PayloadFormatted());
 
-                    return AppMetricsTaskCache.SuccessTask;
+                    return Task.FromResult(true);
                 },
                 _payloadBuilder,
                 _settings.ReportInterval,
                 name,
-                loggerFactory);
+                _loggerFactory);
         }
     }
 }

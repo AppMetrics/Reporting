@@ -3,33 +3,39 @@
 // </copyright>
 
 using System;
-using App.Metrics.Abstractions.Filtering;
-using App.Metrics.Abstractions.Reporting;
+using App.Metrics.Core.Filtering;
 using App.Metrics.Extensions.Reporting.Http.Client;
+using App.Metrics.Filters;
 using App.Metrics.Reporting;
-using App.Metrics.Reporting.Abstractions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace App.Metrics.Extensions.Reporting.Http
 {
     public class HttpReporterProvider<TPayload> : IReporterProvider
     {
+        private readonly ILoggerFactory _loggerFactory;
         private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
         private readonly HttpReporterSettings _settings;
 
-        public HttpReporterProvider(HttpReporterSettings settings, IMetricPayloadBuilder<TPayload> payloadBuilder, IFilterMetrics filter)
+        public HttpReporterProvider(
+            HttpReporterSettings settings,
+            ILoggerFactory loggerFactory,
+            IMetricPayloadBuilder<TPayload> payloadBuilder,
+            IFilterMetrics filter)
         {
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));
             _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
-            Filter = filter;
+            Filter = filter ?? new NoOpMetricsFilter();
         }
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
+        public IMetricReporter CreateMetricReporter(string name)
         {
             var httpClient = new DefaultHttpClient(
-                loggerFactory,
+                _loggerFactory,
                 _settings.HttpSettings,
                 _settings.HttpPolicy,
                 _settings.InnerHttpMessageHandler);
@@ -43,7 +49,7 @@ namespace App.Metrics.Extensions.Reporting.Http
                 _payloadBuilder,
                 _settings.ReportInterval,
                 name,
-                loggerFactory);
+                _loggerFactory);
         }
     }
 }

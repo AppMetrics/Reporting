@@ -3,17 +3,16 @@
 // </copyright>
 
 using System;
-using App.Metrics.Abstractions.Reporting;
 using App.Metrics.Reporting;
 
 namespace App.Metrics.Extensions.Reporting.TextFile
 {
     public class TextFileReporterSettings : IReporterSettings
     {
-        public string FileName { get; set; }
-
         /// <inheritdoc />
         public MetricValueDataKeys DataKeys { get; set; }
+
+        public string FileName { get; set; }
 
         public Func<string, string, string> MetricNameFormatter { get; set; }
 

@@ -1,49 +1,30 @@
-﻿using System;
+﻿// <copyright file="SampleMetrics.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using App.Metrics;
+using App.Metrics.Core.Gauge;
 using App.Metrics.Counter;
-using App.Metrics.Counter.Abstractions;
-using App.Metrics.Gauge;
-using App.Metrics.Histogram.Abstractions;
+using App.Metrics.Histogram;
 using App.Metrics.Meter;
-using App.Metrics.Meter.Abstractions;
-using App.Metrics.Timer.Abstractions;
+using App.Metrics.Timer;
 
-namespace Metrics.Samples
+namespace AppMetrics.Reporters.Sandbox.Metrics
 {
     public class SampleMetrics
     {
-        /// <summary>
-        ///     count the current concurrent requests
-        /// </summary>
-        private readonly ICounter _concurrentRequestsCounter;
-
-        /// <summary>
-        ///     keep a histogram of the input data of our request method
-        /// </summary>
-        private readonly IHistogram _histogramOfData;
-
-        /// <summary>
-        ///     measure the rate at which requests come in
-        /// </summary>
-        private readonly IMeter _meter;
-
-        private readonly ICounter _setCounter;
-
-        private readonly IMeter _setMeter;
-
-        /// <summary>
-        ///     measure the time rate and duration of requests
-        /// </summary>
-        private readonly ITimer _timer;
-
-        /// <summary>
-        ///     keep the total count of the requests
-        /// </summary>
-        private readonly ICounter _totalRequestsCounter;
-
         private static IMetrics _metrics;
+
+        private readonly ICounter _concurrentRequestsCounter;
+        private readonly IHistogram _histogramOfData;
+        private readonly IMeter _meter;
+        private readonly ICounter _setCounter;
+        private readonly IMeter _setMeter;
+        private readonly ITimer _timer;
+        private readonly ICounter _totalRequestsCounter;
 
         private double _someValue = 1;
 
@@ -81,11 +62,11 @@ namespace Metrics.Samples
 
             using (_timer.NewContext(i.ToString())) // measure until disposed
             {
-                _someValue *= i + 1; // will be reflected in the gauge 
+                _someValue *= i + 1; // will be reflected in the gauge
 
                 _concurrentRequestsCounter.Increment(); // increment concurrent requests counter
 
-                _totalRequestsCounter.Increment(); // increment total requests counter 
+                _totalRequestsCounter.Increment(); // increment total requests counter
 
                 _meter.Mark(); // signal a new request to the meter
 
@@ -103,7 +84,6 @@ namespace Metrics.Samples
                 _concurrentRequestsCounter.Decrement(); // decrement number of concurrent requests
             }
         }
-
 
         public void RunSomeRequests()
         {

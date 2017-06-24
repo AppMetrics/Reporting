@@ -1,14 +1,18 @@
-﻿using System;
-using App.Metrics;
-using App.Metrics.Meter.Abstractions;
+﻿// <copyright file="SetMeterSample.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
 
-namespace Metrics.Samples
+using System;
+using App.Metrics;
+using App.Metrics.Meter;
+
+namespace AppMetrics.Reporters.Sandbox.Metrics
 {
     public class SetMeterSample
     {
+        private static IMetrics _metrics;
         private readonly IMeter _commandMeter;
         private readonly IMeter _errorMeter;
-        private static IMetrics _metrics;
 
         public SetMeterSample(IMetrics metrics)
         {
@@ -40,18 +44,22 @@ namespace Metrics.Samples
                 {
                     Process(new SendEmail());
                 }
+
                 if (commandIndex == 1)
                 {
                     Process(new ShipProduct());
                 }
+
                 if (commandIndex == 2)
                 {
                     Process(new BillCustomer());
                 }
+
                 if (commandIndex == 3)
                 {
                     Process(new MakeInvoice());
                 }
+
                 if (commandIndex == 4)
                 {
                     Process(new MarkAsPreffered());

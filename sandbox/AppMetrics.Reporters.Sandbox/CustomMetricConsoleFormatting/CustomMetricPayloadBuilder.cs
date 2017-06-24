@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿// <copyright file="CustomMetricPayloadBuilder.cs" company="Allan Hardy">
+// Copyright (c) Allan Hardy. All rights reserved.
+// </copyright>
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using App.Metrics;
 using App.Metrics.Reporting;
-using App.Metrics.Reporting.Abstractions;
-using App.Metrics.Tagging;
 
 namespace AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting
 {
     public class CustomMetricPayloadBuilder : IMetricPayloadBuilder<CustomMetricPayload>
     {
         private CustomMetricPayload _payload;
-
 
         public MetricValueDataKeys DataKeys { get; } = new MetricValueDataKeys();
 

@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using App.Metrics.Abstractions.Reporting;
 using App.Metrics.Reporting;
 
 namespace App.Metrics.Extensions.Reporting.Console
