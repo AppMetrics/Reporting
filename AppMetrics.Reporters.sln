@@ -33,9 +33,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Git", "Git", "{4199989A-27B
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Reporting.Console", "src\App.Metrics.Extensions.Reporting.Console\App.Metrics.Extensions.Reporting.Console.csproj", "{2017C0A4-7CBE-4834-A5EA-D8D9C7E37698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.Console", "src\App.Metrics.Reporting.Console\App.Metrics.Reporting.Console.csproj", "{2017C0A4-7CBE-4834-A5EA-D8D9C7E37698}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Reporting.TextFile", "src\App.Metrics.Extensions.Reporting.TextFile\App.Metrics.Extensions.Reporting.TextFile.csproj", "{2B01FDF8-8E73-4904-9B2C-5BFA505BFF5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.TextFile", "src\App.Metrics.Reporting.TextFile\App.Metrics.Reporting.TextFile.csproj", "{2B01FDF8-8E73-4904-9B2C-5BFA505BFF5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandbox", "sandbox", "{887BC5A0-8ED7-4460-851D-5EFC4AE828DE}"
 EndProject
@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{82BE5E48
 		build\dependencies.props = build\dependencies.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Extensions.Reporting.Http", "src\App.Metrics.Extensions.Reporting.Http\App.Metrics.Extensions.Reporting.Http.csproj", "{A4FCA5FE-5866-419D-B2BE-AAF31751C476}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.Http", "src\App.Metrics.Reporting.Http\App.Metrics.Reporting.Http.csproj", "{A4FCA5FE-5866-419D-B2BE-AAF31751C476}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -19,9 +19,9 @@ var configuration               = HasArgument("BuildConfiguration") ? Argument<s
                                   EnvironmentVariable("BuildConfiguration") != null ? EnvironmentVariable("BuildConfiguration") : "Release";
 var coverWith					= HasArgument("CoverWith") ? Argument<string>("CoverWith") :
                                   EnvironmentVariable("CoverWith") != null ? EnvironmentVariable("CoverWith") : "OpenCover"; // None, DotCover, OpenCover
-var skipReSharperCodeInspect    = Argument("SkipCodeInspect", false) || !IsRunningOnWindows();
+var skipReSharperCodeInspect    = HasArgument("SkipCodeInspect") ? Argument<bool>("SkipCodeInspect", false) || !IsRunningOnWindows(): true;
 var preReleaseSuffix            = HasArgument("PreReleaseSuffix") ? Argument<string>("PreReleaseSuffix") :
-	                              (AppVeyor.IsRunningOnAppVeyor && EnvironmentVariable("PreReleaseSuffix") == null || AppVeyor.Environment.Repository.Tag.IsTag) ? null :
+	                              (AppVeyor.IsRunningOnAppVeyor && EnvironmentVariable("PreReleaseSuffix") == null) || (AppVeyor.IsRunningOnAppVeyor && AppVeyor.Environment.Repository.Tag.IsTag) ? null :
                                   EnvironmentVariable("PreReleaseSuffix") != null ? EnvironmentVariable("PreReleaseSuffix") : "ci";
 var buildNumber                 = HasArgument("BuildNumber") ? Argument<int>("BuildNumber") :
                                   AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number :
@@ -29,12 +29,17 @@ var buildNumber                 = HasArgument("BuildNumber") ? Argument<int>("Bu
                                   EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
 var gitUser						= HasArgument("GitUser") ? Argument<string>("GitUser") : EnvironmentVariable("GitUser");
 var gitPassword					= HasArgument("GitPassword") ? Argument<string>("GitPassword") : EnvironmentVariable("GitPassword");
-var skipHtmlCoverageReport		= Argument("SkipHtmlCoverageReport", true) || !IsRunningOnWindows();
+var skipHtmlCoverageReport		= HasArgument("SkipHtmlCoverageReport") ? Argument<bool>("SkipHtmlCoverageReport", true) || !IsRunningOnWindows() : true;
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE FILES & DIRECTORIES
 //////////////////////////////////////////////////////////////////////
-var packDirs                    = new [] { Directory("./src/App.Metrics.Extensions.Reporting.Console"), Directory("./src/App.Metrics.Extensions.Reporting.TextFile"), Directory("./src/App.Metrics.Extensions.Reporting.Http") };
+var packDirs                    = new [] 
+									{ 
+										Directory("./src/App.Metrics.Reporting.Console"), 
+										Directory("./src/App.Metrics.Reporting.TextFile"), 
+										Directory("./src/App.Metrics.Reporting.Http") 
+									};
 var artifactsDir                = (DirectoryPath) Directory("./artifacts");
 var testResultsDir              = (DirectoryPath) artifactsDir.Combine("test-results");
 var coverageResultsDir          = (DirectoryPath) artifactsDir.Combine("coverage");
@@ -58,7 +63,7 @@ var openCoverFilter				= "+[App.Metrics*]* -[xunit.*]* -[*.Facts]*";
 var openCoverExcludeFile        = "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs";
 var coverIncludeFilter			= "+:App.Metrics*";
 var coverExcludeFilter			= "-:*.Facts";
-var excludeFromCoverage			= "*.AppMetricsExcludeFromCodeCoverage*";
+var excludeFromCoverage			= "*.ExcludeFromCodeCoverage*";
 string versionSuffix			= null;
 
 if (!string.IsNullOrEmpty(preReleaseSuffix))
@@ -146,21 +151,15 @@ Task("Build")
 
 		foreach(var project in projects)
         {
-			// Ignore Net452 on non-windows environments
-			if (project.Path.ToString().Contains("Net452"))
-			{
-				continue;
-			}
-
 			var parsedProject = ParseProject(new FilePath(project.Path.ToString()), configuration);
 
 			if (parsedProject.IsLibrary() && !project.Path.ToString().Contains(".Sandbox")&& !project.Path.ToString().Contains(".Facts") && !project.Path.ToString().Contains(".Benchmarks"))
 			{				
-				settings.Framework = "netstandard1.6";				
+				settings.Framework = "netstandard2.0";				
 			}
 			else
 			{
-				settings.Framework = "netcoreapp1.1";
+				settings.Framework = "netcoreapp2.0";
 			}
 
 			Context.Information("Building as " + settings.Framework + ": " +  project.Path.ToString());
@@ -227,15 +226,9 @@ Task("RunTests")
 			 ArgumentCustomization = args => args.Append("--logger:trx")
 		};
 
-		// Ignore Net452 on non-windows environments
-		if (folderName.Contains("Net452") && !IsRunningOnWindows())
-		{
-			continue;
-		}
-
 		if (!IsRunningOnWindows())
         {
-			settings.Framework = "netcoreapp1.1";
+			settings.Framework = "netcoreapp2.0";
         }	 
 
 		DotNetCoreTest(project.FullPath, settings);

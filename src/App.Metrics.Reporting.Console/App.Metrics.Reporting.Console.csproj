@@ -3,10 +3,10 @@
   <Import Project="..\..\build\common.props" />
     
   <PropertyGroup>
-    <Description>Provides text file reporting capability to App Metrics</Description>
-    <AssemblyTitle>App.Metrics.Extensions.Reporting.TextFile</AssemblyTitle>
+    <Description>Provides console reporting capability to App Metrics</Description>
+    <AssemblyTitle>App.Metrics.Reporting.Console</AssemblyTitle>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageTags>appmetrics;reporting;influxdb</PackageTags>
+    <PackageTags>appmetrics;reporting;console</PackageTags>
     <!--Required for OpenCover-->
     <DebugType>full</DebugType>
   </PropertyGroup>
@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="App.Metrics.Reporting" Version="$(AppMetricsReportingVersion)" />
     <PackageReference Include="App.Metrics.Formatters.Ascii" Version="$(AppMetricsCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="$(MicrosoftConsoleLoggingVersion)" />  
   </ItemGroup>
 
 </Project>
