@@ -6,14 +6,15 @@
     <Description>Provides text file reporting capability to App Metrics</Description>
     <AssemblyTitle>App.Metrics.Reporting.TextFile</AssemblyTitle>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageTags>appmetrics;reporting;influxdb</PackageTags>
-    <!--Required for OpenCover-->
-    <DebugType>full</DebugType>
+    <PackageTags>appmetrics;reporting;influxdb</PackageTags>    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics.Reporting" Version="$(AppMetricsReportingVersion)" />
     <PackageReference Include="App.Metrics.Formatters.Ascii" Version="$(AppMetricsCoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\App.Metrics.Reporting\App.Metrics.Reporting.csproj" />
   </ItemGroup>
 
 </Project>

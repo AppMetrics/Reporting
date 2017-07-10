@@ -6,13 +6,11 @@
     <Description>Provides HTTP reporting capability to App Metrics</Description>
     <AssemblyTitle>App.Metrics.Reporting.Http</AssemblyTitle>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageTags>appmetrics;reporting;http</PackageTags>
-    <!--Required for OpenCover-->
-    <DebugType>full</DebugType>
+    <PackageTags>appmetrics;reporting;http</PackageTags>    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="App.Metrics.Reporting" Version="$(AppMetricsReportingVersion)" />
+    <ProjectReference Include="..\App.Metrics.Reporting\App.Metrics.Reporting.csproj" />
   </ItemGroup>
 
 </Project>

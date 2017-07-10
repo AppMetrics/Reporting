@@ -6,12 +6,9 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics;
 using App.Metrics.Builder;
 using App.Metrics.Core.Scheduling;
 using App.Metrics.Formatters.Ascii;
-using App.Metrics.Formatters.InfluxDB;
-using App.Metrics.Health;
 using App.Metrics.Reporting.Console;
 using App.Metrics.Reporting.Http;
 using App.Metrics.Reporting.Http.Client;
@@ -127,26 +124,24 @@ namespace AppMetrics.Reporters.Sandbox
                              options.ReportingEnabled = true;
                              options.GlobalTags.Add("env", "stage");
                          }).
-                     AddHealthChecks(
-                         factory =>
-                         {
-                             factory.RegisterProcessPrivateMemorySizeHealthCheck("Private Memory Size", 200);
-                             factory.RegisterProcessVirtualMemorySizeHealthCheck("Virtual Memory Size", 200);
-                             factory.RegisterProcessPhysicalMemoryHealthCheck("Working Set", 200);
-
-                             factory.Register("DatabaseConnected", () => Task.FromResult("Database Connection OK"));
-                             factory.Register(
-                                 "DiskSpace",
-                                 () =>
-                                 {
-                                     var freeDiskSpace = GetFreeDiskSpace();
-
-                                     return Task.FromResult(
-                                         freeDiskSpace <= 512
-                                             ? HealthCheckResult.Unhealthy("Not enough disk space: {0}", freeDiskSpace)
-                                             : HealthCheckResult.Unhealthy("Disk space ok: {0}", freeDiskSpace));
-                                 });
-                         }).
+                     // AddHealthChecks(
+                     //     factory =>
+                     //     {
+                     //         factory.RegisterProcessPrivateMemorySizeHealthCheck("Private Memory Size", 200);
+                     //         factory.RegisterProcessVirtualMemorySizeHealthCheck("Virtual Memory Size", 200);
+                     //         factory.RegisterProcessPhysicalMemoryHealthCheck("Working Set", 200);
+                     //         factory.Register("DatabaseConnected", () => Task.FromResult("Database Connection OK"));
+                     //         factory.Register(
+                     //             "DiskSpace",
+                     //             () =>
+                     //             {
+                     //                 var freeDiskSpace = GetFreeDiskSpace();
+                     //                 return Task.FromResult(
+                     //                     freeDiskSpace <= 512
+                     //                         ? HealthCheckResult.Unhealthy("Not enough disk space: {0}", freeDiskSpace)
+                     //                         : HealthCheckResult.Unhealthy("Disk space ok: {0}", freeDiskSpace));
+                     //             });
+                     //     }).
                      AddReporting(
                          factory =>
                          {
@@ -162,7 +157,7 @@ namespace AppMetrics.Reporters.Sandbox
                                  {
                                      ReportInterval = TimeSpan.FromSeconds(20),
                                  },
-                                 new LineProtocolPayloadBuilder());
+                                 new AsciiMetricPayloadBuilder());
 
                              factory.AddTextFile(
                                  new TextFileReporterSettings
