@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.Facts", "test\App.Metrics.Reporting.Facts\App.Metrics.Reporting.Facts.csproj", "{2DF010CC-9CA3-4D85-9469-F0F3ABAA2A8A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.Abstractions", "src\App.Metrics.Reporting.Abstractions\App.Metrics.Reporting.Abstractions.csproj", "{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{2DF010CC-9CA3-4D85-9469-F0F3ABAA2A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DF010CC-9CA3-4D85-9469-F0F3ABAA2A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DF010CC-9CA3-4D85-9469-F0F3ABAA2A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{A4FCA5FE-5866-419D-B2BE-AAF31751C476} = {2D805782-756E-4C98-B22E-F502BEE95318}
 		{0303CC39-B3D8-4668-8331-B698ACD37602} = {2D805782-756E-4C98-B22E-F502BEE95318}
 		{2DF010CC-9CA3-4D85-9469-F0F3ABAA2A8A} = {DD2E4647-7125-4CE3-9BA5-B45A26113A31}
+		{AF9F8AEC-1961-4CEA-8F8B-AFE0132CE7C7} = {2D805782-756E-4C98-B22E-F502BEE95318}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {492C97B1-706A-4357-B3F7-EFB6AFB1F6C6}

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Core.Internal;
+using App.Metrics;
 using App.Metrics.Counter;
 using App.Metrics.Scheduling;
 using Microsoft.Extensions.Logging;
@@ -60,7 +60,7 @@ namespace App.Metrics.Reporting.Internal
 
             _successCounter = new CounterOptions
                               {
-                                  Context = CoreConstants.InternalMetricsContext,
+                                  Context = AppMetricsConstants.InternalMetricsContext,
                                   MeasurementUnit = Unit.Items,
                                   ResetOnReporting = true,
                                   Name = "report_success"
@@ -68,7 +68,7 @@ namespace App.Metrics.Reporting.Internal
 
             _failedCounter = new CounterOptions
                              {
-                                 Context = CoreConstants.InternalMetricsContext,
+                                 Context = AppMetricsConstants.InternalMetricsContext,
                                  MeasurementUnit = Unit.Items,
                                  ResetOnReporting = true,
                                  Name = "report_failed"
