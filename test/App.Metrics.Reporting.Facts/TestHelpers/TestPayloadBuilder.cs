@@ -11,7 +11,7 @@ namespace App.Metrics.Reporting.Facts.TestHelpers
 {
     public class TestPayloadBuilder : IMetricPayloadBuilder<TestMetricPayload>
     {
-        private readonly Func<string, string, string> _metricNameFormatter = (metricContext, metricName) => metricContext.IsMissing()
+        private readonly Func<string, string, string> _metricNameFormatter = (metricContext, metricName) => string.IsNullOrWhiteSpace(metricContext)
             ? $"{metricName}".Replace(' ', '_').ToLowerInvariant()
             : $"{metricContext}__{metricName}".Replace(' ', '_').ToLowerInvariant();
 

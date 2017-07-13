@@ -5,7 +5,6 @@
 using System;
 using App.Metrics.Core.Configuration;
 using App.Metrics.Core.Filtering;
-using App.Metrics.Core.Infrastructure;
 using App.Metrics.Core.Internal;
 using App.Metrics.Counter;
 using App.Metrics.Gauge;
@@ -16,7 +15,6 @@ using App.Metrics.Reporting.Facts.TestHelpers;
 using App.Metrics.Reporting.Internal;
 using App.Metrics.Timer;
 using Microsoft.Extensions.Logging;
-using Moq;
 
 namespace App.Metrics.Reporting.Facts.Fixtures
 {

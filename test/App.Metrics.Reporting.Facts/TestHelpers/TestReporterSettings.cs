@@ -11,7 +11,7 @@ namespace App.Metrics.Reporting.Facts.TestHelpers
         public TestReporterSettings()
         {
             ReportInterval = TimeSpan.FromSeconds(5);
-            MetricNameFormatter = (metricContext, metricName) => metricContext.IsMissing()
+            MetricNameFormatter = (metricContext, metricName) => string.IsNullOrWhiteSpace(metricContext)
                 ? $"{metricName}".Replace(' ', '_').ToLowerInvariant()
                 : $"{metricContext}__{metricName}".Replace(' ', '_').ToLowerInvariant();
         }
