@@ -119,77 +119,60 @@ namespace AppMetrics.Reporters.Sandbox
         private static void ConfigureMetrics(IServiceCollection services)
         {
             services.AddMetrics(
-                         options =>
-                         {
-                             options.ReportingEnabled = true;
-                             options.GlobalTags.Add("env", "stage");
-                         }).
-                     // AddHealthChecks(
-                     //     factory =>
-                     //     {
-                     //         factory.RegisterProcessPrivateMemorySizeHealthCheck("Private Memory Size", 200);
-                     //         factory.RegisterProcessVirtualMemorySizeHealthCheck("Virtual Memory Size", 200);
-                     //         factory.RegisterProcessPhysicalMemoryHealthCheck("Working Set", 200);
-                     //         factory.Register("DatabaseConnected", () => Task.FromResult("Database Connection OK"));
-                     //         factory.Register(
-                     //             "DiskSpace",
-                     //             () =>
-                     //             {
-                     //                 var freeDiskSpace = GetFreeDiskSpace();
-                     //                 return Task.FromResult(
-                     //                     freeDiskSpace <= 512
-                     //                         ? HealthCheckResult.Unhealthy("Not enough disk space: {0}", freeDiskSpace)
-                     //                         : HealthCheckResult.Unhealthy("Disk space ok: {0}", freeDiskSpace));
-                     //             });
-                     //     }).
-                     AddReporting(
-                         factory =>
-                         {
-                             // factory.AddConsole(
-                             //     new ConsoleReporterSettings
-                             //     {
-                             //         ReportInterval = TimeSpan.FromSeconds(5),
-                             //     },
-                             //     new CustomMetricPayloadBuilder());
+                options =>
+                {
+                    options.GlobalTags.Add("env", "stage");
+                });
 
-                             factory.AddConsole(
-                                 new ConsoleReporterSettings
-                                 {
-                                     ReportInterval = TimeSpan.FromSeconds(20),
-                                 },
-                                 new AsciiMetricPayloadBuilder());
+            services.AddReporting(
+                options => options.ReportingEnabled = true,
+                factory =>
+                {
+                    // factory.AddConsole(
+                    //     new ConsoleReporterSettings
+                    //     {
+                    //         ReportInterval = TimeSpan.FromSeconds(5),
+                    //     },
+                    //     new CustomMetricPayloadBuilder());
 
-                             factory.AddTextFile(
-                                 new TextFileReporterSettings
-                                 {
-                                     ReportInterval = TimeSpan.FromSeconds(5),
-                                     FileName = @"C:\metrics\sample.txt",
-                                     AppendMetricsToTextFile = true
-                                 },
-                                 new AsciiMetricPayloadBuilder());
+                    factory.AddConsole(
+                        new ConsoleReporterSettings
+                        {
+                            ReportInterval = TimeSpan.FromSeconds(20),
+                        },
+                        new AsciiMetricPayloadBuilder());
 
-                             // factory.AddTextFile(
-                             //     new TextFileReporterSettings
-                             //     {
-                             //         ReportInterval = TimeSpan.FromSeconds(5),
-                             //         FileName = @"C:\metrics\sample.txt"
-                             //     },
-                             //     new LineProtocolPayloadBuilder());
+                    factory.AddTextFile(
+                        new TextFileReporterSettings
+                        {
+                            ReportInterval = TimeSpan.FromSeconds(5),
+                            FileName = @"C:\metrics\sample.txt",
+                            AppendMetricsToTextFile = true
+                        },
+                        new AsciiMetricPayloadBuilder());
 
-                             factory.AddHttp(
-                                 new HttpReporterSettings
-                                 {
-                                     HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive")),
-                                     ReportInterval = TimeSpan.FromSeconds(5),
-                                     HttpPolicy = new HttpPolicy
-                                                  {
-                                                      BackoffPeriod = TimeSpan.FromSeconds(30),
-                                                      FailuresBeforeBackoff = 5,
-                                                      Timeout = TimeSpan.FromSeconds(3)
-                                                  }
-                                 },
-                                 new AsciiMetricPayloadBuilder());
-                         });
+                    // factory.AddTextFile(
+                    //     new TextFileReporterSettings
+                    //     {
+                    //         ReportInterval = TimeSpan.FromSeconds(5),
+                    //         FileName = @"C:\metrics\sample.txt"
+                    //     },
+                    //     new LineProtocolPayloadBuilder());
+
+                    factory.AddHttp(
+                        new HttpReporterSettings
+                        {
+                            HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive")),
+                            ReportInterval = TimeSpan.FromSeconds(5),
+                            HttpPolicy = new HttpPolicy
+                                         {
+                                             BackoffPeriod = TimeSpan.FromSeconds(30),
+                                             FailuresBeforeBackoff = 5,
+                                             Timeout = TimeSpan.FromSeconds(3)
+                                         }
+                        },
+                        new AsciiMetricPayloadBuilder());
+                });
         }
 
         private static void ConfigureServices(IServiceCollection services)

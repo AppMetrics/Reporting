@@ -3,40 +3,65 @@
 // </copyright>
 
 using System;
-using App.Metrics.Core.Configuration;
+using System.Diagnostics.CodeAnalysis;
+using App.Metrics;
 using App.Metrics.Core.Internal.NoOp;
 using App.Metrics.Reporting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using App.Metrics.Reporting.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 // ReSharper disable CheckNamespace
-namespace App.Metrics.Builder
+namespace Microsoft.Extensions.DependencyInjection
     // ReSharper restore CheckNamespace
 {
     public static class AppMetricsReportingAppMetricsBuilderExtensions
     {
-        public static IAppMetricsBuilder AddReporting(this IAppMetricsBuilder builder, Action<IReportFactory> setupAction)
+        [ExcludeFromCodeCoverage] // DEVNOTE: No need to test Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions
+        public static IServiceCollection AddReporting(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            Action<IReportFactory> setupAction)
         {
-            builder.Services.Replace(
-                ServiceDescriptor.Singleton<IReportFactory>(
-                    provider =>
+            services.Configure<AppMetricsReportingOptions>(configuration);
+
+            return services.AddReporting(setupAction);
+        }
+
+        [ExcludeFromCodeCoverage] // DEVNOTE: No need to test Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions
+        public static IServiceCollection AddReporting(
+            this IServiceCollection services,
+            Action<AppMetricsReportingOptions> setupOptionsAction,
+            Action<IReportFactory> setupAction)
+        {
+            services.Configure(setupOptionsAction);
+
+            return services.AddReporting(setupAction);
+        }
+
+        public static IServiceCollection AddReporting(this IServiceCollection services, Action<IReportFactory> setupAction)
+        {
+            services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AppMetricsReportingOptions>>().Value);
+
+            services.AddSingleton<IReportFactory>(
+                provider =>
+                {
+                    var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+                    var metrics = provider.GetRequiredService<IMetrics>();
+                    var options = provider.GetRequiredService<AppMetricsReportingOptions>();
+
+                    if (!options.ReportingEnabled || setupAction == null)
                     {
-                        var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-                        var metrics = provider.GetRequiredService<IMetrics>();
-                        var options = provider.GetRequiredService<AppMetricsOptions>();
+                        return new NoOpReportFactory();
+                    }
 
-                        if (!options.ReportingEnabled || setupAction == null)
-                        {
-                            return new NoOpReportFactory();
-                        }
+                    var factory = new ReportFactory(metrics, loggerFactory);
+                    setupAction.Invoke(factory);
+                    return factory;
+                });
 
-                        var factory = new ReportFactory(metrics, loggerFactory);
-                        setupAction.Invoke(factory);
-                        return factory;
-                    }));
-
-            return builder;
+            return services;
         }
     }
 }
