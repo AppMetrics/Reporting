@@ -124,7 +124,7 @@ namespace AppMetrics.Reporters.Sandbox
                     options.GlobalTags.Add("env", "stage");
                 });
 
-            services.AddReporting(
+            services.AddMetricsReporting(
                 options => options.ReportingEnabled = true,
                 factory =>
                 {

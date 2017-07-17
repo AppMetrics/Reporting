@@ -19,28 +19,28 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class AppMetricsReportingAppMetricsBuilderExtensions
     {
         [ExcludeFromCodeCoverage] // DEVNOTE: No need to test Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions
-        public static IServiceCollection AddReporting(
+        public static IServiceCollection AddMetricsReporting(
             this IServiceCollection services,
             IConfiguration configuration,
             Action<IReportFactory> setupAction)
         {
             services.Configure<AppMetricsReportingOptions>(configuration);
 
-            return services.AddReporting(setupAction);
+            return services.AddMetricsReporting(setupAction);
         }
 
         [ExcludeFromCodeCoverage] // DEVNOTE: No need to test Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions
-        public static IServiceCollection AddReporting(
+        public static IServiceCollection AddMetricsReporting(
             this IServiceCollection services,
             Action<AppMetricsReportingOptions> setupOptionsAction,
             Action<IReportFactory> setupAction)
         {
             services.Configure(setupOptionsAction);
 
-            return services.AddReporting(setupAction);
+            return services.AddMetricsReporting(setupAction);
         }
 
-        public static IServiceCollection AddReporting(this IServiceCollection services, Action<IReportFactory> setupAction)
+        public static IServiceCollection AddMetricsReporting(this IServiceCollection services, Action<IReportFactory> setupAction)
         {
             services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<AppMetricsReportingOptions>>().Value);
 
