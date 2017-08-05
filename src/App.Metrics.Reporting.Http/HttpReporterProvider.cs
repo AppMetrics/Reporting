@@ -3,11 +3,10 @@
 // </copyright>
 
 using System;
-using App.Metrics.Core.Filtering;
+using App.Metrics.Filtering;
 using App.Metrics.Filters;
 using App.Metrics.Reporting.Http.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace App.Metrics.Reporting.Http
 {

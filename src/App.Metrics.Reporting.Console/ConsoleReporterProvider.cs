@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using App.Metrics.Core.Filtering;
+using App.Metrics.Filtering;
 using App.Metrics.Filters;
 using Microsoft.Extensions.Logging;
 

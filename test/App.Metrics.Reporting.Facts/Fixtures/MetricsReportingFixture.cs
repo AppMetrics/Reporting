@@ -3,18 +3,19 @@
 // </copyright>
 
 using System;
-using App.Metrics.Core.Configuration;
-using App.Metrics.Core.Filtering;
-using App.Metrics.Core.Internal;
 using App.Metrics.Counter;
+using App.Metrics.Filtering;
 using App.Metrics.Gauge;
 using App.Metrics.Histogram;
+using App.Metrics.Internal;
 using App.Metrics.Meter;
 using App.Metrics.Registry;
 using App.Metrics.Reporting.Facts.TestHelpers;
 using App.Metrics.Reporting.Internal;
 using App.Metrics.Timer;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
 
 namespace App.Metrics.Reporting.Facts.Fixtures
 {
@@ -24,7 +25,10 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 
         public MetricsReportingFixture()
         {
-            var options = new AppMetricsOptions();
+            var options = new Mock<IOptions<MetricsOptions>>();
+            options
+                .SetupGet(o => o.Value)
+                .Returns(new MetricsOptions());
             var clock = new TestClock();
 
             IMetricContextRegistry NewContextRegistry(string name) => new DefaultMetricContextRegistry(name);
@@ -34,7 +38,7 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 
             Metrics = () =>
             {
-                var registry = new DefaultMetricsRegistry(_loggerFactory, options, clock, NewContextRegistry);
+                var registry = new DefaultMetricsRegistry(_loggerFactory, options.Object, clock, NewContextRegistry);
                 var metricBuilderFactory = new DefaultMetricsBuilderFactory();
                 var filter = new DefaultMetricsFilter();
                 var dataManager = new DefaultMetricValuesProvider(

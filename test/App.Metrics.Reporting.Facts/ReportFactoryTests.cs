@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using App.Metrics.Core.Configuration;
 using App.Metrics.Scheduling;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -60,7 +59,7 @@ namespace App.Metrics.Reporting.Facts
         public void Logger_factory_is_required()
         {
             var metrics = new Mock<IMetrics>();
-            var options = new AppMetricsOptions();
+            var options = new MetricsOptions();
 
             Action action = () =>
             {

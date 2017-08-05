@@ -5,7 +5,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Core.Scheduling;
 using App.Metrics.Reporting.Facts.Fixtures;
 using App.Metrics.Reporting.Facts.TestHelpers;
 using App.Metrics.Reporting.Internal;

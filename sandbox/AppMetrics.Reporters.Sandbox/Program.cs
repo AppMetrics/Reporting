@@ -7,12 +7,12 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Builder;
-using App.Metrics.Core.Scheduling;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Reporting.Console;
 using App.Metrics.Reporting.Http;
 using App.Metrics.Reporting.Http.Client;
 using App.Metrics.Reporting.TextFile;
+using App.Metrics.Scheduling;
 using AppMetrics.Reporters.Sandbox.Metrics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -121,6 +121,7 @@ namespace AppMetrics.Reporters.Sandbox
             services.AddMetrics(
                 options =>
                 {
+                    options.GlobalTags.Remove("env");
                     options.GlobalTags.Add("env", "stage");
                 });
 
@@ -128,13 +129,6 @@ namespace AppMetrics.Reporters.Sandbox
                 options => options.ReportingEnabled = true,
                 factory =>
                 {
-                    // factory.AddConsole(
-                    //     new ConsoleReporterSettings
-                    //     {
-                    //         ReportInterval = TimeSpan.FromSeconds(5),
-                    //     },
-                    //     new CustomMetricPayloadBuilder());
-
                     factory.AddConsole(
                         new ConsoleReporterSettings
                         {
@@ -151,13 +145,6 @@ namespace AppMetrics.Reporters.Sandbox
                         },
                         new AsciiMetricPayloadBuilder());
 
-                    // factory.AddTextFile(
-                    //     new TextFileReporterSettings
-                    //     {
-                    //         ReportInterval = TimeSpan.FromSeconds(5),
-                    //         FileName = @"C:\metrics\sample.txt"
-                    //     },
-                    //     new LineProtocolPayloadBuilder());
 
                     factory.AddHttp(
                         new HttpReporterSettings
@@ -183,7 +170,5 @@ namespace AppMetrics.Reporters.Sandbox
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddConsole();
         }
-
-        private static int GetFreeDiskSpace() { return 1024; }
     }
 }

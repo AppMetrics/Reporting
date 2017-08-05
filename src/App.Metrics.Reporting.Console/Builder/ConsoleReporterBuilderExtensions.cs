@@ -2,7 +2,7 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
-using App.Metrics.Core.Filtering;
+using App.Metrics.Filtering;
 using App.Metrics.Filters;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Reporting;

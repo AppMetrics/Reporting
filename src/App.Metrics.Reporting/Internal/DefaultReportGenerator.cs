@@ -25,7 +25,7 @@ namespace App.Metrics.Reporting.Internal
         public Task<bool> GenerateAsync(
             IMetricReporter reporter,
             IMetrics metrics,
-            CancellationToken token) { return GenerateAsync(reporter, metrics, metrics.GlobalFilter, token); }
+            CancellationToken token) { return GenerateAsync(reporter, metrics, metrics.Filter, token); }
 
         public async Task<bool> GenerateAsync(
             IMetricReporter reporter,
@@ -39,7 +39,7 @@ namespace App.Metrics.Reporting.Internal
 
             if (reporterMetricsFilter == default(IFilterMetrics))
             {
-                reporterMetricsFilter = metrics.GlobalFilter;
+                reporterMetricsFilter = metrics.Filter;
             }
 
             reporter.StartReportRun(metrics);
