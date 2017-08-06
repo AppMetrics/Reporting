@@ -3,51 +3,44 @@
 // </copyright>
 
 using System;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Filtering;
 using App.Metrics.Filters;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Console
 {
-    public class ConsoleReporterProvider<TPayload> : IReporterProvider
+    public class ConsoleReporterProvider : IReporterProvider
     {
-        private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
-        private readonly ConsoleReporterSettings _settings;
+        private readonly IOptions<MetricsReportingConsoleOptions> _consoleOptionsAccessor;
 
         public ConsoleReporterProvider(
-            ConsoleReporterSettings settings,
-            IMetricPayloadBuilder<TPayload> payloadBuilder)
+            IOptions<MetricsReportingOptions> optionsAccessor,
+            IOptions<MetricsReportingConsoleOptions> consoleOptionsAccessor)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
-            Filter = new NoOpMetricsFilter();
-        }
-
-        public ConsoleReporterProvider(
-            ConsoleReporterSettings settings,
-            IMetricPayloadBuilder<TPayload> payloadBuilder,
-            IFilterMetrics filter)
-        {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
-            Filter = filter ?? new NoOpMetricsFilter();
+            _consoleOptionsAccessor = consoleOptionsAccessor;
+            Filter = optionsAccessor.Value.Filter;
+            ReportInterval = consoleOptionsAccessor.Value.ReportInterval;
         }
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
+        public TimeSpan ReportInterval { get; }
+
+        public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new ReportRunner<TPayload>(
-                p =>
-                {
-                    System.Console.WriteLine(p.PayloadFormatted());
-                    return Task.FromResult(true);
-                },
-                _payloadBuilder,
-                _settings.ReportInterval,
-                name,
-                loggerFactory);
+            using (var stream = new MemoryStream())
+            {
+                await _consoleOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, Encoding.UTF8, cancellationToken);
+
+                var output = Encoding.UTF8.GetString(stream.ToArray());
+
+                System.Console.WriteLine(output);
+            }
+
+            return true;
         }
     }
 }

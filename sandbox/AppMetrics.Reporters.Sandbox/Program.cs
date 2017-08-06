@@ -6,13 +6,11 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Builder;
-using App.Metrics.Formatters.Ascii;
-using App.Metrics.Reporting.Console;
-using App.Metrics.Reporting.Http;
+using App.Metrics.Formatters.Json;
+using App.Metrics.Reporting;
 using App.Metrics.Reporting.Http.Client;
-using App.Metrics.Reporting.TextFile;
 using App.Metrics.Scheduling;
+using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
 using AppMetrics.Reporters.Sandbox.Metrics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,7 +101,7 @@ namespace AppMetrics.Reporters.Sandbox
                 cancellationTokenSource.Token);
 
             Task.Run(
-                () =>
+                action: () =>
                 {
                     application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
 
@@ -118,48 +116,39 @@ namespace AppMetrics.Reporters.Sandbox
 
         private static void ConfigureMetrics(IServiceCollection services)
         {
-            services.AddMetrics(
+            var builder = services.AddMetrics(
                 options =>
                 {
                     options.GlobalTags.Remove("env");
                     options.GlobalTags.Add("env", "stage");
                 });
 
-            services.AddMetricsReporting(
-                options => options.ReportingEnabled = true,
-                factory =>
-                {
-                    factory.AddConsole(
-                        new ConsoleReporterSettings
-                        {
-                            ReportInterval = TimeSpan.FromSeconds(20),
-                        },
-                        new AsciiMetricPayloadBuilder());
-
-                    factory.AddTextFile(
-                        new TextFileReporterSettings
-                        {
-                            ReportInterval = TimeSpan.FromSeconds(5),
-                            FileName = @"C:\metrics\sample.txt",
-                            AppendMetricsToTextFile = true
-                        },
-                        new AsciiMetricPayloadBuilder());
-
-
-                    factory.AddHttp(
-                        new HttpReporterSettings
-                        {
-                            HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive")),
-                            ReportInterval = TimeSpan.FromSeconds(5),
-                            HttpPolicy = new HttpPolicy
-                                         {
-                                             BackoffPeriod = TimeSpan.FromSeconds(30),
-                                             FailuresBeforeBackoff = 5,
-                                             Timeout = TimeSpan.FromSeconds(3)
-                                         }
-                        },
-                        new AsciiMetricPayloadBuilder());
-                });
+            builder.AddMetricsReporting()
+                .AddConsole(options =>
+                   {
+                       options.ReportInterval = TimeSpan.FromSeconds(3);
+                   })
+                .AddTextFile(
+                       options =>
+                       {
+                           options.ReportInterval = TimeSpan.FromSeconds(5);
+                           options.OutputPathAndFileName = @"C:\metrics\sample.txt";
+                           options.AppendMetricsToTextFile = true;
+                           options.MetricsOutputFormatter = new CustomMetricsOutputFormatter();
+                       })
+                .AddHttp(
+                       options =>
+                       {
+                           options.ReportInterval = TimeSpan.FromSeconds(5);
+                           options.HttpSettings = new HttpSettings(new Uri("http://localhost:5000/metrics-receive"));
+                           options.HttpPolicy = new HttpPolicy
+                                                {
+                                                    BackoffPeriod = TimeSpan.FromSeconds(30),
+                                                    FailuresBeforeBackoff = 5,
+                                                    Timeout = TimeSpan.FromSeconds(3)
+                                                };
+                           options.MetricsOutputFormatter = new JsonMetricsOutputFormatter();
+                       });
         }
 
         private static void ConfigureServices(IServiceCollection services)

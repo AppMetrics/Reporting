@@ -14,8 +14,4 @@
     <PackageReference Include="App.Metrics.Abstractions" Version="$(AppMetricsCoreVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>

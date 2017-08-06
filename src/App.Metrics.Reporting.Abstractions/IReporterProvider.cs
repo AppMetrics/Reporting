@@ -2,8 +2,10 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using App.Metrics.Filters;
-using Microsoft.Extensions.Logging;
 
 namespace App.Metrics.Reporting
 {
@@ -11,6 +13,8 @@ namespace App.Metrics.Reporting
     {
         IFilterMetrics Filter { get; }
 
-        IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory);
+        TimeSpan ReportInterval { get; }
+
+        Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

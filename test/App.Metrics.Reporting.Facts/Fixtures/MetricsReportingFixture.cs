@@ -34,7 +34,6 @@ namespace App.Metrics.Reporting.Facts.Fixtures
             IMetricContextRegistry NewContextRegistry(string name) => new DefaultMetricContextRegistry(name);
 
             DefaultMetrics defaultMetrics;
-            ReportGenerator = new DefaultReportGenerator(new LoggerFactory());
 
             Metrics = () =>
             {
@@ -65,8 +64,6 @@ namespace App.Metrics.Reporting.Facts.Fixtures
         }
 
         public Func<IMetrics> Metrics { get; }
-
-        internal DefaultReportGenerator ReportGenerator { get; }
 
         public void Dispose() { Dispose(true); }
 

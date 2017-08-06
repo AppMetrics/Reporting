@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Http.Client
 {
@@ -22,44 +23,15 @@ namespace App.Metrics.Reporting.Http.Client
         private readonly HttpSettings _httpSettings;
         private readonly ILogger<DefaultHttpClient> _logger;
 
-        public DefaultHttpClient(ILoggerFactory loggerFactory, HttpSettings httpSettings)
-            : this(
-                loggerFactory,
-                httpSettings,
-#pragma warning disable SA1118
-                new HttpPolicy
-                {
-                    FailuresBeforeBackoff = Constants.DefaultFailuresBeforeBackoff,
-                    BackoffPeriod = Constants.DefaultBackoffPeriod,
-                    Timeout = Constants.DefaultTimeout
-                })
-        {
-        }
-
-#pragma warning disable SA1118
-
         public DefaultHttpClient(
-            ILoggerFactory loggerFactory,
-            HttpSettings httpSettings,
-            HttpPolicy httpPolicy,
-            HttpMessageHandler httpMessageHandler = null)
+            ILogger<DefaultHttpClient> logger, IOptions<MetricsReportingHttpOptions> httpOptionsAccessor)
         {
-            if (httpSettings == null)
-            {
-                throw new ArgumentNullException(nameof(httpSettings));
-            }
-
-            if (httpPolicy == null)
-            {
-                throw new ArgumentNullException(nameof(httpPolicy));
-            }
-
-            _httpClient = CreateHttpClient(httpSettings, httpPolicy, httpMessageHandler);
-            _httpSettings = httpSettings;
-            _backOffPeriod = httpPolicy.BackoffPeriod;
-            _failuresBeforeBackoff = httpPolicy.FailuresBeforeBackoff;
+            _httpClient = CreateHttpClient(httpOptionsAccessor.Value.HttpSettings, httpOptionsAccessor.Value.HttpPolicy, httpOptionsAccessor.Value.InnerHttpMessageHandler);
+            _httpSettings = httpOptionsAccessor.Value.HttpSettings;
+            _backOffPeriod = httpOptionsAccessor.Value.HttpPolicy.BackoffPeriod;
+            _failuresBeforeBackoff = httpOptionsAccessor.Value.HttpPolicy.FailuresBeforeBackoff;
             _failureAttempts = 0;
-            _logger = loggerFactory.CreateLogger<DefaultHttpClient>();
+            _logger = logger;
         }
 
         public async Task<HttpWriteResult> WriteAsync(

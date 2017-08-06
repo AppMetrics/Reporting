@@ -5,22 +5,21 @@
   <PropertyGroup>
     <Description>App Metrics reporting features.</Description>    
     <TargetFramework>netstandard2.0</TargetFramework>
+	<RootNamespace>App.Metrics.Reporting</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>appmetrics;reporting</PackageTags>    
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Internal\**" />
-    <EmbeddedResource Remove="Internal\**" />
-    <None Remove="Internal\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="App.Metrics.Core" Version="$(AppMetricsCoreVersion)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.Metrics.Reporting.Core\App.Metrics.Reporting.Core.csproj" />
+    <ProjectReference Include="..\App.Metrics.Reporting.Abstractions\App.Metrics.Reporting.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Internal\Extensions\" />
   </ItemGroup>
 
 </Project>

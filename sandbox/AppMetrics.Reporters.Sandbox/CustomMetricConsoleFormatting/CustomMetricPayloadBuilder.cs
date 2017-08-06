@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using App.Metrics;
-using App.Metrics.Reporting;
 
 namespace AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting
 {
@@ -15,6 +14,11 @@ namespace AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting
         private CustomMetricPayload _payload;
 
         public MetricValueDataKeys DataKeys { get; } = new MetricValueDataKeys();
+
+        public CustomMetricPayloadBuilder()
+        {
+            _payload = new CustomMetricPayload();
+        }
 
         /// <inheritdoc />
         public void Clear()

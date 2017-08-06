@@ -3,28 +3,45 @@
 // </copyright>
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using App.Metrics.Filtering;
 using App.Metrics.Filters;
-using Microsoft.Extensions.Logging;
 
 namespace App.Metrics.Reporting.Facts.TestHelpers
 {
     public class TestReportProvider : IReporterProvider
     {
         private readonly bool _pass;
-        private readonly TimeSpan _reportInterval;
         private readonly Exception _throwEx;
 
-        public TestReportProvider(bool pass, TimeSpan reportInterval, Exception throwEx = null)
+        public TestReportProvider(bool pass = true, Exception throwEx = null)
         {
             _pass = throwEx == null && pass;
-            _reportInterval = reportInterval;
             _throwEx = throwEx;
+            ReportInterval = TimeSpan.FromMilliseconds(10);
+            Filter = new NoOpMetricsFilter();
+        }
+
+        public TestReportProvider(TimeSpan interval, bool pass = true, Exception throwEx = null)
+        {
+            ReportInterval = interval;
+            _pass = throwEx == null && pass;
+            _throwEx = throwEx;
+            ReportInterval = TimeSpan.FromMilliseconds(10);
+            Filter = new NoOpMetricsFilter();
         }
 
         // ReSharper disable UnassignedGetOnlyAutoProperty
         public IFilterMetrics Filter { get; }
-        // ReSharper restore UnassignedGetOnlyAutoProperty
 
-        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory) { return new TestMetricReporter(_pass, _reportInterval, _throwEx); }
+        public TimeSpan ReportInterval { get; }
+
+        public Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return Task.FromResult(true);
+        }
+
+        // ReSharper restore UnassignedGetOnlyAutoProperty
     }
 }

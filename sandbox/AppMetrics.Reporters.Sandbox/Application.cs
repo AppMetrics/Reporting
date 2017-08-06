@@ -14,9 +14,7 @@ namespace AppMetrics.Reporters.Sandbox
         public Application(IServiceProvider provider)
         {
             Metrics = provider.GetRequiredService<IMetrics>();
-
-            var reporterFactory = provider.GetRequiredService<IReportFactory>();
-            Reporter = reporterFactory.CreateReporter();
+            Reporter = provider.GetRequiredService<IReporter>();
         }
 
         public IMetrics Metrics { get; }

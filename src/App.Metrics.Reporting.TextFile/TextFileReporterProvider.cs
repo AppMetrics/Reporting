@@ -4,54 +4,50 @@
 
 using System;
 using System.IO;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Filtering;
 using App.Metrics.Filters;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.TextFile
 {
-    public class TextFileReporterProvider<TPayload> : IReporterProvider
+    public class TextFileReporterProvider : IReporterProvider
     {
-        private readonly IMetricPayloadBuilder<TPayload> _payloadBuilder;
-        private readonly TextFileReporterSettings _settings;
+        private readonly IOptions<MetricsReportingTextFileOptions> _textFileOptionsAccessor;
 
         public TextFileReporterProvider(
-            TextFileReporterSettings settings,
-            IMetricPayloadBuilder<TPayload> payloadBuilder,
-            IFilterMetrics filter)
+            IOptions<MetricsReportingOptions> optionsAccessor,
+            IOptions<MetricsReportingTextFileOptions> textFileOptionsAccessor)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            _payloadBuilder = payloadBuilder ?? throw new ArgumentNullException(nameof(payloadBuilder));
-
-            Filter = filter ?? new NoOpMetricsFilter();
+            _textFileOptionsAccessor = textFileOptionsAccessor;
+            Filter = optionsAccessor.Value.Filter;
+            ReportInterval = textFileOptionsAccessor.Value.ReportInterval;
         }
 
         public IFilterMetrics Filter { get; }
 
-        public IMetricReporter CreateMetricReporter(string name, ILoggerFactory loggerFactory)
+        public TimeSpan ReportInterval { get; }
+
+        public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var file = new FileInfo(_settings.FileName);
-            file.Directory?.Create();
+            using (var stream = new MemoryStream())
+            {
+                await _textFileOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, _textFileOptionsAccessor.Value.TextFileEncoding, cancellationToken);
 
-            return new ReportRunner<TPayload>(
-                p =>
+                var output = Encoding.UTF8.GetString(stream.ToArray());
+
+                if (_textFileOptionsAccessor.Value.AppendMetricsToTextFile)
                 {
-                    if (_settings.AppendMetricsToTextFile)
-                    {
-                        File.AppendAllText(_settings.FileName, p.PayloadFormatted(), _settings.TextFileEncoding);
-                    }
-                    else
-                    {
-                        File.WriteAllText(_settings.FileName, p.PayloadFormatted(), _settings.TextFileEncoding);
-                    }
+                    File.AppendAllText(_textFileOptionsAccessor.Value.OutputPathAndFileName, output, _textFileOptionsAccessor.Value.TextFileEncoding);
+                }
+                else
+                {
+                    File.WriteAllText(_textFileOptionsAccessor.Value.OutputPathAndFileName, output, _textFileOptionsAccessor.Value.TextFileEncoding);
+                }
+            }
 
-                    return Task.FromResult(true);
-                },
-                _payloadBuilder,
-                _settings.ReportInterval,
-                name,
-                loggerFactory);
+            return true;
         }
     }
 }
