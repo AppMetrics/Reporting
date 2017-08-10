@@ -6,7 +6,7 @@ using System;
 using App.Metrics;
 using App.Metrics.Histogram;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
     public class UserValueHistogramSample
     {

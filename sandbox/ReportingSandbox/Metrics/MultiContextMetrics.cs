@@ -6,7 +6,7 @@ using App.Metrics;
 using App.Metrics.Counter;
 using App.Metrics.Meter;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
     public class MultiContextMetrics
     {

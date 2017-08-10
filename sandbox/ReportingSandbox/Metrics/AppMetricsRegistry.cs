@@ -6,7 +6,7 @@ using App.Metrics;
 using App.Metrics.Apdex;
 using App.Metrics.Gauge;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
 #pragma warning disable SA1401 // Fields must be private
 #pragma warning disable SA1202 // Elements must be ordered by access

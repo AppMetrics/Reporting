@@ -7,7 +7,7 @@ using System.Threading;
 using App.Metrics;
 using App.Metrics.Timer;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
     public class UserValueTimerSample
     {

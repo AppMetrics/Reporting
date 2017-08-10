@@ -12,7 +12,7 @@ using App.Metrics.Histogram;
 using App.Metrics.Meter;
 using App.Metrics.Timer;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
     public class SampleMetrics
     {

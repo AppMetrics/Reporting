@@ -1,37 +1,37 @@
-﻿// <copyright file="SetMeterSample.cs" company="Allan Hardy">
+﻿// <copyright file="SetCounterSample.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
 using System;
 using App.Metrics;
-using App.Metrics.Meter;
+using App.Metrics.Counter;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
-    public class SetMeterSample
+    public class SetCounterSample
     {
         private static IMetrics _metrics;
-        private readonly IMeter _commandMeter;
-        private readonly IMeter _errorMeter;
+        private readonly ICounter _commandCounter;
+        private readonly ICounter _commandCounterNoPercentages;
+        private readonly ICounter _commandCounterNoReportSetItems;
+        private readonly ICounter _commandCounterNotReset;
 
-        public SetMeterSample(IMetrics metrics)
+        public SetCounterSample(IMetrics metrics)
         {
             _metrics = metrics;
 
-            _errorMeter = _metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.Errors);
-            _commandMeter = _metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.CommandMeter);
+            _commandCounter = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounter);
+            _commandCounterNoPercentages = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNoPercentages);
+            _commandCounterNotReset = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNotReset);
+            _commandCounterNoReportSetItems = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterDontReportSetItems);
         }
 
         public void Process(ICommand command)
         {
-            try
-            {
-                ActualCommandProcessing(command);
-            }
-            catch
-            {
-                _errorMeter.Mark(command.GetType().Name);
-            }
+            _commandCounterNotReset.Increment(command.GetType().Name);
+            _commandCounter.Increment(command.GetType().Name);
+            _commandCounterNoPercentages.Increment(command.GetType().Name);
+            _commandCounterNoReportSetItems.Increment(command.GetType().Name);
         }
 
         public void RunSomeRequests()
@@ -39,7 +39,6 @@ namespace AppMetrics.Reporters.Sandbox.Metrics
             for (var i = 0; i < 30; i++)
             {
                 var commandIndex = new Random().Next() % 5;
-
                 if (commandIndex == 0)
                 {
                     Process(new SendEmail());
@@ -66,8 +65,6 @@ namespace AppMetrics.Reporters.Sandbox.Metrics
                 }
             }
         }
-
-        private void ActualCommandProcessing(ICommand command) { _commandMeter.Mark(command.GetType().Name); }
 
         public interface ICommand
         {

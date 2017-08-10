@@ -7,7 +7,7 @@ using App.Metrics;
 using App.Metrics.Reporting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppMetrics.Reporters.Sandbox
+namespace ReportingSandbox
 {
     public class Application
     {

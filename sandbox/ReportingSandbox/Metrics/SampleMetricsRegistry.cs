@@ -9,7 +9,7 @@ using App.Metrics.Histogram;
 using App.Metrics.Meter;
 using App.Metrics.Timer;
 
-namespace AppMetrics.Reporters.Sandbox.Metrics
+namespace ReportingSandbox.Metrics
 {
 #pragma warning disable SA1401 // Fields must be private
 #pragma warning disable SA1202 // Elements must be ordered by access

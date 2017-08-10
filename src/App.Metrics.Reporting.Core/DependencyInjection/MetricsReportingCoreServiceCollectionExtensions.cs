@@ -152,7 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var metrics = provider.GetRequiredService<IMetrics>();
                     var reporterProviders = provider.GetService<IEnumerable<IReporterProvider>>();
 
-                    if (!optionsAccessor.Value.ReportingEnabled || reporterProviders == null || !reporterProviders.Any())
+                    if (!optionsAccessor.Value.Enabled || reporterProviders == null || !reporterProviders.Any())
                     {
                         return new NoOpMetricsReporter();
                     }

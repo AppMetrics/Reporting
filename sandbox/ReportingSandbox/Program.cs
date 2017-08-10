@@ -11,12 +11,12 @@ using App.Metrics.Formatters.Json;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.Http.Client;
 using App.Metrics.Scheduling;
-using AppMetrics.Reporters.Sandbox.Metrics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ReportingSandbox.Metrics;
 
-namespace AppMetrics.Reporters.Sandbox
+namespace ReportingSandbox
 {
     public class Program
     {

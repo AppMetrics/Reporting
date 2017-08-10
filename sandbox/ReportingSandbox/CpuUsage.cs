@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 
-namespace AppMetrics.Reporters.Sandbox
+namespace ReportingSandbox
 {
     public class CpuUsage
     {

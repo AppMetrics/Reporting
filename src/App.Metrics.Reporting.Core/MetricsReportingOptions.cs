@@ -20,7 +20,7 @@ namespace App.Metrics.Reporting
         /// <value>
         ///     <c>true</c> if [reporting enabled]; otherwise, <c>false</c>.
         /// </value>
-        public bool ReportingEnabled { get; set; } = true;
+        public bool Enabled { get; set; } = true;
 
         public IFilterMetrics Filter { get; }
     }
