@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Metrics.Filtering;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Formatters.Json;
 using App.Metrics.Reporting;

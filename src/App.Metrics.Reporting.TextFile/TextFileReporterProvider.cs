@@ -20,14 +20,17 @@ namespace App.Metrics.Reporting.TextFile
             IOptions<MetricsReportingTextFileOptions> textFileOptionsAccessor)
         {
             _textFileOptionsAccessor = textFileOptionsAccessor;
-            Filter = optionsAccessor.Value.Filter;
+            Filter = textFileOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
             ReportInterval = textFileOptionsAccessor.Value.ReportInterval;
         }
 
+        /// <inheritdoc />
         public IFilterMetrics Filter { get; }
 
+        /// <inheritdoc />
         public TimeSpan ReportInterval { get; }
 
+        /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var stream = new MemoryStream())

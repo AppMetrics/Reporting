@@ -9,10 +9,7 @@ namespace App.Metrics.Reporting
 {
     public class MetricsReportingOptions
     {
-        public MetricsReportingOptions()
-        {
-            Filter = new NoOpMetricsFilter();
-        }
+        public MetricsReportingOptions() { Filter = new NoOpMetricsFilter(); }
 
         /// <summary>
         ///     Gets or sets a value indicating whether [reporting enabled].
@@ -22,6 +19,13 @@ namespace App.Metrics.Reporting
         /// </value>
         public bool Enabled { get; set; } = true;
 
-        public IFilterMetrics Filter { get; }
+        /// <summary>
+        ///    Gets or sets the <see cref="IFilterMetrics"/> which overrides the global metrics snapshot filter set on <see cref="MetricsOptions" /> for all reporters.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="IFilterMetrics" /> to use instead of the global metrics snapshot filter set on
+        ///     <see cref="MetricsOptions" /> .
+        /// </value>
+        public IFilterMetrics Filter { get; set; }
     }
 }

@@ -21,14 +21,17 @@ namespace App.Metrics.Reporting.Console
             IOptions<MetricsReportingConsoleOptions> consoleOptionsAccessor)
         {
             _consoleOptionsAccessor = consoleOptionsAccessor;
-            Filter = optionsAccessor.Value.Filter;
+            Filter = consoleOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
             ReportInterval = consoleOptionsAccessor.Value.ReportInterval;
         }
 
+        /// <inheritdoc />
         public IFilterMetrics Filter { get; }
 
+        /// <inheritdoc />
         public TimeSpan ReportInterval { get; }
 
+        /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var stream = new MemoryStream())

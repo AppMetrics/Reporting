@@ -26,14 +26,17 @@ namespace App.Metrics.Reporting.Http
         {
             _httpOptionsAccessor = httpOptionsAccessor;
             _httpClient = new DefaultHttpClient(loggerFactory.CreateLogger<DefaultHttpClient>(), httpOptionsAccessor);
-            Filter = optionsAccessor.Value.Filter;
+            Filter = _httpOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
             ReportInterval = httpOptionsAccessor.Value.ReportInterval;
         }
 
+        /// <inheritdoc />
         public IFilterMetrics Filter { get; }
 
+        /// <inheritdoc />
         public TimeSpan ReportInterval { get; }
 
+        /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var stream = new MemoryStream())

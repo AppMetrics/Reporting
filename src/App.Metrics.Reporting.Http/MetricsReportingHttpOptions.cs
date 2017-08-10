@@ -4,7 +4,8 @@
 
 using System;
 using System.Net.Http;
-using System.Text;
+using App.Metrics.Filtering;
+using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Reporting.Http.Client;
 
@@ -17,6 +18,7 @@ namespace App.Metrics.Reporting.Http
             ReportInterval = TimeSpan.FromSeconds(10);
             HttpSettings = new HttpSettings();
             HttpPolicy = new HttpPolicy();
+            Filter = new NoOpMetricsFilter();
         }
 
         /// <summary>
@@ -43,6 +45,20 @@ namespace App.Metrics.Reporting.Http
         /// </value>
         public HttpMessageHandler InnerHttpMessageHandler { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the <see cref="IFilterMetrics" /> to use for just this reporter.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="IFilterMetrics" /> to use for this reporter.
+        /// </value>
+        public IFilterMetrics Filter { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the <see cref="IMetricsOutputFormatter" /> used to write metrics.
+        /// </summary>
+        /// <value>
+        ///     The <see cref="IMetricsOutputFormatter" /> used to write metrics.
+        /// </value>
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
 
         /// <summary>
