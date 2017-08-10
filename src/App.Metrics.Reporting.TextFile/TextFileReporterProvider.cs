@@ -4,7 +4,6 @@
 
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Filters;
@@ -33,17 +32,36 @@ namespace App.Metrics.Reporting.TextFile
         {
             using (var stream = new MemoryStream())
             {
-                await _textFileOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, _textFileOptionsAccessor.Value.TextFileEncoding, cancellationToken);
-
-                var output = Encoding.UTF8.GetString(stream.ToArray());
+                await _textFileOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, cancellationToken);
+                var outputStream = stream.ToArray();
 
                 if (_textFileOptionsAccessor.Value.AppendMetricsToTextFile)
                 {
-                    File.AppendAllText(_textFileOptionsAccessor.Value.OutputPathAndFileName, output, _textFileOptionsAccessor.Value.TextFileEncoding);
+                    using (var sourceStream = new FileStream(
+                        _textFileOptionsAccessor.Value.OutputPathAndFileName,
+                        FileMode.Append,
+                        FileAccess.Write,
+                        FileShare.None,
+                        bufferSize: 4096,
+                        useAsync: true))
+                    {
+                        sourceStream.Seek(0, SeekOrigin.End);
+                        await sourceStream.WriteAsync(outputStream, 0, outputStream.Length, cancellationToken);
+                    }
                 }
                 else
                 {
-                    File.WriteAllText(_textFileOptionsAccessor.Value.OutputPathAndFileName, output, _textFileOptionsAccessor.Value.TextFileEncoding);
+                    using (var sourceStream = new FileStream(
+                        _textFileOptionsAccessor.Value.OutputPathAndFileName,
+                        FileMode.Create,
+                        FileAccess.Write,
+                        FileShare.None,
+                        bufferSize: 4096,
+                        useAsync: true))
+                    {
+                        sourceStream.Seek(0, SeekOrigin.End);
+                        await sourceStream.WriteAsync(outputStream, 0, outputStream.Length, cancellationToken);
+                    }
                 }
             }
 

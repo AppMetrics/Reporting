@@ -6,11 +6,11 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Metrics.Formatters.Ascii;
 using App.Metrics.Formatters.Json;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.Http.Client;
 using App.Metrics.Scheduling;
-using AppMetrics.Reporters.Sandbox.CustomMetricConsoleFormatting;
 using AppMetrics.Reporters.Sandbox.Metrics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,7 +103,7 @@ namespace AppMetrics.Reporters.Sandbox
             Task.Run(
                 action: () =>
                 {
-                    application.Reporter.RunReports(application.Metrics, cancellationTokenSource.Token);
+                    application.MetricsReporter.ScheduleReports(cancellationTokenSource.Token);
 
                     Console.WriteLine("Report Cancelled...");
                 },
@@ -134,7 +134,7 @@ namespace AppMetrics.Reporters.Sandbox
                            options.ReportInterval = TimeSpan.FromSeconds(5);
                            options.OutputPathAndFileName = @"C:\metrics\sample.txt";
                            options.AppendMetricsToTextFile = true;
-                           options.MetricsOutputFormatter = new CustomMetricsOutputFormatter();
+                           options.MetricsOutputFormatter = new MetricsTextOutputFormatter();
                        })
                 .AddHttp(
                        options =>
@@ -147,13 +147,12 @@ namespace AppMetrics.Reporters.Sandbox
                                                     FailuresBeforeBackoff = 5,
                                                     Timeout = TimeSpan.FromSeconds(3)
                                                 };
-                           options.MetricsOutputFormatter = new JsonMetricsOutputFormatter();
+                           options.MetricsOutputFormatter = new MetricsJsonOutputFormatter();
                        });
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddLogging();
 
             var loggerFactory = new LoggerFactory();

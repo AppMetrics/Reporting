@@ -33,7 +33,7 @@ namespace App.Metrics.Reporting.Console
         {
             using (var stream = new MemoryStream())
             {
-                await _consoleOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, Encoding.UTF8, cancellationToken);
+                await _consoleOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, cancellationToken);
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 

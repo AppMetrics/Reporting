@@ -21,13 +21,13 @@ namespace App.Metrics.Reporting.Facts
     {
         private readonly IEnumerable<IReporterProvider> _reporterProviders;
         private readonly MetricsReportingFixture _fixture;
-        private readonly ILogger<DefaultReporter> _logger;
+        private readonly ILogger<DefaultMetricsReporter> _logger;
 
         public ReporterTests(MetricsReportingFixture fixture)
         {
             var loggerFactory = new LoggerFactory();
             _fixture = fixture;
-            _logger = loggerFactory.CreateLogger<DefaultReporter>();
+            _logger = loggerFactory.CreateLogger<DefaultMetricsReporter>();
             _reporterProviders = new[] { new TestReportProvider() };
         }
 
@@ -35,11 +35,11 @@ namespace App.Metrics.Reporting.Facts
         public void Can_generate_report_successfully()
         {
             var scheduler = new DefaultTaskScheduler();
-            var reporter = new DefaultReporter(_reporterProviders, _fixture.Metrics(), scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), scheduler, _logger);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
-            Action action = () => { reporter.RunReports(_fixture.Metrics(), token.Token); };
+            Action action = () => { reporter.ScheduleReports(token.Token); };
 
             action.ShouldNotThrow();
         }
@@ -50,7 +50,7 @@ namespace App.Metrics.Reporting.Facts
             Action action = () =>
             {
                 var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultReporter(_reporterProviders, null, scheduler, _logger);
+                var unused = new DefaultMetricsReporter(_reporterProviders, null, scheduler, _logger);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -62,7 +62,7 @@ namespace App.Metrics.Reporting.Facts
             Action action = () =>
             {
                 var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultReporter(_reporterProviders, _fixture.Metrics(), scheduler, null);
+                var unused = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), scheduler, null);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -75,7 +75,7 @@ namespace App.Metrics.Reporting.Facts
             {
                 var loggerFactory = new LoggerFactory();
                 var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultReporter(null, _fixture.Metrics(), scheduler, _logger);
+                var unused = new DefaultMetricsReporter(null, _fixture.Metrics(), scheduler, _logger);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -86,7 +86,7 @@ namespace App.Metrics.Reporting.Facts
         {
             Action action = () =>
             {
-                var unused = new DefaultReporter(_reporterProviders, _fixture.Metrics(), null, _logger);
+                var unused = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), null, _logger);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -103,9 +103,9 @@ namespace App.Metrics.Reporting.Facts
 
             var metrics = _fixture.Metrics();
 
-            var reporter = new DefaultReporter(new[] { provider.Object }, metrics, scheduler.Object, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider.Object }, metrics, scheduler.Object, _logger);
 
-            reporter.RunReports(metrics, CancellationToken.None);
+            reporter.ScheduleReports(CancellationToken.None);
 
             scheduler.Verify(
                 p => p.Interval(interval, TaskCreationOptions.LongRunning, It.IsAny<Action>(), It.IsAny<CancellationToken>()),
@@ -119,11 +119,11 @@ namespace App.Metrics.Reporting.Facts
             var scheduler = new DefaultTaskScheduler();
             var metrics = _fixture.Metrics();
 
-            var reporter = new DefaultReporter(new[] { provider }, metrics, scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler, _logger);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
-            Action action = () => { reporter.RunReports(metrics, token.Token); };
+            Action action = () => { reporter.ScheduleReports(token.Token); };
 
             action.ShouldNotThrow();
         }
@@ -134,11 +134,11 @@ namespace App.Metrics.Reporting.Facts
             var provider = new TestReportProvider(TimeSpan.FromMilliseconds(10), false);
             var scheduler = new DefaultTaskScheduler();
             var metrics = _fixture.Metrics();
-            var reporter = new DefaultReporter(new[] { provider }, metrics, scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler, _logger);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
-            Action action = () => { reporter.RunReports(metrics, token.Token); };
+            Action action = () => { reporter.ScheduleReports(token.Token); };
 
             action.ShouldNotThrow();
         }
@@ -148,9 +148,9 @@ namespace App.Metrics.Reporting.Facts
         {
             var scheduler = new Mock<IScheduler>();
             var metrics = _fixture.Metrics();
-            var reporter = new DefaultReporter(_reporterProviders, metrics, scheduler.Object, _logger);
+            var reporter = new DefaultMetricsReporter(_reporterProviders, metrics, scheduler.Object, _logger);
 
-            reporter.RunReports(metrics, CancellationToken.None);
+            reporter.ScheduleReports(CancellationToken.None);
         }
     }
 }

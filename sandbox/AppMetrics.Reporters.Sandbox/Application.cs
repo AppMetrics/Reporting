@@ -14,11 +14,11 @@ namespace AppMetrics.Reporters.Sandbox
         public Application(IServiceProvider provider)
         {
             Metrics = provider.GetRequiredService<IMetrics>();
-            Reporter = provider.GetRequiredService<IReporter>();
+            MetricsReporter = provider.GetRequiredService<IMetricsReporter>();
         }
 
         public IMetrics Metrics { get; }
 
-        public IReporter Reporter { get; }
+        public IMetricsReporter MetricsReporter { get; }
     }
 }

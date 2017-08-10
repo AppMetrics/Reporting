@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultReporter.cs" company="Allan Hardy">
+﻿// <copyright file="DefaultMetricsReporter.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
@@ -12,10 +12,10 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Metrics.Reporting.Internal
 {
-    public class DefaultReporter : IReporter
+    public class DefaultMetricsReporter : IMetricsReporter
     {
         private readonly CounterOptions _failedCounter;
-        private readonly ILogger<DefaultReporter> _logger;
+        private readonly ILogger<DefaultMetricsReporter> _logger;
         private readonly IEnumerable<IReporterProvider> _reporterProviders;
 
         private readonly IMetrics _metrics;
@@ -23,11 +23,11 @@ namespace App.Metrics.Reporting.Internal
 
         private readonly CounterOptions _successCounter;
 
-        public DefaultReporter(
+        public DefaultMetricsReporter(
             IEnumerable<IReporterProvider> reporterProviders,
             IMetrics metrics,
             IScheduler scheduler,
-            ILogger<DefaultReporter> logger)
+            ILogger<DefaultMetricsReporter> logger)
         {
             _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
             _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
@@ -62,7 +62,7 @@ namespace App.Metrics.Reporting.Internal
             }
         }
 
-        public void RunReports(IMetrics context, CancellationToken token)
+        public Task RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var reportTasks = new List<Task>();
 
@@ -70,12 +70,43 @@ namespace App.Metrics.Reporting.Internal
             {
                 _logger.ReportRunning(provider);
 
-                reportTasks.Add(ScheduleReport(context, token, provider).WithAggregateException());
+                reportTasks.Add(ScheduleReport(_metrics, cancellationToken, provider).WithAggregateException());
             }
 
             try
             {
-                Task.WaitAll(reportTasks.ToArray(), token);
+                return Task.WhenAll(reportTasks.ToArray());
+            }
+            catch (OperationCanceledException ex)
+            {
+                _logger.ReportingCancelled(ex);
+            }
+            catch (AggregateException ex)
+            {
+                _logger.ReportingFailedDuringExecution(ex);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                _logger.ReportingDisposedDuringExecution(ex);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var reportTasks = new List<Task>();
+
+            foreach (var provider in _reporterProviders)
+            {
+                _logger.ReportRunning(provider);
+
+                reportTasks.Add(ScheduleReport(_metrics, cancellationToken, provider).WithAggregateException());
+            }
+
+            try
+            {
+                Task.WaitAll(reportTasks.ToArray(), cancellationToken);
             }
             catch (OperationCanceledException ex)
             {
@@ -99,29 +130,31 @@ namespace App.Metrics.Reporting.Internal
             return _scheduler.Interval(
                 provider.ReportInterval,
                 TaskCreationOptions.LongRunning,
-                async () =>
-                {
-                    try
-                    {
-                        var result = await provider.FlushAsync(metrics.Snapshot.Get(provider.Filter), cancellationToken);
-
-                        if (result)
-                        {
-                            _metrics.Measure.Counter.Increment(_successCounter, provider.GetType().Name);
-                        }
-                        else
-                        {
-                            _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
-                            _logger.ReportFailed(provider);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
-                        _logger.ReportFailed(provider, ex);
-                    }
-                },
+                async () => { await FlushMetrics(metrics, cancellationToken, provider); },
                 cancellationToken);
+        }
+
+        private async Task FlushMetrics(IMetrics metrics, CancellationToken cancellationToken, IReporterProvider provider)
+        {
+            try
+            {
+                var result = await provider.FlushAsync(metrics.Snapshot.Get(provider.Filter), cancellationToken);
+
+                if (result)
+                {
+                    _metrics.Measure.Counter.Increment(_successCounter, provider.GetType().Name);
+                }
+                else
+                {
+                    _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
+                    _logger.ReportFailed(provider);
+                }
+            }
+            catch (Exception ex)
+            {
+                _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
+                _logger.ReportFailed(provider, ex);
+            }
         }
     }
 }

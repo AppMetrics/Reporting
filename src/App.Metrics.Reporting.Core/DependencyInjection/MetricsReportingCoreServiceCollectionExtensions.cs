@@ -143,7 +143,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Reporting Infrastructure
             //
             services.AddSingleton<IScheduler, DefaultTaskScheduler>();
-            services.AddSingleton<IReporter>(
+            services.AddSingleton<IMetricsReporter>(
                 provider =>
                 {
                     var optionsAccessor = provider.GetRequiredService<IOptions<MetricsReportingOptions>>();
@@ -154,10 +154,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
                     if (!optionsAccessor.Value.ReportingEnabled || reporterProviders == null || !reporterProviders.Any())
                     {
-                        return new NoOpReporter();
+                        return new NoOpMetricsReporter();
                     }
 
-                    return new DefaultReporter(reporterProviders, metrics, scheduler, loggerFactory.CreateLogger<DefaultReporter>());
+                    return new DefaultMetricsReporter(reporterProviders, metrics, scheduler, loggerFactory.CreateLogger<DefaultMetricsReporter>());
                 });
 
             //

@@ -11,13 +11,8 @@ namespace App.Metrics.Reporting.Console
     {
         public MetricsReportingConsoleOptions()
         {
-            DataKeys = new MetricValueDataKeys();
             ReportInterval = TimeSpan.FromSeconds(10);
         }
-
-        public MetricValueDataKeys DataKeys { get; set; }
-
-        public Func<string, string, string> MetricNameFormatter { get; set; }
 
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
 

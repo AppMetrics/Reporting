@@ -12,17 +12,12 @@ namespace App.Metrics.Reporting.TextFile
     {
         public MetricsReportingTextFileOptions()
         {
-            DataKeys = new MetricValueDataKeys();
             ReportInterval = TimeSpan.FromSeconds(10);
         }
 
-        public bool AppendMetricsToTextFile { get; set; } = false;
-
-        public MetricValueDataKeys DataKeys { get; set; }
+        public bool AppendMetricsToTextFile { get; set; }
 
         public string OutputPathAndFileName { get; set; }
-
-        public Func<string, string, string> MetricNameFormatter { get; set; }
 
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
 

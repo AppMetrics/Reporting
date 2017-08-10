@@ -14,15 +14,10 @@ namespace App.Metrics.Reporting.Http
     {
         public MetricsReportingHttpOptions()
         {
-            DataKeys = new MetricValueDataKeys();
             ReportInterval = TimeSpan.FromSeconds(10);
             HttpSettings = new HttpSettings();
             HttpPolicy = new HttpPolicy();
         }
-
-        public bool AppendMetricsToTextFile { get; set; } = false;
-
-        public MetricValueDataKeys DataKeys { get; set; }
 
         /// <summary>
         ///     Gets or sets the HTTP policy settings which allows circuit breaker configuration to be adjusted
@@ -48,11 +43,7 @@ namespace App.Metrics.Reporting.Http
         /// </value>
         public HttpMessageHandler InnerHttpMessageHandler { get; set; }
 
-        public Func<string, string, string> MetricNameFormatter { get; set; }
-
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
-
-        public string OutputPathAndFileName { get; set; }
 
         /// <summary>
         ///     Gets or sets the flush metrics interval
@@ -65,7 +56,5 @@ namespace App.Metrics.Reporting.Http
         ///     The <see cref="TimeSpan" /> to wait between reporting metrics
         /// </value>
         public TimeSpan ReportInterval { get; set; }
-
-        public Encoding TextFileEncoding { get; set; } = Encoding.UTF8;
     }
 }

@@ -38,7 +38,7 @@ namespace App.Metrics.Reporting.Http
         {
             using (var stream = new MemoryStream())
             {
-                await _httpOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, Encoding.UTF8, cancellationToken);
+                await _httpOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, cancellationToken);
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 
