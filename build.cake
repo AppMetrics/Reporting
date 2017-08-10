@@ -36,6 +36,7 @@ var skipHtmlCoverageReport		= HasArgument("SkipHtmlCoverageReport") ? Argument<b
 //////////////////////////////////////////////////////////////////////
 var packDirs                    = new [] 
 									{ 
+										Directory("./src/App.Metrics.AspNetCore.Reporting"),
 										Directory("./src/App.Metrics.Reporting"),
 										Directory("./src/App.Metrics.Reporting.Core"),
 										Directory("./src/App.Metrics.Reporting.Abstractions"),
