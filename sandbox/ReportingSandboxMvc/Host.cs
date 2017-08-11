@@ -15,18 +15,18 @@ namespace ReportingSandboxMvc
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseMetrics()
-                .UseMetricsReporting(
-                               options =>
-                               {
-                                   options.AddConsole();
-                                   options.AddTextFile(
-                                       textFileOptions =>
-                                       {
-                                           textFileOptions.OutputPathAndFileName = @"C:\metrics\metrics_web.txt";
-                                           textFileOptions.ReportInterval = TimeSpan.FromSeconds(5);
-                                           textFileOptions.AppendMetricsToTextFile = false;
-                                       });
-                               })
+                 .UseMetricsReporting(
+                                options =>
+                                {
+                                    options.AddConsole();
+                                    options.AddTextFile(
+                                        textFileOptions =>
+                                        {
+                                            textFileOptions.OutputPathAndFileName = @"C:\metrics\metrics_web.txt";
+                                            textFileOptions.ReportInterval = TimeSpan.FromSeconds(20);
+                                            textFileOptions.AppendMetricsToTextFile = false;
+                                        });
+                                })
                 .UseStartup<Startup>()
                 .Build();
         }
