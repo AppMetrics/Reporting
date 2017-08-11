@@ -22,6 +22,13 @@ namespace App.Metrics.Reporting.TextFile
             _textFileOptionsAccessor = textFileOptionsAccessor;
             Filter = textFileOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
             ReportInterval = textFileOptionsAccessor.Value.ReportInterval;
+
+            var fileInfo = new FileInfo(_textFileOptionsAccessor.Value.OutputPathAndFileName);
+
+            if (!fileInfo.Directory.Exists)
+            {
+                Directory.CreateDirectory(fileInfo.Directory.FullName);
+            }
         }
 
         /// <inheritdoc />

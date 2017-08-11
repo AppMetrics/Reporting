@@ -4,6 +4,7 @@
 
 using System;
 using App.Metrics.AspNetCore.Reporting;
+using App.Metrics.Reporting.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable CheckNamespace
@@ -25,7 +26,7 @@ namespace Microsoft.AspNetCore.Hosting
         /// </exception>
         public static IWebHostBuilder UseMetricsReporting(
             this IWebHostBuilder hostBuilder,
-            Action<IMetricsReportingCoreBuilder> setupAction)
+            Action<IMetricsReportingBuilder> setupAction)
         {
             if (hostBuilder == null)
             {
@@ -34,7 +35,9 @@ namespace Microsoft.AspNetCore.Hosting
 
             hostBuilder.ConfigureServices((context, services) =>
             {
-                var builder = services.AddMetricsReportingCore();
+                services.AddMetricsReportingCore(context.Configuration.GetSection("MetricsReportingOptions"));
+
+                var builder = new MetricsReportingBuilder(services);
 
                 setupAction?.Invoke(builder);
 

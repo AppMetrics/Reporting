@@ -15,6 +15,7 @@ namespace App.Metrics.Reporting.TextFile
         {
             ReportInterval = TimeSpan.FromSeconds(10);
             Filter = new NoOpMetricsFilter();
+            OutputPathAndFileName = @".\metrics.txt";
         }
 
         /// <summary>

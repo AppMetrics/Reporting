@@ -3,13 +3,8 @@
 // </copyright>
 
 using System;
-using System.Threading.Tasks;
-using App.Metrics.DependencyInjection.Internal;
-using App.Metrics.Reporting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace App.Metrics.AspNetCore.Reporting
 {
@@ -19,22 +14,7 @@ namespace App.Metrics.AspNetCore.Reporting
         {
             return app =>
             {
-                // Verify if AddMetrics was done before calling UseMetricsEndpoints
-                // We use the MetricsMarkerService to make sure if all the services were added.
-                AppMetricsServicesHelper.ThrowIfMetricsNotRegistered(app.ApplicationServices);
-
-                var options = app.ApplicationServices.GetRequiredService<IOptions<MetricsReportingOptions>>();
-
-                if (!options.Value.Enabled)
-                {
-                    next(app);
-                    return;
-                }
-
-                var lifetime = app.ApplicationServices.GetRequiredService<IApplicationLifetime>();
-                var reporter = app.ApplicationServices.GetRequiredService<IMetricsReporter>();
-
-                lifetime.ApplicationStarted.Register(() => { Task.Run(() => reporter.ScheduleReports(lifetime.ApplicationStopping), lifetime.ApplicationStopping); });
+                app.UseMetricsReporting();
 
                 next(app);
             };
