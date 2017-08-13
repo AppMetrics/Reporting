@@ -3,11 +3,13 @@
 // </copyright>
 
 using System;
+using App.Metrics.Reporting;
 using App.Metrics.Reporting.Internal;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace App.Metrics.Reporting
+// ReSharper disable CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection
+    // ReSharper restore CheckNamespace
 {
     /// <summary>
     ///     Extension methods for setting up App Metrics Reporting services in an <see cref="IServiceCollection" />.

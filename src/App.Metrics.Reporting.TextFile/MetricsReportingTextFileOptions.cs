@@ -3,18 +3,19 @@
 // </copyright>
 
 using System;
-using App.Metrics.Filtering;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 
 namespace App.Metrics.Reporting.TextFile
 {
+    /// <summary>
+    ///     Provides programmatic configuration of Text File Reporting in the App Metrics framework.
+    /// </summary>
     public class MetricsReportingTextFileOptions
     {
         public MetricsReportingTextFileOptions()
         {
-            ReportInterval = TimeSpan.FromSeconds(10);
-            Filter = new NoOpMetricsFilter();
+            ReportInterval = TimeSpan.FromSeconds(20);
             OutputPathAndFileName = @".\metrics.txt";
         }
 
@@ -42,6 +43,10 @@ namespace App.Metrics.Reporting.TextFile
         /// </value>
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the directory and filename where metrics are written.
+        /// </summary>
+        /// <remarks>If not sets writes metrics.txt to the application's running directory.</remarks>
         public string OutputPathAndFileName { get; set; }
 
         /// <summary>
@@ -49,7 +54,7 @@ namespace App.Metrics.Reporting.TextFile
         /// </summary>
         /// <remarks>
         ///     This <see cref="TimeSpan" /> will apply to all configured reporters unless overriden by a specific reporters
-        ///     options.
+        ///     options. Defaults to 20 secs.
         /// </remarks>
         /// <value>
         ///     The <see cref="TimeSpan" /> to wait between reporting metrics

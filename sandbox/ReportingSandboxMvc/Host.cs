@@ -3,6 +3,8 @@
 // </copyright>
 
 using System;
+using System.Diagnostics;
+using App.Metrics.AspNetCore.Reporting;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,23 +16,28 @@ namespace ReportingSandboxMvc
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .UseMetrics()
-                 .UseMetricsReporting(
-                                options =>
-                                {
-                                    options.AddConsole();
-                                    options.AddTextFile(
-                                        textFileOptions =>
-                                        {
-                                            textFileOptions.OutputPathAndFileName = @"C:\metrics\metrics_web.txt";
-                                            textFileOptions.ReportInterval = TimeSpan.FromSeconds(20);
-                                            textFileOptions.AppendMetricsToTextFile = false;
-                                        });
-                                })
-                .UseStartup<Startup>()
-                .Build();
+                            .UseMetrics()
+                            .UseMetricsReporting(ConfigureMetricsReportingOptions())
+                            .UseStartup<Startup>().Build();
         }
 
         public static void Main(string[] args) { BuildWebHost(args).Run(); }
+
+        private static Action<MetricsReportingWebHostOptions> ConfigureMetricsReportingOptions()
+        {
+            return options =>
+            {
+                options.ReportingBuilder = reportingBuilder =>
+                {
+                    reportingBuilder.AddConsole();
+                    reportingBuilder.AddTextFile(textFileOptions => textFileOptions.OutputPathAndFileName = @"C:\metrics\sample.txt");
+                };
+
+                options.UnobservedTaskExceptionHandler = (sender, args) =>
+                {
+                    Trace.WriteLine(args.Exception);
+                };
+            };
+        }
     }
 }

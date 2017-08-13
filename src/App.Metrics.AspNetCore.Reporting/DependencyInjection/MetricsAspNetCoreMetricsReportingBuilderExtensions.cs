@@ -23,11 +23,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>An <see cref="IMetricsReportingBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
         public static IMetricsReportingBuilder AddHostedServiceScheduling(this IMetricsReportingBuilder builder)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
             var coreBuilder = new MetricsReportingCoreBuilder(builder.Services);
 
             coreBuilder.AddHostedServiceSchedulingCore();
@@ -43,11 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>An <see cref="IMetricsReportingBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
         public static IMetricsReportingBuilder AddHostedServiceScheduling(this IMetricsReportingBuilder builder, EventHandler<UnobservedTaskExceptionEventArgs> unobservedTaskExceptionHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
             var coreBuilder = new MetricsReportingCoreBuilder(builder.Services);
 
             coreBuilder.AddHostedServiceSchedulingCore();

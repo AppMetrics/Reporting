@@ -17,6 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class MetricsReportingConsoleServiceCollectionExtensions
     {
+        /// <summary>
+        ///     Adds essential App Metrics Console Reporting services to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+        /// <returns>
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
+        /// </returns>
         public static IServiceCollection AddConsoleCore(this IServiceCollection services)
         {
             AddConsoleReportingServices(services);

@@ -4,13 +4,15 @@
 
 using System;
 using System.Net.Http;
-using App.Metrics.Filtering;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Reporting.Http.Client;
 
 namespace App.Metrics.Reporting.Http
 {
+    /// <summary>
+    ///     Provides programmatic configuration of HTTP Reporting in the App Metrics framework.
+    /// </summary>
     public class MetricsReportingHttpOptions
     {
         public MetricsReportingHttpOptions()
@@ -18,7 +20,6 @@ namespace App.Metrics.Reporting.Http
             ReportInterval = TimeSpan.FromSeconds(10);
             HttpSettings = new HttpSettings();
             HttpPolicy = new HttpPolicy();
-            Filter = new NoOpMetricsFilter();
         }
 
         /// <summary>

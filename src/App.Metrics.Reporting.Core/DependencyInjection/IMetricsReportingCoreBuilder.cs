@@ -7,10 +7,13 @@ namespace Microsoft.Extensions.DependencyInjection
     // ReSharper restore CheckNamespace
 {
     /// <summary>
-    ///     Provides extensiblity on App Metrics Reporting
+    ///     An interface for configuring App Metrics Reporting services.
     /// </summary>
     public interface IMetricsReportingCoreBuilder
     {
+        /// <summary>
+        ///     Gets the <see cref="IServiceCollection"/> where Metrics Reporting services are configured.
+        /// </summary>
         IServiceCollection Services { get; }
     }
 }

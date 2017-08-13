@@ -3,12 +3,14 @@
 // </copyright>
 
 using System;
+using App.Metrics.Formatters;
+using App.Metrics.Formatters.Ascii;
 using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Console.Internal
 {
     /// <summary>
-    ///     Sets up default conole reporting options for <see cref="MetricsReportingConsoleOptions"/>.
+    ///     Sets up default Console Reporting options for <see cref="MetricsReportingConsoleOptions"/>.
     /// </summary>
     public class MetricsReportingConsoleOptionsSetup : IConfigureOptions<MetricsReportingConsoleOptions>
     {
@@ -19,11 +21,16 @@ namespace App.Metrics.Reporting.Console.Internal
             _metricsOptionsAccessor = metricsOptionsAccessor.Value ?? throw new ArgumentNullException(nameof(metricsOptionsAccessor));
         }
 
+        /// <inheritdoc/>
         public void Configure(MetricsReportingConsoleOptions options)
         {
-            if (options.MetricsOutputFormatter == null)
+            if (options.MetricsOutputFormatter == default(IMetricsOutputFormatter))
             {
-                options.MetricsOutputFormatter = _metricsOptionsAccessor.DefaultOutputMetricsFormatter;
+                var textFormatter = _metricsOptionsAccessor.OutputMetricsFormatters.GetType<MetricsTextOutputFormatter>();
+
+                options.MetricsOutputFormatter = textFormatter == default(IMetricsOutputFormatter)
+                    ? _metricsOptionsAccessor.DefaultOutputMetricsFormatter
+                    : textFormatter;
             }
         }
     }

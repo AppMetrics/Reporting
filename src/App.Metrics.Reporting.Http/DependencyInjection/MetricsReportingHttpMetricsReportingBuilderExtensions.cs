@@ -9,6 +9,9 @@ using App.Metrics.Reporting.Http;
 namespace Microsoft.Extensions.DependencyInjection
     // ReSharper restore CheckNamespace
 {
+    /// <summary>
+    ///     Extension methods for setting up App Metrics Reporting AspNet Core services in an <see cref="IMetricsReportingBuilder" />.
+    /// </summary>
     public static class MetricsReportingHttpMetricsReportingBuilderExtensions
     {
         /// <summary>

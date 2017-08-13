@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Formatters.Ascii;
 using App.Metrics.Formatters.Json;
-using App.Metrics.Reporting;
 using App.Metrics.Reporting.Http.Client;
 using App.Metrics.Scheduling;
 using Microsoft.AspNetCore.Hosting;

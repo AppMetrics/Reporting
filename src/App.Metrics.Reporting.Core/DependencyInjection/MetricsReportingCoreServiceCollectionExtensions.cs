@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using App.Metrics;
+using App.Metrics.DependencyInjection.Internal;
 using App.Metrics.Reporting;
 using App.Metrics.Reporting.DependencyInjection.Internal;
 using App.Metrics.Reporting.Internal;
@@ -26,12 +27,11 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class MetricsReportingCoreServiceCollectionExtensions
     {
         /// <summary>
-        ///     Adds essential App Metrics AspNet Core metrics services to the specified <see cref="IServiceCollection" />.
+        ///     Adds essential App Metrics Reporting services to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <returns>
-        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics AspNet Core metrics
-        ///     services.
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
         /// </returns>
         public static IMetricsReportingCoreBuilder AddMetricsReportingCore(this IServiceCollection services)
         {
@@ -41,13 +41,12 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        ///     Adds essential App Metrics AspNet Core metrics services to the specified <see cref="IServiceCollection" />.
+        ///     Adds essential App Metrics Reporting services to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <param name="configuration">The <see cref="IConfiguration" /> from where to load <see cref="MetricsReportingOptions" />.</param>
         /// <returns>
-        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics AspNet Core metrics
-        ///     services.
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
         /// </returns>
         public static IMetricsReportingCoreBuilder AddMetricsReportingCore(
             this IServiceCollection services,
@@ -61,7 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        ///     Adds essential App Metrics AspNet Core metrics services to the specified <see cref="IServiceCollection" />.
+        ///     Adds essential App Metrics Reporting services to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <param name="configuration">The <see cref="IConfiguration" /> from where to load <see cref="MetricsReportingOptions" />.</param>
@@ -69,8 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
         ///     An <see cref="Action{MetricsReportingOptions}" /> to configure the provided <see cref="MetricsReportingOptions" />.
         /// </param>
         /// <returns>
-        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics AspNet Core metrics
-        ///     services.
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
         /// </returns>
         public static IMetricsReportingCoreBuilder AddMetricsReportingCore(
             this IServiceCollection services,
@@ -86,7 +84,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        ///     Adds essential App Metrics AspNet Core metrics services to the specified <see cref="IServiceCollection" />.
+        ///     Adds essential App Metrics Reporting services to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <param name="setupAction">
@@ -94,8 +92,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </param>
         /// <param name="configuration">The <see cref="IConfiguration" /> from where to load <see cref="MetricsReportingOptions" />.</param>
         /// <returns>
-        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics AspNet Core metrics
-        ///     services.
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
         /// </returns>
         public static IMetricsReportingCoreBuilder AddMetricsReportingCore(
             this IServiceCollection services,
@@ -111,15 +108,14 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        ///     Adds essential App Metrics AspNet Core metrics services to the specified <see cref="IServiceCollection" />.
+        ///     Adds essential App Metrics Reporting services to the specified <see cref="IServiceCollection" />.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <param name="setupAction">
         ///     An <see cref="Action{MetricsReportingOptions}" /> to configure the provided <see cref="MetricsReportingOptions" />.
         /// </param>
         /// <returns>
-        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics AspNet Core metrics
-        ///     services.
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting services.
         /// </returns>
         public static IMetricsReportingCoreBuilder AddMetricsReportingCore(
             this IServiceCollection services,
@@ -144,13 +140,15 @@ namespace Microsoft.Extensions.DependencyInjection
             //
             services.AddSingleton<IScheduler, DefaultTaskScheduler>();
             services.AddSingleton<IMetricsReporter>(
-                provider =>
+                serviceProvider =>
                 {
-                    var optionsAccessor = provider.GetRequiredService<IOptions<MetricsReportingOptions>>();
-                    var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
-                    var scheduler = provider.GetRequiredService<IScheduler>();
-                    var metrics = provider.GetRequiredService<IMetrics>();
-                    var reporterProviders = provider.GetService<IEnumerable<IReporterProvider>>();
+                    AppMetricsServicesHelper.ThrowIfMetricsNotRegistered(serviceProvider);
+
+                    var optionsAccessor = serviceProvider.GetRequiredService<IOptions<MetricsReportingOptions>>();
+                    var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+                    var scheduler = serviceProvider.GetRequiredService<IScheduler>();
+                    var metrics = serviceProvider.GetRequiredService<IMetrics>();
+                    var reporterProviders = serviceProvider.GetService<IEnumerable<IReporterProvider>>();
 
                     if (!optionsAccessor.Value.Enabled || reporterProviders == null || !reporterProviders.Any())
                     {

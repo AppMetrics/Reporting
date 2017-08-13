@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using App.Metrics;
 using App.Metrics.AspNetCore.Reporting.Internal.Infrastructure;
+using App.Metrics.DependencyInjection.Internal;
 using App.Metrics.Reporting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -27,11 +28,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>An <see cref="IMetricsReportingBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
         public static IMetricsReportingCoreBuilder AddHostedServiceSchedulingCore(this IMetricsReportingCoreBuilder builder)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
             AddReportScheduling(builder.Services);
 
             return builder;
@@ -45,11 +41,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>An <see cref="IMetricsReportingCoreBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
         public static IMetricsReportingCoreBuilder AddHostedServiceSchedulingCore(this IMetricsReportingCoreBuilder builder, EventHandler<UnobservedTaskExceptionEventArgs> unobservedTaskExceptionHandler)
         {
-            if (builder == null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
             AddReportScheduling(builder.Services, unobservedTaskExceptionHandler);
 
             return builder;

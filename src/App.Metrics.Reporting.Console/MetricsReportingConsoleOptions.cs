@@ -9,6 +9,9 @@ using App.Metrics.Formatters;
 
 namespace App.Metrics.Reporting.Console
 {
+    /// <summary>
+    ///     Provides programmatic configuration of Console Reporting in the App Metrics framework.
+    /// </summary>
     public class MetricsReportingConsoleOptions
     {
         public MetricsReportingConsoleOptions()

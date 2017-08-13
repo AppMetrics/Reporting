@@ -2,15 +2,15 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
-using App.Metrics.Filtering;
 using App.Metrics.Filters;
 
 namespace App.Metrics.Reporting
 {
+    /// <summary>
+    ///     Provides programmatic configuration of Metrics Reporting in the App Metrics framework.
+    /// </summary>
     public class MetricsReportingOptions
     {
-        public MetricsReportingOptions() { Filter = new NoOpMetricsFilter(); }
-
         /// <summary>
         ///     Gets or sets a value indicating whether [reporting enabled].
         /// </summary>

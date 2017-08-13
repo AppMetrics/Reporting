@@ -13,10 +13,18 @@ namespace Microsoft.Extensions.DependencyInjection
     // ReSharper restore CheckNamespace
 {
     /// <summary>
-    /// Extension methods for setting up essential App Metrics HTTP reporting services in an <see cref="IServiceCollection"/>.
+    ///     Extension methods for setting up essential App Metrics Reporting services in an <see cref="IServiceCollection" />.
     /// </summary>
     public static class MetricsReportingHttpServiceCollectionExtensions
     {
+        /// <summary>
+        ///     Adds essential App Metrics HTTP Reporting services to the specified <see cref="IServiceCollection" />.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+        /// <returns>
+        ///     An <see cref="IMetricsReportingCoreBuilder" /> that can be used to further configure the App Metrics Reporting
+        ///     services.
+        /// </returns>
         public static IServiceCollection AddHttpCore(this IServiceCollection services)
         {
             AddHttpReportingServices(services);
@@ -29,7 +37,8 @@ namespace Microsoft.Extensions.DependencyInjection
             //
             // Options
             //
-            var optionsSetupDescriptor = ServiceDescriptor.Transient<IConfigureOptions<MetricsReportingHttpOptions>, MetricsReportingHttpOptionsSetup>();
+            var optionsSetupDescriptor =
+                ServiceDescriptor.Transient<IConfigureOptions<MetricsReportingHttpOptions>, MetricsReportingHttpOptionsSetup>();
             services.TryAddEnumerable(optionsSetupDescriptor);
 
             //
