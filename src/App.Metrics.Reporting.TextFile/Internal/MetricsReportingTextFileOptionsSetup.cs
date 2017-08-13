@@ -23,7 +23,7 @@ namespace App.Metrics.Reporting.TextFile.Internal
         {
             if (options.MetricsOutputFormatter == null)
             {
-                options.MetricsOutputFormatter = _metricsOptionsAccessor.DefaultOutputMetricsTextFormatter;
+                options.MetricsOutputFormatter = _metricsOptionsAccessor.DefaultOutputMetricsFormatter;
             }
         }
     }
