@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +13,6 @@ namespace App.Metrics.Reporting
     {
         void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken));
 
-        Task RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken));
+        IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }

@@ -2,7 +2,9 @@
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +20,6 @@ namespace App.Metrics.Reporting.Internal.NoOp
         public void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken)) { }
 
         /// <inheritdoc />
-        public Task RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken)) { return Task.CompletedTask; }
+        public IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken)) { return Enumerable.Empty<Task>(); }
     }
 }

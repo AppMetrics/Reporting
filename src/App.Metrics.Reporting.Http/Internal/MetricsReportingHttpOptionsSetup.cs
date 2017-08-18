@@ -19,6 +19,7 @@ namespace App.Metrics.Reporting.Http.Internal
             _metricsOptionsAccessor = metricsOptionsAccessor.Value ?? throw new ArgumentNullException(nameof(metricsOptionsAccessor));
         }
 
+        /// <inheritdoc/>
         public void Configure(MetricsReportingHttpOptions options)
         {
             if (options.MetricsOutputFormatter == null)

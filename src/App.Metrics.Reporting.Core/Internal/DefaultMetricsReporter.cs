@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Counter;
@@ -62,37 +63,13 @@ namespace App.Metrics.Reporting.Internal
             }
         }
 
-        public Task RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <inheritdoc />
+        public IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var reportTasks = new List<Task>();
-
-            foreach (var provider in _reporterProviders)
-            {
-                _logger.ReportRunning(provider);
-
-                reportTasks.Add(ScheduleReport(_metrics, cancellationToken, provider).WithAggregateException());
-            }
-
-            try
-            {
-                return Task.WhenAll(reportTasks.ToArray());
-            }
-            catch (OperationCanceledException ex)
-            {
-                _logger.ReportingCancelled(ex);
-            }
-            catch (AggregateException ex)
-            {
-                _logger.ReportingFailedDuringExecution(ex);
-            }
-            catch (ObjectDisposedException ex)
-            {
-                _logger.ReportingDisposedDuringExecution(ex);
-            }
-
-            return Task.CompletedTask;
+            return _reporterProviders.Select(provider => FlushMetrics(_metrics, cancellationToken, provider));
         }
 
+        /// <inheritdoc />
         public void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken))
         {
             var reportTasks = new List<Task>();
