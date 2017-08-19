@@ -23,9 +23,9 @@ namespace ReportingSandboxMvc
 
         public static void Main(string[] args) { BuildWebHost(args).Run(); }
 
-        private static Action<MetricsReportingWebHostOptions> ConfigureMetricsReportingOptions()
+        private static Action<WebHostBuilderContext, MetricsReportingWebHostOptions> ConfigureMetricsReportingOptions()
         {
-            return options =>
+            return (context, options) =>
             {
                 options.ReportingBuilder = reportingBuilder =>
                 {
