@@ -5,6 +5,7 @@
 using System;
 using App.Metrics.AspNetCore.Reporting;
 using App.Metrics.DependencyInjection.Internal;
+using App.Metrics.Reporting;
 using App.Metrics.Reporting.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,7 +68,7 @@ namespace Microsoft.AspNetCore.Hosting
             MetricsReportingWebHostOptions metricsReportingOptions)
         {
             var reportingCoreBuilder = services.AddMetricsReportingCore(
-                context.Configuration.GetSection("MetricsReportingOptions"),
+                context.Configuration.GetSection(nameof(MetricsReportingOptions)),
                 metricsReportingOptions.ReportingOptions);
 
             var reportingBuilder = new MetricsReportingBuilder(reportingCoreBuilder.Services);
