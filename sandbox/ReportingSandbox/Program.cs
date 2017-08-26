@@ -4,7 +4,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Formatters.Ascii;
@@ -13,8 +12,8 @@ using App.Metrics.Reporting.Http.Client;
 using App.Metrics.Scheduling;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using ReportingSandbox.Metrics;
+using Serilog;
 
 namespace ReportingSandbox
 {
@@ -153,10 +152,11 @@ namespace ReportingSandbox
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging();
-
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddConsole();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.LiterateConsole()
+                .WriteTo.Seq("http://localhost:5341")
+                .CreateLogger();
         }
     }
 }

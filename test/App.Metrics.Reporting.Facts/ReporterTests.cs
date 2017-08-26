@@ -11,7 +11,6 @@ using App.Metrics.Reporting.Facts.TestHelpers;
 using App.Metrics.Reporting.Internal;
 using App.Metrics.Scheduling;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,13 +20,10 @@ namespace App.Metrics.Reporting.Facts
     {
         private readonly IEnumerable<IReporterProvider> _reporterProviders;
         private readonly MetricsReportingFixture _fixture;
-        private readonly ILogger<DefaultMetricsReporter> _logger;
 
         public ReporterTests(MetricsReportingFixture fixture)
         {
-            var loggerFactory = new LoggerFactory();
             _fixture = fixture;
-            _logger = loggerFactory.CreateLogger<DefaultMetricsReporter>();
             _reporterProviders = new[] { new TestReportProvider() };
         }
 
@@ -35,7 +31,7 @@ namespace App.Metrics.Reporting.Facts
         public void Can_generate_report_successfully()
         {
             var scheduler = new DefaultTaskScheduler();
-            var reporter = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), scheduler);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
@@ -50,19 +46,7 @@ namespace App.Metrics.Reporting.Facts
             Action action = () =>
             {
                 var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultMetricsReporter(_reporterProviders, null, scheduler, _logger);
-            };
-
-            action.ShouldThrow<ArgumentNullException>();
-        }
-
-        [Fact]
-        public void Logger_is_required()
-        {
-            Action action = () =>
-            {
-                var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), scheduler, null);
+                var unused = new DefaultMetricsReporter(_reporterProviders, null, scheduler);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -73,9 +57,8 @@ namespace App.Metrics.Reporting.Facts
         {
             Action action = () =>
             {
-                var loggerFactory = new LoggerFactory();
                 var scheduler = new DefaultTaskScheduler();
-                var unused = new DefaultMetricsReporter(null, _fixture.Metrics(), scheduler, _logger);
+                var unused = new DefaultMetricsReporter(null, _fixture.Metrics(), scheduler);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -86,7 +69,7 @@ namespace App.Metrics.Reporting.Facts
         {
             Action action = () =>
             {
-                var unused = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), null, _logger);
+                var unused = new DefaultMetricsReporter(_reporterProviders, _fixture.Metrics(), null);
             };
 
             action.ShouldThrow<ArgumentNullException>();
@@ -103,7 +86,7 @@ namespace App.Metrics.Reporting.Facts
 
             var metrics = _fixture.Metrics();
 
-            var reporter = new DefaultMetricsReporter(new[] { provider.Object }, metrics, scheduler.Object, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider.Object }, metrics, scheduler.Object);
 
             reporter.ScheduleReports(CancellationToken.None);
 
@@ -119,7 +102,7 @@ namespace App.Metrics.Reporting.Facts
             var scheduler = new DefaultTaskScheduler();
             var metrics = _fixture.Metrics();
 
-            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
@@ -134,7 +117,7 @@ namespace App.Metrics.Reporting.Facts
             var provider = new TestReportProvider(TimeSpan.FromMilliseconds(10), false);
             var scheduler = new DefaultTaskScheduler();
             var metrics = _fixture.Metrics();
-            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler, _logger);
+            var reporter = new DefaultMetricsReporter(new[] { provider }, metrics, scheduler);
             var token = new CancellationTokenSource();
             token.CancelAfter(100);
 
@@ -148,7 +131,7 @@ namespace App.Metrics.Reporting.Facts
         {
             var scheduler = new Mock<IScheduler>();
             var metrics = _fixture.Metrics();
-            var reporter = new DefaultMetricsReporter(_reporterProviders, metrics, scheduler.Object, _logger);
+            var reporter = new DefaultMetricsReporter(_reporterProviders, metrics, scheduler.Object);
 
             reporter.ScheduleReports(CancellationToken.None);
         }

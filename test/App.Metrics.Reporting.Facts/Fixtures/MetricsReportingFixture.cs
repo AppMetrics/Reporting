@@ -11,9 +11,7 @@ using App.Metrics.Internal;
 using App.Metrics.Meter;
 using App.Metrics.Registry;
 using App.Metrics.Reporting.Facts.TestHelpers;
-using App.Metrics.Reporting.Internal;
 using App.Metrics.Timer;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -21,8 +19,6 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 {
     public class MetricsReportingFixture : IDisposable
     {
-        private readonly ILoggerFactory _loggerFactory = new LoggerFactory();
-
         public MetricsReportingFixture()
         {
             var options = new Mock<IOptions<MetricsOptions>>();
@@ -37,7 +33,7 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 
             Metrics = () =>
             {
-                var registry = new DefaultMetricsRegistry(_loggerFactory, options.Object, clock, NewContextRegistry);
+                var registry = new DefaultMetricsRegistry(options.Object, clock, NewContextRegistry);
                 var metricBuilderFactory = new DefaultMetricsBuilderFactory();
                 var filter = new DefaultMetricsFilter();
                 var dataManager = new DefaultMetricValuesProvider(
@@ -46,7 +42,7 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 
                 var metricsManagerFactory = new DefaultMeasureMetricsProvider(registry, metricBuilderFactory, clock);
                 var metricsManagerAdvancedFactory = new DefaultMetricsProvider(registry, metricBuilderFactory, clock);
-                var metricsManager = new DefaultMetricsManager(registry, _loggerFactory.CreateLogger<DefaultMetricsManager>());
+                var metricsManager = new DefaultMetricsManager(registry);
 
                 defaultMetrics = new DefaultMetrics(
                     clock,

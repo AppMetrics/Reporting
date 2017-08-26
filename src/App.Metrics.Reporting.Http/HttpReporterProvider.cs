@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Filters;
 using App.Metrics.Reporting.Http.Client;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Http
@@ -20,12 +19,11 @@ namespace App.Metrics.Reporting.Http
         private readonly DefaultHttpClient _httpClient;
 
         public HttpReporterProvider(
-            ILoggerFactory loggerFactory,
             IOptions<MetricsReportingOptions> optionsAccessor,
             IOptions<MetricsReportingHttpOptions> httpOptionsAccessor)
         {
             _httpOptionsAccessor = httpOptionsAccessor;
-            _httpClient = new DefaultHttpClient(loggerFactory.CreateLogger<DefaultHttpClient>(), httpOptionsAccessor);
+            _httpClient = new DefaultHttpClient(httpOptionsAccessor);
             Filter = _httpOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
             ReportInterval = httpOptionsAccessor.Value.ReportInterval;
         }

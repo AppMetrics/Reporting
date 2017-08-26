@@ -8,53 +8,42 @@ using System.Diagnostics.CodeAnalysis;
 using App.Metrics.Reporting;
 
 // ReSharper disable CheckNamespace
-namespace Microsoft.Extensions.Logging
-    // ReSharper restore CheckNamespace
+namespace App.Metrics.Logging
+// ReSharper restore CheckNamespace
 {
-    // ReSharper disable RedundantStringInterpolation
-
     [ExcludeFromCodeCoverage]
     internal static class AppMetricsReportingLoggerExtensions
     {
-        private static readonly Action<ILogger, string, double, Exception> ReportRanAction;
         private static readonly double TimestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
 
-        static AppMetricsReportingLoggerExtensions()
+        public static void ReportFailed(this ILog logger, IReporterProvider reporter, Exception ex)
         {
-            ReportRanAction = LoggerMessage.Define<string, double>(
-                LogLevel.Trace,
-                AppMetricsEventIds.Reports.Schedule,
-                $"Report {{reportType}} ran in {{elapsedMilliseconds}}ms");
+            logger.Error(ex, $"{reporter.GetType()} failed during execution");
         }
 
-        public static void ReportFailed(this ILogger logger, IReporterProvider reporter, Exception ex)
+        public static void ReportFailed(this ILog logger, IReporterProvider reporter)
         {
-            logger.LogError(AppMetricsEventIds.Reports.Schedule, ex, $"{reporter.GetType()} failed during execution");
+            logger.Error($"{reporter.GetType()} failed during execution");
         }
 
-        public static void ReportFailed(this ILogger logger, IReporterProvider reporter)
+        public static void ReportingCancelled(this ILog logger, OperationCanceledException ex)
         {
-            logger.LogError(AppMetricsEventIds.Reports.Schedule, $"{reporter.GetType()} failed during execution");
+            logger.Error(ex, "Report execution cancelled");
         }
 
-        public static void ReportingCancelled(this ILogger logger, OperationCanceledException ex)
+        public static void ReportingDisposedDuringExecution(this ILog logger, ObjectDisposedException ex)
         {
-            logger.LogError(AppMetricsEventIds.Reports.Schedule, ex, "Report execution cancelled");
+            logger.Error(ex, "Report execution stopped");
         }
 
-        public static void ReportingDisposedDuringExecution(this ILogger logger, ObjectDisposedException ex)
+        public static void ReportingFailedDuringExecution(this ILog logger, AggregateException ex)
         {
-            logger.LogError(AppMetricsEventIds.Reports.Schedule, ex, "Report execution stopped");
+            logger.Error(ex.Flatten(), "Report execution stopped");
         }
 
-        public static void ReportingFailedDuringExecution(this ILogger logger, AggregateException ex)
+        public static void ReportRan(this ILog logger, IReporterProvider reporter, long startTimestamp)
         {
-            logger.LogError(AppMetricsEventIds.Reports.Schedule, ex.Flatten(), "Report execution stopped");
-        }
-
-        public static void ReportRan(this ILogger logger, IReporterProvider reporter, long startTimestamp)
-        {
-            if (!logger.IsEnabled(LogLevel.Trace))
+            if (!logger.IsTraceEnabled())
             {
                 return;
             }
@@ -67,22 +56,12 @@ namespace Microsoft.Extensions.Logging
             var currentTimestamp = Stopwatch.GetTimestamp();
             var elapsed = new TimeSpan((long)(TimestampToTicks * (currentTimestamp - startTimestamp)));
 
-            ReportRanAction(logger, reporter.GetType().FullName, elapsed.TotalMilliseconds, null);
+            logger.Debug("Report {ReportType} ran in {ElapsedMilliseconds}ms", reporter.GetType().FullName, elapsed.Milliseconds);
         }
 
-        public static void ReportRunning(this ILogger logger, IReporterProvider reporterProvider)
+        public static void ReportRunning(this ILog logger, IReporterProvider reporterProvider)
         {
-            logger.LogTrace(AppMetricsEventIds.Reports.Schedule, $"Running {reporterProvider.GetType()}");
-        }
-
-        internal static class AppMetricsEventIds
-        {
-            private const int MetricsStart = 1000;
-
-            public static class Reports
-            {
-                public const int Schedule = MetricsStart + 1;
-            }
+            logger.Trace($"Running {reporterProvider.GetType()}");
         }
     }
 

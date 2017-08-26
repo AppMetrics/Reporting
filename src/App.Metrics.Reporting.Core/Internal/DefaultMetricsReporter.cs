@@ -8,15 +8,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Counter;
+using App.Metrics.Logging;
 using App.Metrics.Scheduling;
-using Microsoft.Extensions.Logging;
 
 namespace App.Metrics.Reporting.Internal
 {
     public class DefaultMetricsReporter : IMetricsReporter
     {
+        private static readonly ILog Logger = LogProvider.For<DefaultMetricsReporter>();
         private readonly CounterOptions _failedCounter;
-        private readonly ILogger<DefaultMetricsReporter> _logger;
         private readonly IEnumerable<IReporterProvider> _reporterProviders;
 
         private readonly IMetrics _metrics;
@@ -27,13 +27,11 @@ namespace App.Metrics.Reporting.Internal
         public DefaultMetricsReporter(
             IEnumerable<IReporterProvider> reporterProviders,
             IMetrics metrics,
-            IScheduler scheduler,
-            ILogger<DefaultMetricsReporter> logger)
+            IScheduler scheduler)
         {
             _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
             _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _reporterProviders = reporterProviders ?? throw new ArgumentNullException(nameof(reporterProviders));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _successCounter = new CounterOptions
                               {
@@ -76,7 +74,7 @@ namespace App.Metrics.Reporting.Internal
 
             foreach (var provider in _reporterProviders)
             {
-                _logger.ReportRunning(provider);
+                Logger.ReportRunning(provider);
 
                 reportTasks.Add(ScheduleReport(_metrics, cancellationToken, provider).WithAggregateException());
             }
@@ -87,15 +85,15 @@ namespace App.Metrics.Reporting.Internal
             }
             catch (OperationCanceledException ex)
             {
-                _logger.ReportingCancelled(ex);
+                Logger.ReportingCancelled(ex);
             }
             catch (AggregateException ex)
             {
-                _logger.ReportingFailedDuringExecution(ex);
+                Logger.ReportingFailedDuringExecution(ex);
             }
             catch (ObjectDisposedException ex)
             {
-                _logger.ReportingDisposedDuringExecution(ex);
+                Logger.ReportingDisposedDuringExecution(ex);
             }
         }
 
@@ -124,13 +122,13 @@ namespace App.Metrics.Reporting.Internal
                 else
                 {
                     _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
-                    _logger.ReportFailed(provider);
+                    Logger.ReportFailed(provider);
                 }
             }
             catch (Exception ex)
             {
                 _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
-                _logger.ReportFailed(provider, ex);
+                Logger.ReportFailed(provider, ex);
             }
         }
     }

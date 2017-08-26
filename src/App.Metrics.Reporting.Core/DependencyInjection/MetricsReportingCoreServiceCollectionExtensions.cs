@@ -14,7 +14,6 @@ using App.Metrics.Reporting.Internal.NoOp;
 using App.Metrics.Scheduling;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable CheckNamespace
@@ -145,7 +144,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     AppMetricsServicesHelper.ThrowIfMetricsNotRegistered(serviceProvider);
 
                     var optionsAccessor = serviceProvider.GetRequiredService<IOptions<MetricsReportingOptions>>();
-                    var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
                     var scheduler = serviceProvider.GetRequiredService<IScheduler>();
                     var metrics = serviceProvider.GetRequiredService<IMetrics>();
                     var reporterProviders = serviceProvider.GetService<IEnumerable<IReporterProvider>>();
@@ -155,7 +153,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         return new NoOpMetricsReporter();
                     }
 
-                    return new DefaultMetricsReporter(reporterProviders, metrics, scheduler, loggerFactory.CreateLogger<DefaultMetricsReporter>());
+                    return new DefaultMetricsReporter(reporterProviders, metrics, scheduler);
                 });
 
             //

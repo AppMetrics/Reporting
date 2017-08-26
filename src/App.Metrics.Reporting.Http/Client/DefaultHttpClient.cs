@@ -8,30 +8,29 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using App.Metrics.Logging;
 using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Http.Client
 {
     public class DefaultHttpClient
     {
+        private static readonly ILog Logger = LogProvider.For<DefaultHttpClient>();
+
         private static long _backOffTicks;
         private static long _failureAttempts;
         private static long _failuresBeforeBackoff;
         private static TimeSpan _backOffPeriod;
         private readonly HttpClient _httpClient;
         private readonly HttpSettings _httpSettings;
-        private readonly ILogger<DefaultHttpClient> _logger;
 
-        public DefaultHttpClient(
-            ILogger<DefaultHttpClient> logger, IOptions<MetricsReportingHttpOptions> httpOptionsAccessor)
+        public DefaultHttpClient(IOptions<MetricsReportingHttpOptions> httpOptionsAccessor)
         {
             _httpClient = CreateHttpClient(httpOptionsAccessor.Value.HttpSettings, httpOptionsAccessor.Value.HttpPolicy, httpOptionsAccessor.Value.InnerHttpMessageHandler);
             _httpSettings = httpOptionsAccessor.Value.HttpSettings;
             _backOffPeriod = httpOptionsAccessor.Value.HttpPolicy.BackoffPeriod;
             _failuresBeforeBackoff = httpOptionsAccessor.Value.HttpPolicy.FailuresBeforeBackoff;
             _failureAttempts = 0;
-            _logger = logger;
         }
 
         public async Task<HttpWriteResult> WriteAsync(
@@ -55,19 +54,19 @@ namespace App.Metrics.Reporting.Http.Client
 
                     var errorMessage =
                         $"Failed to write to {_httpSettings.RequestUri} - StatusCode: {response.StatusCode} Reason: {response.ReasonPhrase}";
-                    _logger.LogError(LoggingEvents.HttpWriteError, errorMessage);
+                    Logger.Error(errorMessage);
 
                     return new HttpWriteResult(false, errorMessage);
                 }
 
-                _logger.LogTrace($"Successful write to {_httpSettings.RequestUri}");
+                Logger.Trace($"Successful write to {_httpSettings.RequestUri}");
 
                 return new HttpWriteResult(true);
             }
             catch (Exception ex)
             {
                 Interlocked.Increment(ref _failureAttempts);
-                _logger.LogError(LoggingEvents.HttpWriteError, ex, $"Failed to write to {_httpSettings.RequestUri}");
+                Logger.Error(ex, $"Failed to write to {_httpSettings.RequestUri}");
                 return new HttpWriteResult(false, ex.ToString());
             }
         }
@@ -104,7 +103,7 @@ namespace App.Metrics.Reporting.Http.Client
                 return false;
             }
 
-            _logger.LogError($"{_httpSettings.RequestUri} write backoff for {_backOffPeriod.Seconds} secs");
+            Logger.Error($"{_httpSettings.RequestUri} write backoff for {_backOffPeriod.Seconds} secs");
 
             if (Interlocked.Read(ref _backOffTicks) == 0)
             {
