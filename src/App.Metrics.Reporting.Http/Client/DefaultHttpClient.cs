@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Logging;
-using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.Http.Client
 {
@@ -24,18 +23,18 @@ namespace App.Metrics.Reporting.Http.Client
         private readonly HttpClient _httpClient;
         private readonly HttpSettings _httpSettings;
 
-        public DefaultHttpClient(IOptions<MetricsReportingHttpOptions> httpOptionsAccessor)
+        public DefaultHttpClient(MetricsReportingHttpOptions httpReportingOptions)
         {
-            _httpClient = CreateHttpClient(httpOptionsAccessor.Value.HttpSettings, httpOptionsAccessor.Value.HttpPolicy, httpOptionsAccessor.Value.InnerHttpMessageHandler);
-            _httpSettings = httpOptionsAccessor.Value.HttpSettings;
-            _backOffPeriod = httpOptionsAccessor.Value.HttpPolicy.BackoffPeriod;
-            _failuresBeforeBackoff = httpOptionsAccessor.Value.HttpPolicy.FailuresBeforeBackoff;
+            _httpClient = CreateHttpClient(httpReportingOptions.HttpSettings, httpReportingOptions.HttpPolicy, httpReportingOptions.InnerHttpMessageHandler);
+            _httpSettings = httpReportingOptions.HttpSettings;
+            _backOffPeriod = httpReportingOptions.HttpPolicy.BackoffPeriod;
+            _failuresBeforeBackoff = httpReportingOptions.HttpPolicy.FailuresBeforeBackoff;
             _failureAttempts = 0;
         }
 
         public async Task<HttpWriteResult> WriteAsync(
             string payload,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             if (NeedToBackoff())
             {

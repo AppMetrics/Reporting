@@ -4,7 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
-using App.Metrics.Reporting.Internal;
+using App.Metrics.Reporting.Builder;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable CheckNamespace
@@ -20,12 +20,15 @@ namespace Microsoft.Extensions.DependencyInjection
         ///     Adds reporter schduling using an <see cref="IHostedService"/> to the specified <see cref="IMetricsReportingBuilder"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IMetricsReportingBuilder" /> to add services to.</param>
+        /// <param name="services">THe <see cref="IServiceCollection"/> to add services to.</param>
         /// <returns>An <see cref="IMetricsReportingBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
-        public static IMetricsReportingBuilder AddHostedServiceScheduling(this IMetricsReportingBuilder builder)
+        public static IMetricsReportingBuilder AddHostedServiceScheduling(
+            this IMetricsReportingBuilder builder,
+            IServiceCollection services)
         {
-            var coreBuilder = new MetricsReportingCoreBuilder(builder.Services);
+            var coreBuilder = new MetricsReportingBuilder(builder.Metrics);
 
-            coreBuilder.AddHostedServiceSchedulingCore();
+            coreBuilder.AddHostedServiceSchedulingCore(services);
 
             return builder;
         }
@@ -34,13 +37,17 @@ namespace Microsoft.Extensions.DependencyInjection
         ///     Adds reporter schduling using an <see cref="IHostedService"/> to the specified <see cref="IMetricsReportingBuilder"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IMetricsReportingBuilder" /> to add services to.</param>
+        /// <param name="services">THe <see cref="IServiceCollection"/> to add services to.</param>
         /// <param name="unobservedTaskExceptionHandler"><see cref="EventHandler"/> registered with an exception is thrown in one of the registered reproter providers.</param>
         /// <returns>An <see cref="IMetricsReportingBuilder"/> that can be used to further configure the App Metrics Reporting services.</returns>
-        public static IMetricsReportingBuilder AddHostedServiceScheduling(this IMetricsReportingBuilder builder, EventHandler<UnobservedTaskExceptionEventArgs> unobservedTaskExceptionHandler)
+        public static IMetricsReportingBuilder AddHostedServiceScheduling(
+            this IMetricsReportingBuilder builder,
+            IServiceCollection services,
+            EventHandler<UnobservedTaskExceptionEventArgs> unobservedTaskExceptionHandler)
         {
-            var coreBuilder = new MetricsReportingCoreBuilder(builder.Services);
+            var coreBuilder = new MetricsReportingBuilder(builder.Metrics);
 
-            coreBuilder.AddHostedServiceSchedulingCore();
+            coreBuilder.AddHostedServiceSchedulingCore(services);
 
             return builder;
         }

@@ -11,9 +11,9 @@ using App.Metrics.Internal;
 using App.Metrics.Meter;
 using App.Metrics.Registry;
 using App.Metrics.Reporting.Facts.TestHelpers;
+using App.Metrics.ReservoirSampling;
+using App.Metrics.ReservoirSampling.ExponentialDecay;
 using App.Metrics.Timer;
-using Microsoft.Extensions.Options;
-using Moq;
 
 namespace App.Metrics.Reporting.Facts.Fixtures
 {
@@ -21,10 +21,7 @@ namespace App.Metrics.Reporting.Facts.Fixtures
     {
         public MetricsReportingFixture()
         {
-            var options = new Mock<IOptions<MetricsOptions>>();
-            options
-                .SetupGet(o => o.Value)
-                .Returns(new MetricsOptions());
+            var options = new MetricsOptions();
             var clock = new TestClock();
 
             IMetricContextRegistry NewContextRegistry(string name) => new DefaultMetricContextRegistry(name);
@@ -33,8 +30,8 @@ namespace App.Metrics.Reporting.Facts.Fixtures
 
             Metrics = () =>
             {
-                var registry = new DefaultMetricsRegistry(options.Object, clock, NewContextRegistry);
-                var metricBuilderFactory = new DefaultMetricsBuilderFactory();
+                var registry = new DefaultMetricsRegistry(options.DefaultContextLabel, clock, NewContextRegistry);
+                var metricBuilderFactory = new DefaultMetricsBuilderFactory(new DefaultSamplingReservoirProvider(() => new DefaultForwardDecayingReservoir()));
                 var filter = new DefaultMetricsFilter();
                 var dataManager = new DefaultMetricValuesProvider(
                     filter,

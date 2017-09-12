@@ -1,4 +1,4 @@
-﻿// <copyright file="TextFileReporterProvider.cs" company="Allan Hardy">
+﻿// <copyright file="TextFileMetricsReporterProvider.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
@@ -7,23 +7,21 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Filters;
-using Microsoft.Extensions.Options;
 
 namespace App.Metrics.Reporting.TextFile
 {
-    public class TextFileReporterProvider : IReporterProvider
+    public class TextFileMetricsReporterProvider : IMetricsReporterProvider
     {
-        private readonly IOptions<MetricsReportingTextFileOptions> _textFileOptionsAccessor;
+        private readonly MetricsReportingTextFileOptions _textFileOptions;
 
-        public TextFileReporterProvider(
-            IOptions<MetricsReportingOptions> optionsAccessor,
-            IOptions<MetricsReportingTextFileOptions> textFileOptionsAccessor)
+        public TextFileMetricsReporterProvider(
+            MetricsReportingTextFileOptions textFileOptions)
         {
-            _textFileOptionsAccessor = textFileOptionsAccessor;
-            Filter = textFileOptionsAccessor.Value.Filter ?? optionsAccessor.Value.Filter;
-            ReportInterval = textFileOptionsAccessor.Value.ReportInterval;
+            _textFileOptions = textFileOptions;
+            Filter = textFileOptions.Filter;
+            ReportInterval = textFileOptions.ReportInterval;
 
-            var fileInfo = new FileInfo(_textFileOptionsAccessor.Value.OutputPathAndFileName);
+            var fileInfo = new FileInfo(_textFileOptions.OutputPathAndFileName);
 
             if (!fileInfo.Directory.Exists)
             {
@@ -38,17 +36,17 @@ namespace App.Metrics.Reporting.TextFile
         public TimeSpan ReportInterval { get; }
 
         /// <inheritdoc />
-        public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
             using (var stream = new MemoryStream())
             {
-                await _textFileOptionsAccessor.Value.MetricsOutputFormatter.WriteAsync(stream, metricsData, cancellationToken);
+                await _textFileOptions.MetricsOutputFormatter.WriteAsync(stream, metricsData, cancellationToken);
                 var outputStream = stream.ToArray();
 
-                if (_textFileOptionsAccessor.Value.AppendMetricsToTextFile)
+                if (_textFileOptions.AppendMetricsToTextFile)
                 {
                     using (var sourceStream = new FileStream(
-                        _textFileOptionsAccessor.Value.OutputPathAndFileName,
+                        _textFileOptions.OutputPathAndFileName,
                         FileMode.Append,
                         FileAccess.Write,
                         FileShare.None,
@@ -62,7 +60,7 @@ namespace App.Metrics.Reporting.TextFile
                 else
                 {
                     using (var sourceStream = new FileStream(
-                        _textFileOptionsAccessor.Value.OutputPathAndFileName,
+                        _textFileOptions.OutputPathAndFileName,
                         FileMode.Create,
                         FileAccess.Write,
                         FileShare.None,

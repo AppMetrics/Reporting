@@ -5,7 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using App.Metrics.Reporting;
-using Microsoft.Extensions.DependencyInjection;
+using App.Metrics.Reporting.Builder;
 
 namespace App.Metrics.AspNetCore.Reporting
 {

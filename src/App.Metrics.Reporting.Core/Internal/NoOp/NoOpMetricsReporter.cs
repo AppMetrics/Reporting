@@ -17,9 +17,9 @@ namespace App.Metrics.Reporting.Internal.NoOp
         public void Dispose() { }
 
         /// <inheritdoc />
-        public void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken)) { }
+        public void ScheduleReports(IMetrics metrics, CancellationToken cancellationToken = default) { }
 
         /// <inheritdoc />
-        public IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken)) { return Enumerable.Empty<Task>(); }
+        public IEnumerable<Task> RunReportsAsync(IMetrics metrics, CancellationToken cancellationToken = default) { return Enumerable.Empty<Task>(); }
     }
 }

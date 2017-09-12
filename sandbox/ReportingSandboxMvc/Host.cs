@@ -4,10 +4,11 @@
 
 using System;
 using System.Diagnostics;
+using App.Metrics;
+using App.Metrics.AspNetCore;
 using App.Metrics.AspNetCore.Reporting;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ReportingSandboxMvc
 {
@@ -27,12 +28,12 @@ namespace ReportingSandboxMvc
         {
             return (context, options) =>
             {
-                options.ReportingBuilder = reportingBuilder =>
+                options.ReportingBuilder = builder =>
                 {
-                    reportingBuilder.AddConsole();
-                    reportingBuilder.AddTextFile(textFileOptions => textFileOptions.OutputPathAndFileName = @"C:\metrics\sample.txt");
+                    builder
+                        .ReportMetrics.ToConsole()
+                        .ReportMetrics.ToTextFile(textFileOptions => textFileOptions.OutputPathAndFileName = @"C:\metrics\sample.txt");
                 };
-
                 options.UnobservedTaskExceptionHandler = (sender, args) =>
                 {
                     Trace.WriteLine(args.Exception);

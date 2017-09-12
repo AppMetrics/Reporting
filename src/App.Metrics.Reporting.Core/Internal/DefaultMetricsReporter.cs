@@ -17,19 +17,16 @@ namespace App.Metrics.Reporting.Internal
     {
         private static readonly ILog Logger = LogProvider.For<DefaultMetricsReporter>();
         private readonly CounterOptions _failedCounter;
-        private readonly IEnumerable<IReporterProvider> _reporterProviders;
+        private readonly IEnumerable<IMetricsReporterProvider> _reporterProviders;
 
-        private readonly IMetrics _metrics;
         private readonly IScheduler _scheduler;
 
         private readonly CounterOptions _successCounter;
 
         public DefaultMetricsReporter(
-            IEnumerable<IReporterProvider> reporterProviders,
-            IMetrics metrics,
+            IEnumerable<IMetricsReporterProvider> reporterProviders,
             IScheduler scheduler)
         {
-            _metrics = metrics ?? throw new ArgumentNullException(nameof(metrics));
             _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _reporterProviders = reporterProviders ?? throw new ArgumentNullException(nameof(reporterProviders));
 
@@ -62,13 +59,13 @@ namespace App.Metrics.Reporting.Internal
         }
 
         /// <inheritdoc />
-        public IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public IEnumerable<Task> RunReportsAsync(IMetrics metrics, CancellationToken cancellationToken = default)
         {
-            return _reporterProviders.Select(provider => FlushMetrics(_metrics, cancellationToken, provider));
+            return _reporterProviders.Select(provider => FlushMetrics(metrics, cancellationToken, provider));
         }
 
         /// <inheritdoc />
-        public void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken))
+        public void ScheduleReports(IMetrics metrics, CancellationToken cancellationToken = default)
         {
             var reportTasks = new List<Task>();
 
@@ -76,7 +73,7 @@ namespace App.Metrics.Reporting.Internal
             {
                 Logger.ReportRunning(provider);
 
-                reportTasks.Add(ScheduleReport(_metrics, cancellationToken, provider).WithAggregateException());
+                reportTasks.Add(ScheduleReport(metrics, cancellationToken, provider).WithAggregateException());
             }
 
             try
@@ -100,7 +97,7 @@ namespace App.Metrics.Reporting.Internal
         private Task ScheduleReport(
             IMetrics metrics,
             CancellationToken cancellationToken,
-            IReporterProvider provider)
+            IMetricsReporterProvider provider)
         {
             return _scheduler.Interval(
                 provider.ReportInterval,
@@ -109,7 +106,7 @@ namespace App.Metrics.Reporting.Internal
                 cancellationToken);
         }
 
-        private async Task FlushMetrics(IMetrics metrics, CancellationToken cancellationToken, IReporterProvider provider)
+        private async Task FlushMetrics(IMetrics metrics, CancellationToken cancellationToken, IMetricsReporterProvider provider)
         {
             try
             {
@@ -117,17 +114,17 @@ namespace App.Metrics.Reporting.Internal
 
                 if (result)
                 {
-                    _metrics.Measure.Counter.Increment(_successCounter, provider.GetType().Name);
+                    metrics.Measure.Counter.Increment(_successCounter, provider.GetType().Name);
                 }
                 else
                 {
-                    _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
+                    metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
                     Logger.ReportFailed(provider);
                 }
             }
             catch (Exception ex)
             {
-                _metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
+                metrics.Measure.Counter.Increment(_failedCounter, provider.GetType().Name);
                 Logger.ReportFailed(provider, ex);
             }
         }

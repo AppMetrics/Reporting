@@ -3,7 +3,7 @@
 // </copyright>
 
 using System;
-using App.Metrics.AspNetCore.TrackingMiddleware;
+using App.Metrics.AspNetCore.Tracking;
 using Microsoft.Extensions.Options;
 using ReportingSandboxMvc.JustForTesting;
 
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient(
                 serviceProvider =>
                 {
-                    var optionsAccessor = serviceProvider.GetRequiredService<IOptions<MetricsTrackingMiddlewareOptions>>();
+                    var optionsAccessor = serviceProvider.GetRequiredService<IOptions<MetricsWebTrackingOptions>>();
                     return new RequestDurationForApdexTesting(optionsAccessor.Value.ApdexTSeconds);
                 });
 

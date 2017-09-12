@@ -3,10 +3,10 @@
 // </copyright>
 
 using System;
+using App.Metrics;
 using App.Metrics.AspNetCore.Reporting;
-using App.Metrics.DependencyInjection.Internal;
 using App.Metrics.Reporting;
-using App.Metrics.Reporting.Internal;
+using App.Metrics.Reporting.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable CheckNamespace
@@ -67,15 +67,16 @@ namespace Microsoft.AspNetCore.Hosting
             WebHostBuilderContext context,
             MetricsReportingWebHostOptions metricsReportingOptions)
         {
-            var reportingCoreBuilder = services.AddMetricsReportingCore(
-                context.Configuration.GetSection(nameof(MetricsReportingOptions)),
-                metricsReportingOptions.ReportingOptions);
+            // TODO: Add options from config
+            // var reportingCoreBuilder = services.AddMetricsReportingCore(
+            //     context.Configuration.GetSection(nameof(MetricsReportingOptions)),
+            //     metricsReportingOptions.ReportingOptions);
 
-            var reportingBuilder = new MetricsReportingBuilder(reportingCoreBuilder.Services);
+            var reportingBuilder = new MetricsReportingBuilder(null);
 
             metricsReportingOptions.ReportingBuilder.Invoke(reportingBuilder);
 
-            reportingBuilder.AddHostedServiceScheduling(metricsReportingOptions.UnobservedTaskExceptionHandler);
+            reportingBuilder.AddHostedServiceScheduling(services, metricsReportingOptions.UnobservedTaskExceptionHandler);
         }
 
         private static void ConfigureMetricsReportingServices(
@@ -95,8 +96,6 @@ namespace Microsoft.AspNetCore.Hosting
             hostBuilder.ConfigureServices(
                 (context, services) =>
                 {
-                    EnsureRequiredMetricsServices(services);
-
                     var metricsReportingOptions = new MetricsReportingWebHostOptions();
                     setupAction.Invoke(metricsReportingOptions);
 
@@ -121,20 +120,11 @@ namespace Microsoft.AspNetCore.Hosting
             hostBuilder.ConfigureServices(
                 (context, services) =>
                 {
-                    EnsureRequiredMetricsServices(services);
-
                     var metricsReportingOptions = new MetricsReportingWebHostOptions();
                     setupAction.Invoke(context, metricsReportingOptions);
 
                     AddMetricsReportingCoreServices(services, context, metricsReportingOptions);
                 });
-        }
-
-        private static void EnsureRequiredMetricsServices(IServiceCollection services)
-        {
-            // Verify if AddMetrics was adding before using reporting.
-            // We use the MetricsMarkerService to make sure if all the services were added.
-            AppMetricsServicesHelper.ThrowIfMetricsNotRegistered(services);
         }
     }
 }

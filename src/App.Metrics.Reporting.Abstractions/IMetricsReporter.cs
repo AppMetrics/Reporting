@@ -11,8 +11,8 @@ namespace App.Metrics.Reporting
 {
     public interface IMetricsReporter : IDisposable
     {
-        void ScheduleReports(CancellationToken cancellationToken = default(CancellationToken));
+        void ScheduleReports(IMetrics metrics, CancellationToken cancellationToken = default);
 
-        IEnumerable<Task> RunReportsAsync(CancellationToken cancellationToken = default(CancellationToken));
+        IEnumerable<Task> RunReportsAsync(IMetrics metrics, CancellationToken cancellationToken = default);
     }
 }

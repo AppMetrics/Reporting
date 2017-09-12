@@ -16,14 +16,14 @@ namespace App.Metrics.Logging
     {
         private static readonly double TimestampToTicks = TimeSpan.TicksPerSecond / (double)Stopwatch.Frequency;
 
-        public static void ReportFailed(this ILog logger, IReporterProvider reporter, Exception ex)
+        public static void ReportFailed(this ILog logger, IMetricsReporterProvider metricsReporter, Exception ex)
         {
-            logger.Error(ex, $"{reporter.GetType()} failed during execution");
+            logger.Error(ex, $"{metricsReporter.GetType()} failed during execution");
         }
 
-        public static void ReportFailed(this ILog logger, IReporterProvider reporter)
+        public static void ReportFailed(this ILog logger, IMetricsReporterProvider metricsReporter)
         {
-            logger.Error($"{reporter.GetType()} failed during execution");
+            logger.Error($"{metricsReporter.GetType()} failed during execution");
         }
 
         public static void ReportingCancelled(this ILog logger, OperationCanceledException ex)
@@ -41,7 +41,7 @@ namespace App.Metrics.Logging
             logger.Error(ex.Flatten(), "Report execution stopped");
         }
 
-        public static void ReportRan(this ILog logger, IReporterProvider reporter, long startTimestamp)
+        public static void ReportRan(this ILog logger, IMetricsReporterProvider metricsReporter, long startTimestamp)
         {
             if (!logger.IsTraceEnabled())
             {
@@ -56,12 +56,12 @@ namespace App.Metrics.Logging
             var currentTimestamp = Stopwatch.GetTimestamp();
             var elapsed = new TimeSpan((long)(TimestampToTicks * (currentTimestamp - startTimestamp)));
 
-            logger.Debug("Report {ReportType} ran in {ElapsedMilliseconds}ms", reporter.GetType().FullName, elapsed.Milliseconds);
+            logger.Debug("Report {ReportType} ran in {ElapsedMilliseconds}ms", metricsReporter.GetType().FullName, elapsed.Milliseconds);
         }
 
-        public static void ReportRunning(this ILog logger, IReporterProvider reporterProvider)
+        public static void ReportRunning(this ILog logger, IMetricsReporterProvider metricsReporterProvider)
         {
-            logger.Trace($"Running {reporterProvider.GetType()}");
+            logger.Trace($"Running {metricsReporterProvider.GetType()}");
         }
     }
 

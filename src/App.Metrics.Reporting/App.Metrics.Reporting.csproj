@@ -3,20 +3,14 @@
   <Import Project="..\..\build\common.props" />
 
   <PropertyGroup>
-    <Description>App Metrics reporting features.</Description>    
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>App Metrics reporting features.</Description>
+    <TargetFrameworks>netstandard1.6;net452</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>appmetrics;reporting</PackageTags>    
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Internal\**" />
-    <EmbeddedResource Remove="Internal\**" />
-    <None Remove="Internal\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="App.Metrics.Core" Version="$(AppMetricsCoreVersion)" />
+    <PackageReference Include="App.Metrics.Core" Version="2.0.0-alpha-0664" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace App.Metrics.AspNetCore.Reporting.Internal.Infrastructure
         public ReportSchedulerHostedService(
             ILogger<ReportSchedulerHostedService> logger,
             IMetrics metrics,
-            IEnumerable<IReporterProvider> reporterProviders)
+            IEnumerable<IMetricsReporterProvider> reporterProviders)
         {
             _logger = logger;
             _metrics = metrics;
@@ -107,7 +107,7 @@ namespace App.Metrics.AspNetCore.Reporting.Internal.Infrastructure
 
             public DateTime NextRunTime { get; set; }
 
-            public IReporterProvider Provider { get; set; }
+            public IMetricsReporterProvider Provider { get; set; }
 
             public void Increment()
             {

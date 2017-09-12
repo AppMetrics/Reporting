@@ -10,7 +10,7 @@ using App.Metrics.Filters;
 
 namespace App.Metrics.Reporting.Facts.TestHelpers
 {
-    public class TestReportProvider : IReporterProvider
+    public class TestReportProvider : IMetricsReporterProvider
     {
         private readonly bool _pass;
         private readonly Exception _throwEx;
@@ -37,7 +37,7 @@ namespace App.Metrics.Reporting.Facts.TestHelpers
 
         public TimeSpan ReportInterval { get; }
 
-        public Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(true);
         }

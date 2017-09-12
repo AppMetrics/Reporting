@@ -1,4 +1,4 @@
-﻿// <copyright file="IReporterProvider.cs" company="Allan Hardy">
+﻿// <copyright file="IMetricsReporterProvider.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ using App.Metrics.Filters;
 
 namespace App.Metrics.Reporting
 {
-    public interface IReporterProvider
+    public interface IMetricsReporterProvider
     {
         /// <summary>
         ///     Gets the <see cref="IFilterMetrics" /> to use for just this reporter provider.
@@ -37,6 +37,6 @@ namespace App.Metrics.Reporting
         /// <param name="metricsData">The current snapshot of metrics.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>True if metrics were successfully flushed, false otherwise.</returns>
-        Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default);
     }
 }
