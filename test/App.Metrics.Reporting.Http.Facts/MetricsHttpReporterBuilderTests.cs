@@ -161,7 +161,7 @@ namespace App.Metrics.Reporting.Http.Facts
                         options.FlushInterval = flushInterval;
                     });
 
-                var metrics = builder.Build();
+                var unused = builder.Build();
             };
 
             // Assert
@@ -182,7 +182,7 @@ namespace App.Metrics.Reporting.Http.Facts
             // Assert
             metrics.Reporters.Should().Contain(reportMetrics => reportMetrics is HttpMetricsReporter);
             reporter.Should().NotBeNull();
-            reporter.FlushInterval.Should().Be(TimeSpan.FromDays(1));
+            reporter?.FlushInterval.Should().Be(TimeSpan.FromDays(1));
         }
 
         [Theory]

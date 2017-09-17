@@ -5,7 +5,6 @@
 using System;
 using System.Threading.Tasks;
 using App.Metrics;
-using App.Metrics.Reporting.Http.Client;
 using Microsoft.AspNetCore.Hosting;
 using ReportingSandbox.JustForTesting;
 using Serilog;

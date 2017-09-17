@@ -155,7 +155,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
                         options.FlushInterval = flushInterval;
                     });
 
-                var metrics = builder.Build();
+                var unused = builder.Build();
             };
 
             // Assert
@@ -176,7 +176,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
             // Assert
             metrics.Reporters.Should().Contain(reportMetrics => reportMetrics is TextFileMetricsReporter);
             reporter.Should().NotBeNull();
-            reporter.FlushInterval.Should().Be(TimeSpan.FromDays(1));
+            reporter?.FlushInterval.Should().Be(TimeSpan.FromDays(1));
         }
 
         [Theory]
