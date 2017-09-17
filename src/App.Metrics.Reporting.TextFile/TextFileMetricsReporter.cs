@@ -23,6 +23,8 @@ namespace App.Metrics.Reporting.TextFile
         public TextFileMetricsReporter()
             // ReSharper restore UnusedMember.Global
         {
+            FlushInterval = AppMetricsConstants.Reporting.DefaultFlushInterval;
+            Formatter = _defaultMetricsOutputFormatter;
         }
 
         public TextFileMetricsReporter(MetricsReportingTextFileOptions options)
@@ -32,19 +34,26 @@ namespace App.Metrics.Reporting.TextFile
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (options.MetricsOutputFormatter != null)
+            if (options.FlushInterval < TimeSpan.Zero)
             {
-                Formatter = options.MetricsOutputFormatter;
+                throw new InvalidOperationException($"{nameof(MetricsReportingTextFileOptions.FlushInterval)} must not be less than zero");
             }
 
-            if (options.FlushInterval > TimeSpan.Zero)
+            if (string.IsNullOrWhiteSpace(options.OutputPathAndFileName))
             {
-                FlushInterval = options.FlushInterval;
+                throw new InvalidOperationException($"{nameof(MetricsReportingTextFileOptions.OutputPathAndFileName)} cannot be null or empty");
             }
+
+            Formatter = options.MetricsOutputFormatter ?? _defaultMetricsOutputFormatter;
+
+            FlushInterval = options.FlushInterval > TimeSpan.Zero
+                ? options.FlushInterval
+                : AppMetricsConstants.Reporting.DefaultFlushInterval;
+
+            Filter = options.Filter;
 
             _appendMode = options.AppendMetricsToTextFile;
             _output = options.OutputPathAndFileName;
-            Filter = options.Filter;
 
             var fileInfo = new FileInfo(options.OutputPathAndFileName);
 

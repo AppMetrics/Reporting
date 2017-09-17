@@ -22,6 +22,8 @@ namespace App.Metrics.Reporting.Console
         public ConsoleMetricsReporter()
             // ReSharper restore UnusedMember.Global
         {
+            FlushInterval = AppMetricsConstants.Reporting.DefaultFlushInterval;
+            Formatter = _defaultMetricsOutputFormatter;
         }
 
         public ConsoleMetricsReporter(MetricsReportingConsoleOptions options)
@@ -31,15 +33,16 @@ namespace App.Metrics.Reporting.Console
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (options.MetricsOutputFormatter != null)
+            if (options.FlushInterval < TimeSpan.Zero)
             {
-                Formatter = options.MetricsOutputFormatter;
+                throw new InvalidOperationException($"{nameof(MetricsReportingConsoleOptions.FlushInterval)} must not be less than zero");
             }
 
-            if (options.FlushInterval > TimeSpan.Zero)
-            {
-                FlushInterval = options.FlushInterval;
-            }
+            Formatter = options.MetricsOutputFormatter ?? _defaultMetricsOutputFormatter;
+
+            FlushInterval = options.FlushInterval > TimeSpan.Zero
+                ? options.FlushInterval
+                : AppMetricsConstants.Reporting.DefaultFlushInterval;
 
             Filter = options.Filter;
         }
@@ -56,11 +59,9 @@ namespace App.Metrics.Reporting.Console
         /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
-            var formatter = Formatter ?? _defaultMetricsOutputFormatter;
-
             using (var stream = new MemoryStream())
             {
-                await formatter.WriteAsync(stream, metricsData, cancellationToken);
+                await Formatter.WriteAsync(stream, metricsData, cancellationToken);
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 

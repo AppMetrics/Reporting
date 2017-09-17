@@ -26,15 +26,16 @@ namespace App.Metrics.Reporting.Http
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (options.MetricsOutputFormatter != null)
+            if (options.FlushInterval < TimeSpan.Zero)
             {
-                Formatter = options.MetricsOutputFormatter;
+                throw new InvalidOperationException($"{nameof(MetricsReportingHttpOptions.FlushInterval)} must not be less than zero");
             }
 
-            if (options.FlushInterval > TimeSpan.Zero)
-            {
-                FlushInterval = options.FlushInterval;
-            }
+            Formatter = options.MetricsOutputFormatter ?? _defaultMetricsOutputFormatter;
+
+            FlushInterval = options.FlushInterval > TimeSpan.Zero
+                ? options.FlushInterval
+                : AppMetricsConstants.Reporting.DefaultFlushInterval;
 
             Filter = options.Filter;
 
