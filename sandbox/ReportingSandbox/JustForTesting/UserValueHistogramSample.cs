@@ -6,7 +6,7 @@ using System;
 using App.Metrics;
 using App.Metrics.Histogram;
 
-namespace ReportingSandbox.Metrics
+namespace ReportingSandbox.JustForTesting
 {
     public class UserValueHistogramSample
     {
@@ -20,7 +20,7 @@ namespace ReportingSandbox.Metrics
             _histogram = _metrics.Provider.Histogram.Instance(SampleMetricsRegistry.Histograms.Results);
         }
 
-        public void RunSomeRequests()
+        public void Run()
         {
             for (var i = 0; i < 30; i++)
             {

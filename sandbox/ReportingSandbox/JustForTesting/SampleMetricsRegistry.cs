@@ -9,7 +9,7 @@ using App.Metrics.Histogram;
 using App.Metrics.Meter;
 using App.Metrics.Timer;
 
-namespace ReportingSandbox.Metrics
+namespace ReportingSandbox.JustForTesting
 {
     // ReSharper disable MemberCanBePrivate.Global
     // ReSharper disable MemberHidesStaticFromOuterClass

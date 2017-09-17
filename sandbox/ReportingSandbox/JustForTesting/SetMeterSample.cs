@@ -1,42 +1,43 @@
-﻿// <copyright file="SetCounterSample.cs" company="Allan Hardy">
+﻿// <copyright file="SetMeterSample.cs" company="Allan Hardy">
 // Copyright (c) Allan Hardy. All rights reserved.
 // </copyright>
 
 using System;
 using App.Metrics;
-using App.Metrics.Counter;
+using App.Metrics.Meter;
 
-namespace ReportingSandbox.Metrics
+namespace ReportingSandbox.JustForTesting
 {
     // ReSharper disable MemberCanBePrivate.Global
-    public class SetCounterSample
+    public class SetMeterSample
     {
-        private readonly ICounter _commandCounter;
-        private readonly ICounter _commandCounterNoPercentages;
-        private readonly ICounter _commandCounterNoReportSetItems;
-        private readonly ICounter _commandCounterNotReset;
+        private readonly IMeter _commandMeter;
+        private readonly IMeter _errorMeter;
 
-        public SetCounterSample(IMetrics metrics)
+        public SetMeterSample(IMetrics metrics)
         {
-            _commandCounter = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounter);
-            _commandCounterNoPercentages = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNoPercentages);
-            _commandCounterNotReset = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNotReset);
-            _commandCounterNoReportSetItems = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterDontReportSetItems);
+            _errorMeter = metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.Errors);
+            _commandMeter = metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.CommandMeter);
         }
 
         public void Process(ICommand command)
         {
-            _commandCounterNotReset.Increment(command.GetType().Name);
-            _commandCounter.Increment(command.GetType().Name);
-            _commandCounterNoPercentages.Increment(command.GetType().Name);
-            _commandCounterNoReportSetItems.Increment(command.GetType().Name);
+            try
+            {
+                ActualCommandProcessing(command);
+            }
+            catch
+            {
+                _errorMeter.Mark(command.GetType().Name);
+            }
         }
 
-        public void RunSomeRequests()
+        public void Run()
         {
             for (var i = 0; i < 30; i++)
             {
                 var commandIndex = new Random().Next() % 5;
+
                 if (commandIndex == 0)
                 {
                     Process(new SendEmail());
@@ -63,6 +64,8 @@ namespace ReportingSandbox.Metrics
                 }
             }
         }
+
+        private void ActualCommandProcessing(ICommand command) { _commandMeter.Mark(command.GetType().Name); }
 
         public interface ICommand
         {

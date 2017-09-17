@@ -6,7 +6,7 @@ using App.Metrics;
 using App.Metrics.Counter;
 using App.Metrics.Timer;
 
-namespace ReportingSandbox.Metrics
+namespace ReportingSandbox.JustForTesting
 {
     public class MultiContextInstanceMetrics
     {

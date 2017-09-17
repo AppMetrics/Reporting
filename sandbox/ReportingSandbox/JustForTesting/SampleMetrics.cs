@@ -12,7 +12,7 @@ using App.Metrics.Histogram;
 using App.Metrics.Meter;
 using App.Metrics.Timer;
 
-namespace ReportingSandbox.Metrics
+namespace ReportingSandbox.JustForTesting
 {
     public class SampleMetrics
     {
@@ -85,7 +85,7 @@ namespace ReportingSandbox.Metrics
             }
         }
 
-        public void RunSomeRequests()
+        public void Run()
         {
             var tasks = new List<Thread>();
             for (var i = 0; i < 10; i++)
