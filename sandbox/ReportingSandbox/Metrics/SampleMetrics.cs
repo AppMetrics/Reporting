@@ -56,7 +56,7 @@ namespace ReportingSandbox.Metrics
 
             for (var j = 0; j < 5; j++)
             {
-                var multiContextInstanceMetrics = new MultiContextInstanceMetrics("Sample Instance " + i.ToString(), _metrics);
+                var multiContextInstanceMetrics = new MultiContextInstanceMetrics(_metrics);
                 multiContextInstanceMetrics.Run();
             }
 
@@ -78,7 +78,7 @@ namespace ReportingSandbox.Metrics
                 _setMeter.Mark(item);
 
                 // simulate doing some work
-                var ms = Math.Abs((int)new Random().Next(3000));
+                var ms = Math.Abs(new Random().Next(3000));
                 Thread.Sleep(ms);
 
                 _concurrentRequestsCounter.Decrement(); // decrement number of concurrent requests

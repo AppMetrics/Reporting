@@ -11,6 +11,8 @@ using App.Metrics.Timer;
 
 namespace ReportingSandbox.Metrics
 {
+    // ReSharper disable MemberCanBePrivate.Global
+    // ReSharper disable MemberHidesStaticFromOuterClass
 #pragma warning disable SA1401 // Fields must be private
 #pragma warning disable SA1202 // Elements must be ordered by access
     public static class SampleMetricsRegistry
@@ -206,4 +208,6 @@ namespace ReportingSandbox.Metrics
     }
 #pragma warning restore SA1202 // Elements must be ordered by access
 #pragma warning restore SA1401 // Fields must be private
+    // ReSharper restore MemberCanBePrivate.Global
+    // ReSharper restore MemberHidesStaticFromOuterClass
 }

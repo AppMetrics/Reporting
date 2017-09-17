@@ -8,18 +8,16 @@ using App.Metrics.Meter;
 
 namespace ReportingSandbox.Metrics
 {
+    // ReSharper disable MemberCanBePrivate.Global
     public class SetMeterSample
     {
-        private static IMetrics _metrics;
         private readonly IMeter _commandMeter;
         private readonly IMeter _errorMeter;
 
         public SetMeterSample(IMetrics metrics)
         {
-            _metrics = metrics;
-
-            _errorMeter = _metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.Errors);
-            _commandMeter = _metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.CommandMeter);
+            _errorMeter = metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.Errors);
+            _commandMeter = metrics.Provider.Meter.Instance(SampleMetricsRegistry.Meters.CommandMeter);
         }
 
         public void Process(ICommand command)
@@ -93,4 +91,6 @@ namespace ReportingSandbox.Metrics
         {
         }
     }
+
+    // ReSharper restore MemberCanBePrivate.Global
 }

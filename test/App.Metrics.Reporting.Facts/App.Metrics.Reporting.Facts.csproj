@@ -11,12 +11,7 @@
     <Content Include="..\..\xunit.runner.json" Link="xunit.runner.json" />
   </ItemGroup>
 
-  <ItemGroup>    
-    <ProjectReference Include="..\..\src\App.Metrics.Reporting\App.Metrics.Reporting.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="App.Metrics.Core" Version="2.0.0-alpha-0664" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />

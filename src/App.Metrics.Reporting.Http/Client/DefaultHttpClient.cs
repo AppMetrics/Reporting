@@ -23,12 +23,17 @@ namespace App.Metrics.Reporting.Http.Client
         private readonly HttpClient _httpClient;
         private readonly HttpSettings _httpSettings;
 
-        public DefaultHttpClient(MetricsReportingHttpOptions httpReportingOptions)
+        public DefaultHttpClient(MetricsReportingHttpOptions options)
         {
-            _httpClient = CreateHttpClient(httpReportingOptions.HttpSettings, httpReportingOptions.HttpPolicy, httpReportingOptions.InnerHttpMessageHandler);
-            _httpSettings = httpReportingOptions.HttpSettings;
-            _backOffPeriod = httpReportingOptions.HttpPolicy.BackoffPeriod;
-            _failuresBeforeBackoff = httpReportingOptions.HttpPolicy.FailuresBeforeBackoff;
+            if (options.HttpSettings.RequestUri == null)
+            {
+                throw new InvalidOperationException($"{nameof(HttpSettings.RequestUri)} is required to flush metric values over HTTP");
+            }
+
+            _httpClient = CreateHttpClient(options.HttpSettings, options.HttpPolicy, options.InnerHttpMessageHandler);
+            _httpSettings = options.HttpSettings;
+            _backOffPeriod = options.HttpPolicy.BackoffPeriod;
+            _failuresBeforeBackoff = options.HttpPolicy.FailuresBeforeBackoff;
             _failureAttempts = 0;
         }
 

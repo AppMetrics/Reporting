@@ -17,7 +17,6 @@ namespace App.Metrics.Reporting.Http
     {
         public MetricsReportingHttpOptions()
         {
-            ReportInterval = TimeSpan.FromSeconds(10);
             HttpSettings = new HttpSettings();
             HttpPolicy = new HttpPolicy();
         }
@@ -63,15 +62,8 @@ namespace App.Metrics.Reporting.Http
         public IMetricsOutputFormatter MetricsOutputFormatter { get; set; }
 
         /// <summary>
-        ///     Gets or sets the flush metrics interval
+        ///     Gets or sets the interval between flushing metrics.
         /// </summary>
-        /// <remarks>
-        ///     This <see cref="TimeSpan" /> will apply to all configured reporters unless overriden by a specific reporters
-        ///     options.
-        /// </remarks>
-        /// <value>
-        ///     The <see cref="TimeSpan" /> to wait between reporting metrics
-        /// </value>
-        public TimeSpan ReportInterval { get; set; }
+        public TimeSpan FlushInterval { get; set; }
     }
 }

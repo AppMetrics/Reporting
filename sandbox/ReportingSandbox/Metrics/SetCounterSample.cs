@@ -8,9 +8,9 @@ using App.Metrics.Counter;
 
 namespace ReportingSandbox.Metrics
 {
+    // ReSharper disable MemberCanBePrivate.Global
     public class SetCounterSample
     {
-        private static IMetrics _metrics;
         private readonly ICounter _commandCounter;
         private readonly ICounter _commandCounterNoPercentages;
         private readonly ICounter _commandCounterNoReportSetItems;
@@ -18,12 +18,10 @@ namespace ReportingSandbox.Metrics
 
         public SetCounterSample(IMetrics metrics)
         {
-            _metrics = metrics;
-
-            _commandCounter = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounter);
-            _commandCounterNoPercentages = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNoPercentages);
-            _commandCounterNotReset = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNotReset);
-            _commandCounterNoReportSetItems = _metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterDontReportSetItems);
+            _commandCounter = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounter);
+            _commandCounterNoPercentages = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNoPercentages);
+            _commandCounterNotReset = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterNotReset);
+            _commandCounterNoReportSetItems = metrics.Provider.Counter.Instance(SampleMetricsRegistry.Counters.CommandCounterDontReportSetItems);
         }
 
         public void Process(ICommand command)
@@ -90,4 +88,6 @@ namespace ReportingSandbox.Metrics
         {
         }
     }
+
+    // ReSharper restore MemberCanBePrivate.Global
 }

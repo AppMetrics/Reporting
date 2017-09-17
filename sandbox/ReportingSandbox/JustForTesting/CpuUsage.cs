@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics;
 
-namespace ReportingSandbox
+namespace ReportingSandbox.JustForTesting
 {
     public class CpuUsage
     {

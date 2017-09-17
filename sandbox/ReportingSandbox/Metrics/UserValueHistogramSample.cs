@@ -20,12 +20,6 @@ namespace ReportingSandbox.Metrics
             _histogram = _metrics.Provider.Histogram.Instance(SampleMetricsRegistry.Histograms.Results);
         }
 
-        public void Process(string documentId)
-        {
-            var results = GetResultsForDocument(documentId);
-            _histogram.Update(results.Length, documentId);
-        }
-
         public void RunSomeRequests()
         {
             for (var i = 0; i < 30; i++)
@@ -36,6 +30,12 @@ namespace ReportingSandbox.Metrics
             }
         }
 
-        private int[] GetResultsForDocument(string documentId) { return new int[new Random().Next() % 100]; }
+        private int[] GetResultsForDocument() { return new int[new Random().Next() % 100]; }
+
+        private void Process(string documentId)
+        {
+            var results = GetResultsForDocument();
+            _histogram.Update(results.Length, documentId);
+        }
     }
 }

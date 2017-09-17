@@ -13,12 +13,6 @@ namespace App.Metrics.Reporting.TextFile
     /// </summary>
     public class MetricsReportingTextFileOptions
     {
-        public MetricsReportingTextFileOptions()
-        {
-            ReportInterval = TimeSpan.FromSeconds(20);
-            OutputPathAndFileName = @".\metrics.txt";
-        }
-
         /// <summary>
         ///     Gets or sets a value indicating whether or not to [append metrics when writing to file].
         /// </summary>
@@ -50,15 +44,8 @@ namespace App.Metrics.Reporting.TextFile
         public string OutputPathAndFileName { get; set; }
 
         /// <summary>
-        ///     Gets or sets the flush metrics interval
+        ///     Gets or sets the interval between flushing metrics.
         /// </summary>
-        /// <remarks>
-        ///     This <see cref="TimeSpan" /> will apply to all configured reporters unless overriden by a specific reporters
-        ///     options. Defaults to 20 secs.
-        /// </remarks>
-        /// <value>
-        ///     The <see cref="TimeSpan" /> to wait between reporting metrics
-        /// </value>
-        public TimeSpan ReportInterval { get; set; }
+        public TimeSpan FlushInterval { get; set; }
     }
 }
