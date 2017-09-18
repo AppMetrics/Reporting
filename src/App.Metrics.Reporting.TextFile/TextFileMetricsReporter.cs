@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Formatters.Ascii;
+using App.Metrics.Logging;
 
 namespace App.Metrics.Reporting.TextFile
 {
     public class TextFileMetricsReporter : IReportMetrics
     {
+        private static readonly ILog Logger = LogProvider.For<TextFileMetricsReporter>();
         private static readonly int _defaultBufferSize = 4096;
         private readonly IMetricsOutputFormatter _defaultMetricsOutputFormatter = new MetricsTextOutputFormatter();
         private readonly bool _appendMode;
@@ -25,6 +27,8 @@ namespace App.Metrics.Reporting.TextFile
         {
             FlushInterval = AppMetricsConstants.Reporting.DefaultFlushInterval;
             Formatter = _defaultMetricsOutputFormatter;
+
+            Logger.Info($"Using Metrics Reporter {this}. Output: {_output} FlushInterval: {FlushInterval}");
         }
 
         public TextFileMetricsReporter(MetricsReportingTextFileOptions options)
@@ -61,6 +65,8 @@ namespace App.Metrics.Reporting.TextFile
             {
                 Directory.CreateDirectory(fileInfo.Directory.FullName);
             }
+
+            Logger.Info($"Using Metrics Reporter {this}. Output: {_output} FlushInterval: {FlushInterval}");
         }
 
         /// <inheritdoc />
@@ -75,6 +81,8 @@ namespace App.Metrics.Reporting.TextFile
         /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
+            Logger.Trace("Flushing metrics snapshot");
+
             using (var stream = new MemoryStream())
             {
                 var formatter = Formatter ?? _defaultMetricsOutputFormatter;
@@ -112,6 +120,8 @@ namespace App.Metrics.Reporting.TextFile
                     }
                 }
             }
+
+            Logger.Trace("Flushed metrics snapshot");
 
             return true;
         }

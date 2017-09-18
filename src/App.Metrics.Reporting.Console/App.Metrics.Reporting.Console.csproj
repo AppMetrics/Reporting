@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="App.Metrics.Core" Version="$(AppMetricsCoreVersion)" />
     <PackageReference Include="App.Metrics.Formatters.Ascii" Version="$(AppMetricsCoreVersion)" />
   </ItemGroup>
 

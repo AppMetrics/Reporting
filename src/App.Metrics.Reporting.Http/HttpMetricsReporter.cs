@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Formatters.Json;
+using App.Metrics.Logging;
 using App.Metrics.Reporting.Http.Client;
 
 namespace App.Metrics.Reporting.Http
 {
     public class HttpMetricsReporter : IReportMetrics
     {
+        private static readonly ILog Logger = LogProvider.For<HttpMetricsReporter>();
         private readonly IMetricsOutputFormatter _defaultMetricsOutputFormatter = new MetricsJsonOutputFormatter();
         private readonly DefaultHttpClient _httpClient;
 
@@ -40,6 +42,8 @@ namespace App.Metrics.Reporting.Http
             Filter = options.Filter;
 
             _httpClient = new DefaultHttpClient(options);
+
+            Logger.Info($"Using Metrics Reporter {this}. Url: {options.HttpSettings.RequestUri} FlushInterval: {FlushInterval}");
         }
 
         /// <inheritdoc />
@@ -54,17 +58,25 @@ namespace App.Metrics.Reporting.Http
         /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
-            var formatter = Formatter ?? _defaultMetricsOutputFormatter;
+            Logger.Trace("Flushing metrics snapshot");
 
             using (var stream = new MemoryStream())
             {
-                await formatter.WriteAsync(stream, metricsData, cancellationToken);
+                await Formatter.WriteAsync(stream, metricsData, cancellationToken);
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 
                 var result = await _httpClient.WriteAsync(output, cancellationToken);
 
-                return result.Success;
+                if (result.Success)
+                {
+                    Logger.Trace("Flushed metrics snapshot");
+                    return true;
+                }
+
+                Logger.Error(result.ErrorMessage);
+
+                return false;
             }
         }
     }

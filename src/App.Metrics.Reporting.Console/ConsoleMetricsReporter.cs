@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Formatters.Ascii;
+using App.Metrics.Logging;
 using static System.Console;
 
 namespace App.Metrics.Reporting.Console
 {
     public class ConsoleMetricsReporter : IReportMetrics
     {
+        private static readonly ILog Logger = LogProvider.For<ConsoleMetricsReporter>();
         private readonly IMetricsOutputFormatter _defaultMetricsOutputFormatter = new MetricsTextOutputFormatter();
 
         // ReSharper disable UnusedMember.Global
@@ -24,6 +26,8 @@ namespace App.Metrics.Reporting.Console
         {
             FlushInterval = AppMetricsConstants.Reporting.DefaultFlushInterval;
             Formatter = _defaultMetricsOutputFormatter;
+
+            Logger.Info($"Using Metrics Reporter {this}. FlushInterval: {FlushInterval}");
         }
 
         public ConsoleMetricsReporter(MetricsReportingConsoleOptions options)
@@ -45,6 +49,8 @@ namespace App.Metrics.Reporting.Console
                 : AppMetricsConstants.Reporting.DefaultFlushInterval;
 
             Filter = options.Filter;
+
+            Logger.Info($"Using Metrics Reporter {this}. FlushInterval: {FlushInterval}");
         }
 
         /// <inheritdoc />
@@ -59,6 +65,8 @@ namespace App.Metrics.Reporting.Console
         /// <inheritdoc />
         public async Task<bool> FlushAsync(MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
         {
+            Logger.Trace("Flushing metrics snapshot");
+
             using (var stream = new MemoryStream())
             {
                 await Formatter.WriteAsync(stream, metricsData, cancellationToken);
@@ -67,6 +75,8 @@ namespace App.Metrics.Reporting.Console
 
                 WriteLine(output);
             }
+
+            Logger.Trace("Flushed metrics snapshot");
 
             return true;
         }
