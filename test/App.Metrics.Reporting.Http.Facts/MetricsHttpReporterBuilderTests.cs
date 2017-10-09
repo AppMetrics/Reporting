@@ -55,7 +55,7 @@ namespace App.Metrics.Reporting.Http.Facts
         {
             // Arrange
             var uri = "http://localhost/metrics";
-            var filter = new DefaultMetricsFilter().WhereType(MetricType.Apdex);
+            var filter = new MetricsFilter().WhereType(MetricType.Apdex);
             var builder = new MetricsBuilder().Report.OverHttp(
                 options =>
                 {

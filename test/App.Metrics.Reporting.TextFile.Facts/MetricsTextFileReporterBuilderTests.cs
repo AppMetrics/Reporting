@@ -69,7 +69,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
         public void Can_set_textfile_reporter_metrics_filter()
         {
             // Arrange
-            var filter = new DefaultMetricsFilter().WhereType(MetricType.Apdex);
+            var filter = new MetricsFilter().WhereType(MetricType.Apdex);
             var builder = new MetricsBuilder().Report.ToTextFile(
                 options =>
                 {

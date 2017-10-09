@@ -51,7 +51,7 @@ namespace App.Metrics.Reporting.Console.Facts
         public void Can_use_console_reporter_with_setup_action_to_override_defaults()
         {
             // Arrange
-            var filter = new DefaultMetricsFilter().WhereType(MetricType.Apdex);
+            var filter = new MetricsFilter().WhereType(MetricType.Apdex);
             var builder = new MetricsBuilder().Report.ToConsole(
                 options =>
                 {

@@ -33,7 +33,7 @@ namespace App.Metrics.Reporting.Console.Facts
         public async Task Can_flush_metrics_to_console_with_options()
         {
             // Arrange
-            var filter = new DefaultMetricsFilter().WhereType(MetricType.Apdex);
+            var filter = new MetricsFilter().WhereType(MetricType.Apdex);
             var formatter = new TestMetricsFormatter();
             var interval = TimeSpan.FromDays(1);
             var options = new MetricsReportingConsoleOptions
