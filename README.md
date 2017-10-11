@@ -27,7 +27,7 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 
 ## How to build
 
-[AppVeyor](https://ci.appveyor.com/project/alhardy/aspnetcore) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
+[AppVeyor](https://ci.appveyor.com/project/alhardy/reporting) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
 
 See the following for build arguments and running locally.
 
