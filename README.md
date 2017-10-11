@@ -1,9 +1,9 @@
-# App Metrics Reporting <img src="http://app-metrics.io/logo.png" alt="App Metrics" width="50px"/> 
+# App Metrics Reporting <img src="https://avatars0.githubusercontent.com/u/29864085?v=4&s=200" alt="App Metrics" width="50px"/> 
 [![Official Site](https://img.shields.io/badge/site-appmetrics-blue.svg?style=flat-square)](http://app-metrics.io/getting-started/intro.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
 ## What is it?
 
-The repo contains reporting extension packages to [App Metrics](https://github.com/alhardy/AppMetrics).
+The repo contains reporting extension packages to [App Metrics](https://github.com/AppMetrics/AppMetrics).
 
 ## Latest Builds, Packages & Repo Stats
 
@@ -20,14 +20,14 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 
 ## Other Reporters for App Metrics
 
-- [InfluxDB](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
-- [Elasticsearch](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
-- [Prometheus](https://github.com/alhardy/AppMetrics.Extensions.Prometheus)
-- [Graphite](https://github.com/alhardy/AppMetrics.Extensions.Graphite)
+- [InfluxDB](https://github.com/AppMetrics/InfluxDB)
+- [Elasticsearch](https://github.com/AppMetrics/Elasticsearch)
+- [Prometheus](https://github.com/AppMetrics/Prometheus)
+- [Graphite](https://github.com/AppMetrics/Graphite)
 
 ## How to build
 
-[AppVeyor](https://ci.appveyor.com/project/alhardy/reporting/branch/master) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
+[AppVeyor](https://ci.appveyor.com/project/alhardy/aspnetcore) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
 
 See the following for build arguments and running locally.
 
