@@ -9,9 +9,9 @@
     <NoWarn>$(NoWarn);1701;1702;1705;CS1591;CS1570</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageIconUrl>http://app-metrics.io/logo.png</PackageIconUrl>
-    <PackageProjectUrl>https://alhardy.github.io/app-metrics-docs/getting-started/reporting/index.html</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/alhardy/AppMetrics.Reporting/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://app-metrics.io/images/logo.png</PackageIconUrl>		
+    <PackageProjectUrl>https://www.app-metrics.io/reporting/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/AppMetrics/Reporting/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/AppMetrics/AppMetricsReporting</RepositoryUrl>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
