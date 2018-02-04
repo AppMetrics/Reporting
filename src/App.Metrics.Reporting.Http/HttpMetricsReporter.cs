@@ -66,7 +66,7 @@ namespace App.Metrics.Reporting.Http
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 
-                var result = await _httpClient.WriteAsync(output, cancellationToken);
+                var result = await _httpClient.WriteAsync(output, Formatter.MediaType, cancellationToken);
 
                 if (result.Success)
                 {

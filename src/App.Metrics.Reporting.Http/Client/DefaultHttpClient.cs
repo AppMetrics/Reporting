@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Metrics.Formatters;
 using App.Metrics.Logging;
 
 namespace App.Metrics.Reporting.Http.Client
@@ -39,6 +40,7 @@ namespace App.Metrics.Reporting.Http.Client
 
         public async Task<HttpWriteResult> WriteAsync(
             string payload,
+            MetricsMediaTypeValue mediaType,
             CancellationToken cancellationToken = default)
         {
             if (NeedToBackoff())
@@ -46,11 +48,14 @@ namespace App.Metrics.Reporting.Http.Client
                 return new HttpWriteResult(false, $"Too many failures in writing to {_httpSettings.RequestUri}, Circuit Opened");
             }
 
-            var content = new StringContent(payload, Encoding.UTF8);
-
             try
             {
-                var response = await _httpClient.PostAsync(_httpSettings.RequestUri, content, cancellationToken).ConfigureAwait(false);
+                var message = new HttpRequestMessage(HttpMethod.Post, _httpSettings.RequestUri)
+                              {
+                                  Content = new StringContent(payload, Encoding.UTF8, mediaType.ContentType)
+                              };
+
+                var response = await _httpClient.SendAsync(message, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {

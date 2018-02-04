@@ -26,6 +26,7 @@ namespace ReportingSandbox
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseStartup<Startup>()
+                .UseUrls("http://localhost:50001")
                 .Build();
 
             host.Run();
@@ -45,7 +46,8 @@ namespace ReportingSandbox
             Metrics = AppMetrics.CreateDefaultBuilder()
                 .Report.ToConsole(TimeSpan.FromSeconds(3))
                 .Report.ToTextFile(@"C:\metrics\sample.txt", TimeSpan.FromSeconds(5))
-                .Report.OverHttp("http://localhost:5000/metrics-receive", TimeSpan.FromSeconds(10))
+                .Report.OverHttp("http://localhost:50001/metrics-receive", TimeSpan.FromSeconds(10))
+                .Report.OverHttp("http://localhost:50002/api/metrics", TimeSpan.FromSeconds(10))
                 .Build();
         }
     }
