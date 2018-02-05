@@ -23,6 +23,30 @@ namespace App.Metrics
         /// <param name="metricReporterProviderBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
+        /// <param name="options">The HTTP reporting options to use.</param>
+        /// <returns>
+        ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
+        /// </returns>
+        public static IMetricsBuilder OverHttp(
+            this IMetricsReportingBuilder metricReporterProviderBuilder,
+            MetricsReportingHttpOptions options)
+        {
+            if (metricReporterProviderBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(metricReporterProviderBuilder));
+            }
+
+            var provider = new HttpMetricsReporter(options);
+
+            return metricReporterProviderBuilder.Using(provider);
+        }
+
+        /// <summary>
+        ///     Add the <see cref="HttpMetricsReporter" /> allowing metrics to be reported over HTTP.
+        /// </summary>
+        /// <param name="metricReporterProviderBuilder">
+        ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
+        /// </param>
         /// <param name="setupAction">The HTTP reporting options to use.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.

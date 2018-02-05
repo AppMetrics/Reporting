@@ -23,6 +23,31 @@ namespace App.Metrics
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
+        /// <param name="options">The text file reporting options to use.</param>
+        /// <returns>
+        ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
+        /// </returns>
+        public static IMetricsBuilder ToTextFile(
+            this IMetricsReportingBuilder reportingBuilder,
+            MetricsReportingTextFileOptions options)
+        {
+            if (reportingBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(reportingBuilder));
+            }
+
+            var reporter = new TextFileMetricsReporter(options);
+
+            return reportingBuilder.Using(reporter);
+        }
+
+        /// <summary>
+        ///     Add the <see cref="TextFileMetricsReporter" /> allowing metrics to be reported to text file. Default output
+        ///     ./metrics.txt
+        /// </summary>
+        /// <param name="reportingBuilder">
+        ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
+        /// </param>
         /// <param name="setupAction">The text file reporting options to use.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.

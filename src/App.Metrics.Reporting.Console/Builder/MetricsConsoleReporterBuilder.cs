@@ -22,6 +22,30 @@ namespace App.Metrics
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
+        /// <param name="options">The console reporting options to use.</param>
+        /// <returns>
+        ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
+        /// </returns>
+        public static IMetricsBuilder ToConsole(
+            this IMetricsReportingBuilder reportingBuilder,
+            MetricsReportingConsoleOptions options)
+        {
+            if (reportingBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(reportingBuilder));
+            }
+
+            var provider = new ConsoleMetricsReporter(options);
+
+            return reportingBuilder.Using(provider);
+        }
+
+        /// <summary>
+        ///     Add the <see cref="ConsoleMetricsReporter" /> allowing metrics to be reported to console.
+        /// </summary>
+        /// <param name="reportingBuilder">
+        ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
+        /// </param>
         /// <param name="setupAction">The console reporting options to use.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.

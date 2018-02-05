@@ -10,7 +10,7 @@ namespace App.Metrics.Reporting.Http.Client
     {
         public HttpSettings(Uri requireUri) { RequestUri = requireUri ?? throw new ArgumentNullException(nameof(requireUri)); }
 
-        internal HttpSettings() { }
+        public HttpSettings() { }
 
         /// <summary>
         ///     Gets or sets the password use to basic auth.
