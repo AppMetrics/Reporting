@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\build\common.props" />
+    
+  <PropertyGroup>
+    <Description>Provides text file reporting capability to App Metrics</Description>
+    <AssemblyTitle>App.Metrics.Reporting.TextFile</AssemblyTitle>
+    <TargetFrameworks>netstandard1.6;net452</TargetFrameworks>
+    <PackageTags>appmetrics;reporting;influxdb</PackageTags>    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="App.Metrics.Core" Version="$(AppMetricsCoreVersion)" />
+    <PackageReference Include="App.Metrics.Formatters.Ascii" Version="$(AppMetricsCoreVersion)" />
+  </ItemGroup>
+
+</Project>

@@ -1,35 +1,33 @@
-# App Metrics Reporters <img src="http://app-metrics.io/logo.png" alt="App Metrics" width="50px"/> 
+# App Metrics Reporting <img src="https://avatars0.githubusercontent.com/u/29864085?v=4&s=200" alt="App Metrics" width="50px"/> 
 [![Official Site](https://img.shields.io/badge/site-appmetrics-blue.svg?style=flat-square)](http://app-metrics.io/getting-started/intro.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
 ## What is it?
 
-The repo contains reporting extension packages to [App Metrics](https://github.com/alhardy/AppMetrics).
-
-## Other Reporters for App Metrics
-
-For metric reporting capabilities see:
-
-- [InfluxDB Extensions](https://github.com/alhardy/AppMetrics.Extensions.InfluxDB)
-- [Elasticsearch Extensions](https://github.com/alhardy/AppMetrics.Extensions.Elasticsearch)
-- [Prometheus Extensions](https://github.com/alhardy/AppMetrics.Extensions.Prometheus)
-- [Graphite Extensions](https://github.com/alhardy/AppMetrics.Extensions.Graphite) - *Work in Progress*
+The repo contains reporting extension packages to [App Metrics](https://github.com/AppMetrics/AppMetrics).
 
 ## Latest Builds, Packages & Repo Stats
 
 |Branch|AppVeyor|Travis|Coverage|
 |------|:--------:|:--------:|:--------:|
-|dev|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/appmetrics-reporters/dev.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/appmetrics-reporters/branch/dev)|[![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/dev.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/alhardy/AppMetrics.Reporters)|[![Coveralls](https://img.shields.io/coveralls/alhardy/AppMetrics.Reporters/dev.svg?style=flat-square)](https://coveralls.io/github/alhardy/AppMetrics.Reporters?branch=dev)
-|master|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/appmetrics-reporters/master.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/appmetrics-reporters/branch/master)| [![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/master.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/AppMetrics.Reporters)| [![Coveralls](https://img.shields.io/coveralls/alhardy/AppMetrics.Reporters/master.svg?style=flat-square)](https://coveralls.io/github/alhardy/AppMetrics.Reporters?branch=master)|
+|dev|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/dev.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/dev)|[![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/dev.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/alhardy/AppMetrics.Reporters)|[![Coveralls](https://img.shields.io/coveralls/AppMetrics/Reporting/dev.svg?style=flat-square)](https://coveralls.io/github/AppMetrics/Reporting?branch=dev)
+|master|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/master.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/master)| [![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/master.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/AppMetrics.Reporters)| [![Coveralls](https://img.shields.io/coveralls/AppMetrics/Reporters/master.svg?style=flat-square)](https://coveralls.io/github/AppMetrics/Reporters?branch=master)|
 
 |Package|Dev Release|Pre-Release|Release|
 |------|:--------:|:--------:|:--------:|
-|App.Metrics.Extensions.Reporting.Console|[![MyGet Status](https://img.shields.io/myget/alhardy/v/App.Metrics.Extensions.Reporting.Console.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Extensions.Reporting.Console)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Extensions.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.Console/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Extensions.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.Console/)
-|App.Metrics.Extensions.Reporting.TextFile|[![MyGet Status](https://img.shields.io/myget/alhardy/v/App.Metrics.Extensions.Reporting.TextFile.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Extensions.Reporting.TextFile)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Extensions.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.TextFile/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Extensions.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.TextFile/)
-|App.Metrics.Extensions.Reporting.Http|[![MyGet Status](https://img.shields.io/myget/alhardy/v/App.Metrics.Extensions.Reporting.Http.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Extensions.Reporting.Http)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Extensions.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.Http/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Extensions.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Extensions.Reporting.Http/)|
+|App.Metrics.Reporting.Console|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.myget.org/feed/appmetrics/package/nuget/App.Metrics.Reporting.Console)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Console/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Console/)
+|App.Metrics.Reporting.TextFile|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.TextFile)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.TextFile/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.TextFile/)
+|App.Metrics.Reporting.Http|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.Http)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)|
+
+## Other Reporters for App Metrics
+
+- [InfluxDB](https://github.com/AppMetrics/InfluxDB)
+- [Elasticsearch](https://github.com/AppMetrics/Elasticsearch)
+- [Prometheus](https://github.com/AppMetrics/Prometheus)
+- [Graphite](https://github.com/AppMetrics/Graphite)
 
 ## How to build
 
-[AppVeyor](https://ci.appveyor.com/project/alhardy/appmetrics-reporters/branch/master) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
+[AppVeyor](https://ci.appveyor.com/project/alhardy/reporting) and [Travis CI](https://travis-ci.org/alhardy/AppMetrics.Reporters) builds are triggered on commits and PRs to `dev` and `master` branches.
 
 See the following for build arguments and running locally.
 
@@ -40,6 +38,7 @@ See the following for build arguments and running locally.
 |CoverWith|**DotCover** or **OpenCover** to calculate and report code coverage, **None** to skip. When not **None**, a coverage file and html report will be generated at `./artifacts/coverage`|*OpenCover*|Windows Only|Optional|
 |SkipCodeInspect|**false** to run ReSharper code inspect and report results, **true** to skip. When **true**, the code inspection html report and xml output will be generated at `./artifacts/resharper-reports`|*false*|Windows Only|Optional|
 |BuildNumber|The build number to use for pre-release versions|*0*|All|Optional|
+|LinkSources|[Source link](https://github.com/ctaggart/SourceLink) support allows source code to be downloaded on demand while debugging|*true*|All|Optional|
 
 
 ### Windows
@@ -69,11 +68,6 @@ Run `build.sh` from the repositories root directory. Code Coverage reports are n
 ```
 	.\build.sh --ScriptArgs '-BuildConfiguration=Release -PreReleaseSuffix=beta -BuildNumber=1'
 ```
-
-> #### Nuget Packages
-> Nuget packages won't be generated on non-windows environments by default.
-> 
-> Unfortunately there is [currently no way out-of-the-box to conditionally build & pack a project by framework](https://github.com/dotnet/roslyn-project-system/issues/1586#issuecomment-280978851). Because `App.Metrics` packages target `.NET 4.5.2` as well as `dotnet standard` there is a work around in the build script to force `dotnet standard` on build but no work around for packaging on non-windows environments. 
 
 ## Contributing
 
