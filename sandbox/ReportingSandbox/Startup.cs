@@ -41,7 +41,11 @@ namespace ReportingSandbox
 
                         using (var sr = new StreamReader(req.Body, Encoding.UTF8, true, 1024, true))
                         {
+#if NET461
+                            File.WriteAllText(fileName, sr.ReadToEnd());
+#else
                             await File.WriteAllTextAsync(fileName, sr.ReadToEnd());
+#endif
                         }
 
                         req.Body.Position = 0;

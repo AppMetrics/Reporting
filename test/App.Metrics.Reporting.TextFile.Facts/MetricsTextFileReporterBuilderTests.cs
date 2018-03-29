@@ -100,7 +100,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace App.Metrics.Reporting.TextFile.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
     }
 }

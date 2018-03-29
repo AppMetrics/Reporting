@@ -86,7 +86,7 @@ namespace App.Metrics.Reporting.Http.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace App.Metrics.Reporting.Http.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace App.Metrics.Reporting.Http.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace App.Metrics.Reporting.Http.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace App.Metrics.Reporting.Http.Facts
             };
 
             // Assert
-            action.ShouldThrow<ArgumentNullException>();
+            action.Should().Throw<ArgumentNullException>();
         }
     }
 }

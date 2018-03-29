@@ -124,7 +124,7 @@ namespace App.Metrics.Reporting.Console.Facts
             };
 
             // Assert
-            action.ShouldThrow<InvalidOperationException>();
+            action.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
