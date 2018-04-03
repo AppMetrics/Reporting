@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D805782-756E-4C98-B22E-F502BEE95318}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{31A4DDB1-952E-4EED-96EF-29C669279A86}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,6 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DD2E4647-7125-4CE3-9BA5-B45A26113A31}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cake", "Cake", "{E1A943F7-5493-4B64-A448-3E9EEA582E20}"
 	ProjectSection(SolutionItems) = preProject
@@ -58,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.TextF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.FactsCommon", "test\App.Metrics.Reporting.FactsCommon\App.Metrics.Reporting.FactsCommon.csproj", "{CEC70E9D-D384-4473-910B-4E96936B3B7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsReceiveSanboxApi", "sandbox\MetricsReceiveSanboxApi\MetricsReceiveSanboxApi.csproj", "{9D0AE951-114B-4590-85D5-56C06652A19A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsReceiveSanboxApi", "sandbox\MetricsReceiveSanboxApi\MetricsReceiveSanboxApi.csproj", "{9D0AE951-114B-4590-85D5-56C06652A19A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
