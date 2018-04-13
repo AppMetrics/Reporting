@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Provides text file reporting capability to App Metrics</Description>
     <AssemblyTitle>App.Metrics.Reporting.TextFile</AssemblyTitle>
-    <TargetFrameworks>netstandard1.6;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net452</TargetFrameworks>
     <PackageTags>appmetrics;reporting;influxdb</PackageTags>    
   </PropertyGroup>
 
