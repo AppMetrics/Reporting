@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MetricsReceiveSanboxApi.Controllers
 {
     [Route("api/[controller]")]
-    public class MetricsController : Controller
+    public class MetricsController : ControllerBase
     {
         [HttpPost]
         public void Post([FromBody] MetricsModel metrics)

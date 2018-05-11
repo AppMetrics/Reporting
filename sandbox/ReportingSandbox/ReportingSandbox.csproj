@@ -3,13 +3,14 @@
   <Import Project="..\..\build\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="App.Metrics" Version="$(AppMetricsCoreVersion)" />
-    <PackageReference Include="App.Metrics.AspNetCore.Reporting" Version="$(AppMetricsAspNetCoreVersion)" />
+    <PackageReference Include="App.Metrics.Extensions.DependencyInjection" Version="$(AppMetricsCoreVersion)" />
+    <PackageReference Include="App.Metrics.Extensions.Hosting" Version="$(AppMetricsCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.1-dev-00044" />

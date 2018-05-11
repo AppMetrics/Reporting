@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ReportingSandbox
 {
@@ -19,9 +20,7 @@ namespace ReportingSandbox
         public void ConfigureServices(IServiceCollection services)
             // ReSharper restore UnusedMember.Global
         {
-            // TODO: At the moment using the IHostedService implemented in App.Metrics.AspNetCore.Reporting,
-            // similar will be provided when the "Generic Host" is available - https://github.com/aspnet/Hosting/issues/1163
-            services.AddMetricsReportScheduler();
+            services.AddMetricsReportingHostedService();
             services.AddMetrics(Program.Metrics);
         }
 

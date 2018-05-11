@@ -14,6 +14,7 @@ namespace App.Metrics.Reporting.FactsCommon
         public TestMetricsFormatter()
         {
             MediaType = new MetricsMediaTypeValue("test", "test", "v1", "format");
+            MetricFields = new MetricFields();
         }
 
         public Task WriteAsync(Stream output, MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
@@ -22,5 +23,8 @@ namespace App.Metrics.Reporting.FactsCommon
         }
 
         public MetricsMediaTypeValue MediaType { get; }
+
+        /// <inheritdoc />
+        public MetricFields MetricFields { get; set; }
     }
 }
