@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://www.app-metrics.io/reporting/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/AppMetrics/Reporting/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>git://github.com/AppMetrics/AppMetricsReporting</RepositoryUrl>
+    <RepositoryUrl>git://github.com/AppMetrics/Reporting</RepositoryUrl>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>

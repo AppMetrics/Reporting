@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\build\common.props" />
+
   <PropertyGroup>
     <Description>Provides HTTP reporting capability to App Metrics</Description>
-    <AssemblyTitle>App.Metrics.Reporting.Http</AssemblyTitle>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net452</TargetFrameworks>
     <PackageTags>appmetrics;reporting;http</PackageTags>    
@@ -11,6 +12,11 @@
   <ItemGroup>
     <PackageReference Include="App.Metrics.Core" Version="$(AppMetricsCoreVersion)" />
     <PackageReference Include="App.Metrics.Formatters.Json" Version="$(AppMetricsCoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+    <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
 
 </Project>
