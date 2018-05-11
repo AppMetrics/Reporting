@@ -1,5 +1,5 @@
-﻿// <copyright file="TextFileMetricsReporter.cs" company="Allan Hardy">
-// Copyright (c) Allan Hardy. All rights reserved.
+﻿// <copyright file="TextFileMetricsReporter.cs" company="App Metrics Contributors">
+// Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System;
@@ -61,7 +61,7 @@ namespace App.Metrics.Reporting.TextFile
 
             var fileInfo = new FileInfo(options.OutputPathAndFileName);
 
-            if (!fileInfo.Directory.Exists)
+            if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
             {
                 Directory.CreateDirectory(fileInfo.Directory.FullName);
             }
