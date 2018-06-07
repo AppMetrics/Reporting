@@ -1,12 +1,12 @@
-﻿// <copyright file="MetricsUdpReporterBuilder.cs" company="App Metrics Contributors">
+﻿// <copyright file="MetricsSocketReporterBuilder.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System;
 using App.Metrics.Builder;
 using App.Metrics.Formatters;
-using App.Metrics.Reporting.Udp;
-using App.Metrics.Reporting.Udp.Client;
+using App.Metrics.Reporting.Socket;
+using App.Metrics.Reporting.Socket.Client;
 
 // ReSharper disable CheckNamespace
 namespace App.Metrics
@@ -19,63 +19,63 @@ namespace App.Metrics
     public static class MetricsUdpReporterBuilder
     {
         /// <summary>
-        ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
-        /// <param name="options">The UDP reporting options to use.</param>
+        /// <param name="options">The Socket reporting options to use.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
             this IMetricsReportingBuilder reportingBuilder,
-            MetricsReportingUdpOptions options)
+            MetricsReportingSocketOptions options)
         {
             if (reportingBuilder == null)
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            UdpSettings.Validate(options.UdpSettings.Address, options.UdpSettings.Port);
+            SocketSettings.Validate(options.SocketSettings.Address, options.SocketSettings.Port);
 
-            var provider = new UdpMetricsReporter(options);
+            var provider = new SocketMetricsReporter(options);
 
             return reportingBuilder.Using(provider);
         }
 
         /// <summary>
-        ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
-        /// <param name="setupAction">The UDP reporting options to use.</param>
+        /// <param name="setupAction">The Socket reporting options to use.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
             this IMetricsReportingBuilder reportingBuilder,
-            Action<MetricsReportingUdpOptions> setupAction)
+            Action<MetricsReportingSocketOptions> setupAction)
         {
             if (reportingBuilder == null)
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            var options = new MetricsReportingUdpOptions();
+            var options = new MetricsReportingSocketOptions();
 
             setupAction?.Invoke(options);
 
-            UdpSettings.Validate(options.UdpSettings.Address, options.UdpSettings.Port);
+            SocketSettings.Validate(options.SocketSettings.Address, options.SocketSettings.Port);
 
-            var provider = new UdpMetricsReporter(options);
+            var provider = new SocketMetricsReporter(options);
 
             return reportingBuilder.Using(provider);
         }
 
         /// <summary>
-        ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -99,20 +99,20 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            UdpSettings.Validate(address, port);
+            SocketSettings.Validate(address, port);
 
-            var options = new MetricsReportingUdpOptions
+            var options = new MetricsReportingSocketOptions
             {
-                UdpSettings = new UdpSettings(address, port),
+                SocketSettings = new SocketSettings(address, port),
                 MetricsOutputFormatter = metricsOutputFormatter
             };
-            var provider = new UdpMetricsReporter(options);
+            var provider = new SocketMetricsReporter(options);
 
             return reportingBuilder.Using(provider);
         }
 
         /// <summary>
-        ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -141,16 +141,16 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            UdpSettings.Validate(address, port);
+            SocketSettings.Validate(address, port);
 
-            var options = new MetricsReportingUdpOptions
+            var options = new MetricsReportingSocketOptions
             {
-                UdpSettings = new UdpSettings(address, port),
+                SocketSettings = new SocketSettings(address, port),
                 MetricsOutputFormatter = metricsOutputFormatter,
                 FlushInterval = flushInterval
             };
 
-            var provider = new UdpMetricsReporter(options);
+            var provider = new SocketMetricsReporter(options);
 
             return reportingBuilder.Using(provider);
         }

@@ -3,10 +3,10 @@
   <Import Project="..\..\build\common.props" />
 
   <PropertyGroup>
-    <Description>Provides UDP reporting capability to App Metrics</Description>
+    <Description>Provides reporting capability to App Metrics via sockets</Description>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net452</TargetFrameworks>
-    <PackageTags>appmetrics;reporting;udp</PackageTags>    
+    <PackageTags>appmetrics;reporting;socket;tcp;udp;uds</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

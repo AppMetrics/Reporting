@@ -1,18 +1,18 @@
-﻿// <copyright file="UdpWriteResult.cs" company="App Metrics Contributors">
+﻿// <copyright file="SocketWriteResult.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
-namespace App.Metrics.Reporting.Udp.Client
+namespace App.Metrics.Reporting.Socket.Client
 {
-    public struct UdpWriteResult
+    public struct SocketWriteResult
     {
-        public UdpWriteResult(bool success)
+        public SocketWriteResult(bool success)
         {
             Success = success;
             ErrorMessage = null;
         }
 
-        public UdpWriteResult(bool success, string errorMessage)
+        public SocketWriteResult(bool success, string errorMessage)
         {
             Success = success;
             ErrorMessage = errorMessage;

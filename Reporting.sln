@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{82BE5E48
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Metrics.Reporting.Http", "src\App.Metrics.Reporting.Http\App.Metrics.Reporting.Http.csproj", "{A4FCA5FE-5866-419D-B2BE-AAF31751C476}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Metrics.Reporting.Udp", "src\App.Metrics.Reporting.Udp\App.Metrics.Reporting.Udp.csproj", "{7DA4DF65-A890-4ACD-8981-AFAAF344C2C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Metrics.Reporting.Socket", "src\App.Metrics.Reporting.Socket\App.Metrics.Reporting.Socket.csproj", "{7DA4DF65-A890-4ACD-8981-AFAAF344C2C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReportingSandbox", "sandbox\ReportingSandbox\ReportingSandbox.csproj", "{96B005A1-B339-408F-BAAE-5C95566A7DF1}"
 EndProject

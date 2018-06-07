@@ -4,7 +4,7 @@
 
 using System;
 
-namespace App.Metrics.Reporting.Udp.Client
+namespace App.Metrics.Reporting.Socket.Client
 {
     internal static class Constants
     {

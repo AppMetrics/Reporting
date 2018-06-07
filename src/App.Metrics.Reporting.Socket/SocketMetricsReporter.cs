@@ -1,4 +1,4 @@
-﻿// <copyright file="UdpMetricsReporter.cs" company="App Metrics Contributors">
+﻿// <copyright file="SocketMetricsReporter.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
@@ -11,16 +11,16 @@ using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Formatters.Json;
 using App.Metrics.Logging;
-using App.Metrics.Reporting.Udp.Client;
+using App.Metrics.Reporting.Socket.Client;
 
-namespace App.Metrics.Reporting.Udp
+namespace App.Metrics.Reporting.Socket
 {
-    public class UdpMetricsReporter : IReportMetrics
+    public class SocketMetricsReporter : IReportMetrics
     {
-        private static readonly ILog Logger = LogProvider.For<UdpMetricsReporter>();
-        private readonly DefaultUdpClient _udpClient;
+        private static readonly ILog Logger = LogProvider.For<SocketMetricsReporter>();
+        private readonly DefaultSocketClient _socketClient;
 
-        public UdpMetricsReporter(MetricsReportingUdpOptions options)
+        public SocketMetricsReporter(MetricsReportingSocketOptions options)
         {
             if (options == null)
             {
@@ -34,7 +34,7 @@ namespace App.Metrics.Reporting.Udp
 
             if (options.FlushInterval < TimeSpan.Zero)
             {
-                throw new InvalidOperationException($"{nameof(MetricsReportingUdpOptions.FlushInterval)} must not be less than zero");
+                throw new InvalidOperationException($"{nameof(MetricsReportingSocketOptions.FlushInterval)} must not be less than zero");
             }
 
             Formatter = options.MetricsOutputFormatter;
@@ -45,9 +45,9 @@ namespace App.Metrics.Reporting.Udp
 
             Filter = options.Filter;
 
-            _udpClient = new DefaultUdpClient(options);
+            _socketClient = new DefaultSocketClient(options);
 
-            Logger.Info($"Using Metrics Reporter {this}. Url: {_udpClient.Endpoint} FlushInterval: {FlushInterval}");
+            Logger.Info($"Using Metrics Reporter {this}. Url: {_socketClient.Endpoint} FlushInterval: {FlushInterval}");
         }
 
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace App.Metrics.Reporting.Udp
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 
-                var result = await _udpClient.WriteAsync(output, Formatter.MediaType, cancellationToken);
+                var result = await _socketClient.WriteAsync(output, Formatter.MediaType, cancellationToken);
 
                 if (result.Success)
                 {

@@ -1,4 +1,4 @@
-﻿// <copyright file="DefaultUdpClient.cs" company="App Metrics Contributors">
+﻿// <copyright file="DefaultSocketClient.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
@@ -10,50 +10,50 @@ using System.Threading.Tasks;
 using App.Metrics.Formatters;
 using App.Metrics.Logging;
 
-namespace App.Metrics.Reporting.Udp.Client
+namespace App.Metrics.Reporting.Socket.Client
 {
-    public class DefaultUdpClient
+    public class DefaultSocketClient
     {
-        private static readonly ILog Logger = LogProvider.For<DefaultUdpClient>();
+        private static readonly ILog Logger = LogProvider.For<DefaultSocketClient>();
 
         private static long _backOffTicks;
         private static long _failureAttempts;
-        private readonly UdpClient _udpClient;
-        private readonly UdpSettings _udpSettings;
-        private readonly UdpPolicy _udpPolicy;
+        private readonly SocketClient _socketClient;
+        private readonly SocketSettings _socketSettings;
+        private readonly SocketPolicy _socketPolicy;
 
         public string Endpoint
         {
             get
             {
-                return _udpSettings.ToString();
+                return _socketSettings.ToString();
             }
         }
 
-        public DefaultUdpClient(MetricsReportingUdpOptions options)
+        public DefaultSocketClient(MetricsReportingSocketOptions options)
         {
-            _udpClient = CreateUdpClient(options.UdpSettings);
-            _udpSettings = options.UdpSettings;
-            _udpPolicy = options.UdpPolicy;
+            _socketClient = CreateSocketClient(options.SocketSettings);
+            _socketSettings = options.SocketSettings;
+            _socketPolicy = options.SocketPolicy;
             _failureAttempts = 0;
         }
 
-        public async Task<UdpWriteResult> WriteAsync(
+        public async Task<SocketWriteResult> WriteAsync(
             string payload,
             MetricsMediaTypeValue mediaType,
             CancellationToken cancellationToken = default)
         {
             if (NeedToBackoff())
             {
-                return new UdpWriteResult(false, $"Too many failures in writing to {_udpSettings}, Circuit Opened");
+                return new SocketWriteResult(false, $"Too many failures in writing to {_socketSettings}, Circuit Opened");
             }
 
             try
             {
                 byte[] output = System.Text.Encoding.UTF8.GetBytes(payload);
 
-                var response = await _udpClient.SendAsync(
-                    output, output.Length, _udpSettings.Address, _udpSettings.Port);
+                var response = await _socketClient.SendAsync(
+                    output, output.Length, _socketSettings.Address, _socketSettings.Port);
 
                 if (response != output.Length)
                 {
@@ -63,41 +63,41 @@ namespace App.Metrics.Reporting.Udp.Client
                         $"Failed to write to {Endpoint}. Bytes: {output.Length}. Sended: {response}";
                     Logger.Error(errorMessage);
 
-                    return new UdpWriteResult(false, errorMessage);
+                    return new SocketWriteResult(false, errorMessage);
                 }
 
                 Logger.Trace($"Successful write to {Endpoint}");
 
-                return new UdpWriteResult(true);
+                return new SocketWriteResult(true);
             }
             catch (Exception ex)
             {
                 Interlocked.Increment(ref _failureAttempts);
                 Logger.Error(ex, $"Failed to write to {Endpoint}");
-                return new UdpWriteResult(false, ex.ToString());
+                return new SocketWriteResult(false, ex.ToString());
             }
         }
 
-        private static UdpClient CreateUdpClient(
-            UdpSettings udpSettings)
+        private static SocketClient CreateSocketClient(
+            SocketSettings socketSettings)
         {
-            UdpSettings.Validate(udpSettings.Address, udpSettings.Port);
+            SocketSettings.Validate(socketSettings.Address, socketSettings.Port);
             var client = new UdpClient();
             return client;
         }
 
         private bool NeedToBackoff()
         {
-            if (Interlocked.Read(ref _failureAttempts) < _udpPolicy.FailuresBeforeBackoff)
+            if (Interlocked.Read(ref _failureAttempts) < _socketPolicy.FailuresBeforeBackoff)
             {
                 return false;
             }
 
-            Logger.Error($"{Endpoint} write backoff for {_udpPolicy.BackoffPeriod.Seconds} secs");
+            Logger.Error($"{Endpoint} write backoff for {_socketPolicy.BackoffPeriod.Seconds} secs");
 
             if (Interlocked.Read(ref _backOffTicks) == 0)
             {
-                Interlocked.Exchange(ref _backOffTicks, DateTime.UtcNow.Add(_udpPolicy.BackoffPeriod).Ticks);
+                Interlocked.Exchange(ref _backOffTicks, DateTime.UtcNow.Add(_socketPolicy.BackoffPeriod).Ticks);
             }
 
             if (DateTime.UtcNow.Ticks <= Interlocked.Read(ref _backOffTicks))

@@ -1,14 +1,14 @@
-﻿// <copyright file="UdpPolicy.cs" company="App Metrics Contributors">
+﻿// <copyright file="SocketPolicy.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System;
 
-namespace App.Metrics.Reporting.Udp.Client
+namespace App.Metrics.Reporting.Socket.Client
 {
-    public class UdpPolicy
+    public class SocketPolicy
     {
-        public UdpPolicy()
+        public SocketPolicy()
         {
             FailuresBeforeBackoff = Constants.DefaultFailuresBeforeBackoff;
             BackoffPeriod = Constants.DefaultBackoffPeriod;

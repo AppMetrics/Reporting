@@ -1,22 +1,22 @@
-﻿// <copyright file="UdpSettings.cs" company="App Metrics Contributors">
+﻿// <copyright file="SocketSettings.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System;
 using System.Net;
 
-namespace App.Metrics.Reporting.Udp.Client
+namespace App.Metrics.Reporting.Socket.Client
 {
-    public class UdpSettings
+    public class SocketSettings
     {
-        public UdpSettings(string address, int port)
+        public SocketSettings(string address, int port)
         {
             Validate(address, port);
             Address = address;
             Port = port;
         }
 
-        public UdpSettings() { }
+        public SocketSettings() { }
 
         /// <summary>
         ///     Gets or sets Address to send data.
@@ -60,7 +60,7 @@ namespace App.Metrics.Reporting.Udp.Client
 
         public override string ToString()
         {
-            return $"udp://{Address}:{Port}";
+            return $"socket://{Address}:{Port}";
         }
     }
 }
