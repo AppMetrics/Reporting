@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\src\App.Metrics.Reporting.Console\App.Metrics.Reporting.Console.csproj" />
     <ProjectReference Include="..\..\src\App.Metrics.Reporting.Http\App.Metrics.Reporting.Http.csproj" />
     <ProjectReference Include="..\..\src\App.Metrics.Reporting.TextFile\App.Metrics.Reporting.TextFile.csproj" />
+    <ProjectReference Include="..\..\src\App.Metrics.Reporting.Udp\App.Metrics.Reporting.Udp.csproj" />
   </ItemGroup>
 
 </Project>

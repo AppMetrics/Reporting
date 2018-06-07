@@ -40,8 +40,9 @@ var linkSources					= HasArgument("LinkSources") ? Argument<bool>("LinkSources")
 var packDirs                    = new [] 
 									{ 
 										Directory("./src/App.Metrics.Reporting.Console"),
-										Directory("./src/App.Metrics.Reporting.TextFile"), 
-										Directory("./src/App.Metrics.Reporting.Http") 
+										Directory("./src/App.Metrics.Reporting.TextFile"),
+										Directory("./src/App.Metrics.Reporting.Http"),
+										Directory("./src/App.Metrics.Reporting.Udp")
 									};
 var artifactsDir                = (DirectoryPath) Directory("./artifacts");
 var testResultsDir              = (DirectoryPath) artifactsDir.Combine("test-results");

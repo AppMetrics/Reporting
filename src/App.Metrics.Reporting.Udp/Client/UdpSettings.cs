@@ -48,10 +48,10 @@ namespace App.Metrics.Reporting.Udp.Client
                 throw new ArgumentOutOfRangeException(
                     nameof(port),
                     port,
-                    "Port should be in ({IPEndPoint.MinPort}; {IPEndPoint.MaxPort}) range.");
+                    $"Port should be in ({IPEndPoint.MinPort}; {IPEndPoint.MaxPort}) range.");
             }
 
-            string endpoint = "{address}:{port}";
+            string endpoint = $"{address}:{port}";
             if (!Uri.TryCreate(endpoint, UriKind.Absolute, out var uri))
             {
                 throw new InvalidOperationException($"{endpoint} must be a valid absolute URI.");
