@@ -18,7 +18,6 @@ namespace App.Metrics.Reporting.Udp
     public class UdpMetricsReporter : IReportMetrics
     {
         private static readonly ILog Logger = LogProvider.For<UdpMetricsReporter>();
-        private readonly IMetricsOutputFormatter _defaultMetricsOutputFormatter = new MetricsJsonOutputFormatter();
         private readonly DefaultUdpClient _udpClient;
 
         public UdpMetricsReporter(MetricsReportingUdpOptions options)
@@ -28,12 +27,17 @@ namespace App.Metrics.Reporting.Udp
                 throw new ArgumentNullException(nameof(options));
             }
 
+            if (options.MetricsOutputFormatter == null)
+            {
+                throw new ArgumentNullException(nameof(options.MetricsOutputFormatter));
+            }
+
             if (options.FlushInterval < TimeSpan.Zero)
             {
                 throw new InvalidOperationException($"{nameof(MetricsReportingUdpOptions.FlushInterval)} must not be less than zero");
             }
 
-            Formatter = options.MetricsOutputFormatter ?? _defaultMetricsOutputFormatter;
+            Formatter = options.MetricsOutputFormatter;
 
             FlushInterval = options.FlushInterval > TimeSpan.Zero
                 ? options.FlushInterval

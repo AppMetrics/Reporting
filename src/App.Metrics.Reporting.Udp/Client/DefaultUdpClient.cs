@@ -60,7 +60,7 @@ namespace App.Metrics.Reporting.Udp.Client
                     Interlocked.Increment(ref _failureAttempts);
 
                     var errorMessage =
-                        $"Failed to write to {_udpSettings}. Bytes: {output.Length}. Sended: {response}";
+                        $"Failed to write to {Endpoint}. Bytes: {output.Length}. Sended: {response}";
                     Logger.Error(errorMessage);
 
                     return new UdpWriteResult(false, errorMessage);

@@ -60,7 +60,7 @@ namespace App.Metrics.Reporting.Udp.Client
 
         public override string ToString()
         {
-            return "udp://{Address}:{Port}";
+            return $"udp://{Address}:{Port}";
         }
     }
 }

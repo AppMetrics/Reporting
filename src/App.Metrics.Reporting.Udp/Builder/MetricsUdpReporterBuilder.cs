@@ -4,6 +4,7 @@
 
 using System;
 using App.Metrics.Builder;
+using App.Metrics.Formatters;
 using App.Metrics.Reporting.Udp;
 using App.Metrics.Reporting.Udp.Client;
 
@@ -20,7 +21,7 @@ namespace App.Metrics
         /// <summary>
         ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
-        /// <param name="metricReporterProviderBuilder">
+        /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
         /// <param name="options">The UDP reporting options to use.</param>
@@ -28,25 +29,25 @@ namespace App.Metrics
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
-            this IMetricsReportingBuilder metricReporterProviderBuilder,
+            this IMetricsReportingBuilder reportingBuilder,
             MetricsReportingUdpOptions options)
         {
-            if (metricReporterProviderBuilder == null)
+            if (reportingBuilder == null)
             {
-                throw new ArgumentNullException(nameof(metricReporterProviderBuilder));
+                throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
             UdpSettings.Validate(options.UdpSettings.Address, options.UdpSettings.Port);
 
             var provider = new UdpMetricsReporter(options);
 
-            return metricReporterProviderBuilder.Using(provider);
+            return reportingBuilder.Using(provider);
         }
 
         /// <summary>
         ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
-        /// <param name="metricReporterProviderBuilder">
+        /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
         /// </param>
         /// <param name="setupAction">The UDP reporting options to use.</param>
@@ -54,12 +55,12 @@ namespace App.Metrics
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
-            this IMetricsReportingBuilder metricReporterProviderBuilder,
+            this IMetricsReportingBuilder reportingBuilder,
             Action<MetricsReportingUdpOptions> setupAction)
         {
-            if (metricReporterProviderBuilder == null)
+            if (reportingBuilder == null)
             {
-                throw new ArgumentNullException(nameof(metricReporterProviderBuilder));
+                throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
             var options = new MetricsReportingUdpOptions();
@@ -70,14 +71,17 @@ namespace App.Metrics
 
             var provider = new UdpMetricsReporter(options);
 
-            return metricReporterProviderBuilder.Using(provider);
+            return reportingBuilder.Using(provider);
         }
 
         /// <summary>
         ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
-        /// <param name="metricReporterProviderBuilder">
+        /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
+        /// </param>
+        /// <param name="metricsOutputFormatter">
+        ///     The <see cref="IMetricsOutputFormatter" /> used to configure metrics output formatter.
         /// </param>
         /// <param name="address">The UDP endpoint address where metrics are POSTed.</param>
         /// <param name="port">The UDP endpoint port where metrics are POSTed.</param>
@@ -85,31 +89,36 @@ namespace App.Metrics
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
-            this IMetricsReportingBuilder metricReporterProviderBuilder,
+            this IMetricsReportingBuilder reportingBuilder,
+            IMetricsOutputFormatter metricsOutputFormatter,
             string address,
             int port)
         {
-            if (metricReporterProviderBuilder == null)
+            if (reportingBuilder == null)
             {
-                throw new ArgumentNullException(nameof(metricReporterProviderBuilder));
+                throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
             UdpSettings.Validate(address, port);
 
             var options = new MetricsReportingUdpOptions
             {
-                UdpSettings = new UdpSettings(address, port)
+                UdpSettings = new UdpSettings(address, port),
+                MetricsOutputFormatter = metricsOutputFormatter
             };
             var provider = new UdpMetricsReporter(options);
 
-            return metricReporterProviderBuilder.Using(provider);
+            return reportingBuilder.Using(provider);
         }
 
         /// <summary>
         ///     Add the <see cref="UdpMetricsReporter" /> allowing metrics to be reported over UDP.
         /// </summary>
-        /// <param name="metricReporterProviderBuilder">
+        /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
+        /// </param>
+        /// <param name="metricsOutputFormatter">
+        ///     The <see cref="IMetricsOutputFormatter" /> used to configure metrics reporters.
         /// </param>
         /// <param name="address">The UDP endpoint address where metrics are POSTed.</param>
         /// <param name="port">The UDP endpoint port where metrics are POSTed.</param>
@@ -121,14 +130,15 @@ namespace App.Metrics
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
         public static IMetricsBuilder OverUdp(
-            this IMetricsReportingBuilder metricReporterProviderBuilder,
+            this IMetricsReportingBuilder reportingBuilder,
+            IMetricsOutputFormatter metricsOutputFormatter,
             string address,
             int port,
             TimeSpan flushInterval)
         {
-            if (metricReporterProviderBuilder == null)
+            if (reportingBuilder == null)
             {
-                throw new ArgumentNullException(nameof(metricReporterProviderBuilder));
+                throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
             UdpSettings.Validate(address, port);
@@ -136,12 +146,13 @@ namespace App.Metrics
             var options = new MetricsReportingUdpOptions
             {
                 UdpSettings = new UdpSettings(address, port),
+                MetricsOutputFormatter = metricsOutputFormatter,
                 FlushInterval = flushInterval
             };
 
             var provider = new UdpMetricsReporter(options);
 
-            return metricReporterProviderBuilder.Using(provider);
+            return reportingBuilder.Using(provider);
         }
     }
 }
