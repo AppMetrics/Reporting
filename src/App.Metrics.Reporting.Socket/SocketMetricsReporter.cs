@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
-using App.Metrics.Formatters.Json;
 using App.Metrics.Logging;
 using App.Metrics.Reporting.Socket.Client;
 
@@ -70,7 +69,7 @@ namespace App.Metrics.Reporting.Socket
 
                 var output = Encoding.UTF8.GetString(stream.ToArray());
 
-                var result = await _socketClient.WriteAsync(output, Formatter.MediaType, cancellationToken);
+                var result = await _socketClient.WriteAsync(output, cancellationToken);
 
                 if (result.Success)
                 {

@@ -4,19 +4,29 @@
 
 using System;
 using System.Net;
+using System.Net.Sockets;
 
 namespace App.Metrics.Reporting.Socket.Client
 {
     public class SocketSettings
     {
-        public SocketSettings(string address, int port)
+        public SocketSettings(ProtocolType protocolType, string address, int port)
         {
-            Validate(address, port);
+            Validate(protocolType, address, port);
+            ProtocolType = protocolType;
             Address = address;
             Port = port;
         }
 
         public SocketSettings() { }
+
+        /// <summary>
+        ///     Gets or sets Protocol to send data.
+        /// </summary>
+        /// <value>
+        ///     Possible variants are TCP and UDP.
+        /// </value>
+        public ProtocolType ProtocolType { get; }
 
         /// <summary>
         ///     Gets or sets Address to send data.
@@ -34,10 +44,34 @@ namespace App.Metrics.Reporting.Socket.Client
         /// </value>
         public int Port { get; set; }
 
+        public string Endpoint
+        {
+            get
+            {
+                if (ProtocolType == ProtocolType.Tcp)
+                {
+                    return $"tcp://{Address}:{Port}";
+                }
+
+                if (ProtocolType == ProtocolType.Udp)
+                {
+                    return $"udp://{Address}:{Port}";
+                }
+
+                return "Failed Setings Instance";
+            }
+        }
+
         public static void Validate(
+            ProtocolType protocolType,
             string address,
             int port)
         {
+            if (protocolType != ProtocolType.Tcp && protocolType != ProtocolType.Udp)
+            {
+                throw new ArgumentOutOfRangeException(nameof(protocolType), "Only available TCP and UDP");
+            }
+
             if (string.IsNullOrWhiteSpace(address))
             {
                 throw new ArgumentNullException(nameof(address));
@@ -56,11 +90,6 @@ namespace App.Metrics.Reporting.Socket.Client
             {
                 throw new InvalidOperationException($"{endpoint} must be a valid absolute URI.");
             }
-        }
-
-        public override string ToString()
-        {
-            return $"socket://{Address}:{Port}";
         }
     }
 }

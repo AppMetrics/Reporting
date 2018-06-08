@@ -3,8 +3,8 @@
 // </copyright>
 
 using System;
-using System.Net.Sockets;
 using System.Text;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Formatters;
@@ -19,48 +19,44 @@ namespace App.Metrics.Reporting.Socket.Client
         private static long _backOffTicks;
         private static long _failureAttempts;
         private readonly SocketClient _socketClient;
-        private readonly SocketSettings _socketSettings;
         private readonly SocketPolicy _socketPolicy;
 
         public string Endpoint
         {
             get
             {
-                return _socketSettings.ToString();
+                return _socketClient.Endpoint;
             }
         }
 
         public DefaultSocketClient(MetricsReportingSocketOptions options)
         {
             _socketClient = CreateSocketClient(options.SocketSettings);
-            _socketSettings = options.SocketSettings;
             _socketPolicy = options.SocketPolicy;
             _failureAttempts = 0;
         }
 
         public async Task<SocketWriteResult> WriteAsync(
             string payload,
-            MetricsMediaTypeValue mediaType,
             CancellationToken cancellationToken = default)
         {
             if (NeedToBackoff())
             {
-                return new SocketWriteResult(false, $"Too many failures in writing to {_socketSettings}, Circuit Opened");
+                return new SocketWriteResult(false, $"Too many failures in writing to {Endpoint}, Circuit Opened");
             }
 
             try
             {
-                byte[] output = System.Text.Encoding.UTF8.GetBytes(payload);
+                byte[] output = Encoding.UTF8.GetBytes(payload);
 
-                var response = await _socketClient.SendAsync(
-                    output, output.Length, _socketSettings.Address, _socketSettings.Port);
+                var response = await _socketClient.WriteAsync(output, cancellationToken);
 
-                if (response != output.Length)
+                if (!response.Success)
                 {
                     Interlocked.Increment(ref _failureAttempts);
 
                     var errorMessage =
-                        $"Failed to write to {Endpoint}. Bytes: {output.Length}. Sended: {response}";
+                        $"Failed to write {output.Length} bytes to {Endpoint}";
                     Logger.Error(errorMessage);
 
                     return new SocketWriteResult(false, errorMessage);
@@ -81,8 +77,7 @@ namespace App.Metrics.Reporting.Socket.Client
         private static SocketClient CreateSocketClient(
             SocketSettings socketSettings)
         {
-            SocketSettings.Validate(socketSettings.Address, socketSettings.Port);
-            var client = new UdpClient();
+            var client = new SocketClient(socketSettings);
             return client;
         }
 

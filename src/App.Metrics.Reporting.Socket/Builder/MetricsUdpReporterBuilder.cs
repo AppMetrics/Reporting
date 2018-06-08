@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Net.Sockets;
 using App.Metrics.Builder;
 using App.Metrics.Formatters;
 using App.Metrics.Reporting.Socket;
@@ -37,7 +38,7 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(options.SocketSettings.Address, options.SocketSettings.Port);
+            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
 
             var provider = new SocketMetricsReporter(options);
 
@@ -67,7 +68,7 @@ namespace App.Metrics
 
             setupAction?.Invoke(options);
 
-            SocketSettings.Validate(options.SocketSettings.Address, options.SocketSettings.Port);
+            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
 
             var provider = new SocketMetricsReporter(options);
 
@@ -99,11 +100,11 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(address, port);
+            SocketSettings.Validate(ProtocolType.Udp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
-                SocketSettings = new SocketSettings(address, port),
+                SocketSettings = new SocketSettings(ProtocolType.Udp, address, port),
                 MetricsOutputFormatter = metricsOutputFormatter
             };
             var provider = new SocketMetricsReporter(options);
@@ -141,11 +142,11 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(address, port);
+            SocketSettings.Validate(ProtocolType.Udp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
-                SocketSettings = new SocketSettings(address, port),
+                SocketSettings = new SocketSettings(ProtocolType.Udp, address, port),
                 MetricsOutputFormatter = metricsOutputFormatter,
                 FlushInterval = flushInterval
             };
