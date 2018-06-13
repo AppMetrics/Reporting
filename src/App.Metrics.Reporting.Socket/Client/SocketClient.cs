@@ -13,7 +13,7 @@ namespace App.Metrics.Reporting.Socket.Client
     {
         private static readonly ILog Logger = LogProvider.For<SocketClient>();
 
-        private readonly TcpClient _tcpClient;
+        private TcpClient _tcpClient;
         private readonly UdpClient _udpClient;
         private readonly SocketSettings _socketSettings;
 
@@ -40,6 +40,38 @@ namespace App.Metrics.Reporting.Socket.Client
             }
 
             _socketSettings = socketSettings;
+        }
+
+        public bool IsConnected()
+        {
+            if (_tcpClient != null)
+            {
+                if (!_tcpClient.Connected
+                    || !_tcpClient.Client.Poll(0, SelectMode.SelectWrite)
+                    || !_tcpClient.Client.Poll(0, SelectMode.SelectError))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (_udpClient != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task ReConnect()
+        {
+            if (_tcpClient != null)
+            {
+                _tcpClient.Client.Dispose();
+                _tcpClient = new TcpClient();
+                await _tcpClient.ConnectAsync(_socketSettings.Address, _socketSettings.Port);
+            }
         }
 
         public async Task<SocketWriteResult> WriteAsync(

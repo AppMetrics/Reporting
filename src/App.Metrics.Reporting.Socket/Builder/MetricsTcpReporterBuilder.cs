@@ -1,4 +1,4 @@
-﻿// <copyright file="MetricsUdpReporterBuilder.cs" company="App Metrics Contributors">
+﻿// <copyright file="MetricsTcpReporterBuilder.cs" company="App Metrics Contributors">
 // Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
@@ -14,13 +14,13 @@ namespace App.Metrics
     // ReSharper restore CheckNamespace
 {
     /// <summary>
-    ///     Builder for configuring metrics UDP reporting using an
+    ///     Builder for configuring metrics TCP reporting using an
     ///     <see cref="IMetricsReportingBuilder" />.
     /// </summary>
-    public static class MetricsUdpReporterBuilder
+    public static class MetricsTcpReporterBuilder
     {
         /// <summary>
-        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over TCP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -29,7 +29,7 @@ namespace App.Metrics
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
-        public static IMetricsBuilder OverUdp(
+        public static IMetricsBuilder OverTcp(
             this IMetricsReportingBuilder reportingBuilder,
             MetricsReportingSocketOptions options)
         {
@@ -38,7 +38,7 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
+            SocketSettings.Validate(ProtocolType.Tcp, options.SocketSettings.Address, options.SocketSettings.Port);
 
             var provider = new SocketMetricsReporter(options);
 
@@ -46,7 +46,7 @@ namespace App.Metrics
         }
 
         /// <summary>
-        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over TCP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -55,7 +55,7 @@ namespace App.Metrics
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
-        public static IMetricsBuilder OverUdp(
+        public static IMetricsBuilder OverTcp(
             this IMetricsReportingBuilder reportingBuilder,
             Action<MetricsReportingSocketOptions> setupAction)
         {
@@ -68,7 +68,7 @@ namespace App.Metrics
 
             setupAction?.Invoke(options);
 
-            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
+            SocketSettings.Validate(ProtocolType.Tcp, options.SocketSettings.Address, options.SocketSettings.Port);
 
             var provider = new SocketMetricsReporter(options);
 
@@ -76,7 +76,7 @@ namespace App.Metrics
         }
 
         /// <summary>
-        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over TCP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -84,12 +84,12 @@ namespace App.Metrics
         /// <param name="metricsOutputFormatter">
         ///     The <see cref="IMetricsOutputFormatter" /> used to configure metrics output formatter.
         /// </param>
-        /// <param name="address">The UDP endpoint address where metrics are POSTed.</param>
-        /// <param name="port">The UDP endpoint port where metrics are POSTed.</param>
+        /// <param name="address">The TCP endpoint address where metrics are POSTed.</param>
+        /// <param name="port">The TCP endpoint port where metrics are POSTed.</param>
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
-        public static IMetricsBuilder OverUdp(
+        public static IMetricsBuilder OverTcp(
             this IMetricsReportingBuilder reportingBuilder,
             IMetricsOutputFormatter metricsOutputFormatter,
             string address,
@@ -100,11 +100,11 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(ProtocolType.Udp, address, port);
+            SocketSettings.Validate(ProtocolType.Tcp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
-                SocketSettings = new SocketSettings(ProtocolType.Udp, address, port),
+                SocketSettings = new SocketSettings(ProtocolType.Tcp, address, port),
                 MetricsOutputFormatter = metricsOutputFormatter
             };
             var provider = new SocketMetricsReporter(options);
@@ -113,7 +113,7 @@ namespace App.Metrics
         }
 
         /// <summary>
-        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over UDP.
+        ///     Add the <see cref="SocketMetricsReporter" /> allowing metrics to be reported over TCP.
         /// </summary>
         /// <param name="reportingBuilder">
         ///     The <see cref="IMetricsReportingBuilder" /> used to configure metrics reporters.
@@ -121,8 +121,8 @@ namespace App.Metrics
         /// <param name="metricsOutputFormatter">
         ///     The <see cref="IMetricsOutputFormatter" /> used to configure metrics reporters.
         /// </param>
-        /// <param name="address">The UDP endpoint address where metrics are POSTed.</param>
-        /// <param name="port">The UDP endpoint port where metrics are POSTed.</param>
+        /// <param name="address">The TCP endpoint address where metrics are POSTed.</param>
+        /// <param name="port">The TCP endpoint port where metrics are POSTed.</param>
         /// <param name="flushInterval">
         ///     The <see cref="T:System.TimeSpan" /> interval used if intended to schedule metrics
         ///     reporting.
@@ -130,7 +130,7 @@ namespace App.Metrics
         /// <returns>
         ///     An <see cref="IMetricsBuilder" /> that can be used to further configure App Metrics.
         /// </returns>
-        public static IMetricsBuilder OverUdp(
+        public static IMetricsBuilder OverTcp(
             this IMetricsReportingBuilder reportingBuilder,
             IMetricsOutputFormatter metricsOutputFormatter,
             string address,
@@ -142,11 +142,11 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(ProtocolType.Udp, address, port);
+            SocketSettings.Validate(ProtocolType.Tcp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
-                SocketSettings = new SocketSettings(ProtocolType.Udp, address, port),
+                SocketSettings = new SocketSettings(ProtocolType.Tcp, address, port),
                 MetricsOutputFormatter = metricsOutputFormatter,
                 FlushInterval = flushInterval
             };

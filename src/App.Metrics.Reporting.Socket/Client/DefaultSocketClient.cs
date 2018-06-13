@@ -45,6 +45,12 @@ namespace App.Metrics.Reporting.Socket.Client
                 return new SocketWriteResult(false, $"Too many failures in writing to {Endpoint}, Circuit Opened");
             }
 
+            if (!_socketClient.IsConnected())
+            {
+                Logger.Debug($"Try to connect to {Endpoint}");
+                await _socketClient.ReConnect();
+            }
+
             try
             {
                 byte[] output = Encoding.UTF8.GetBytes(payload);
