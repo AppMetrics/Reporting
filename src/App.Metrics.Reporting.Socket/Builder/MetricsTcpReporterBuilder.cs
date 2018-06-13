@@ -38,7 +38,7 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(ProtocolType.Tcp, options.SocketSettings.Address, options.SocketSettings.Port);
+            options.SocketSettings.ProtocolType = ProtocolType.Tcp;
 
             var provider = new SocketMetricsReporter(options);
 
@@ -68,7 +68,7 @@ namespace App.Metrics
 
             setupAction?.Invoke(options);
 
-            SocketSettings.Validate(ProtocolType.Tcp, options.SocketSettings.Address, options.SocketSettings.Port);
+            options.SocketSettings.ProtocolType = ProtocolType.Tcp;
 
             var provider = new SocketMetricsReporter(options);
 
@@ -99,8 +99,6 @@ namespace App.Metrics
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
-
-            SocketSettings.Validate(ProtocolType.Tcp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
@@ -141,8 +139,6 @@ namespace App.Metrics
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
-
-            SocketSettings.Validate(ProtocolType.Tcp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {

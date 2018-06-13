@@ -26,7 +26,7 @@ namespace App.Metrics.Reporting.Socket.Client
         /// <value>
         ///     Possible variants are TCP and UDP.
         /// </value>
-        public ProtocolType ProtocolType { get; }
+        public ProtocolType ProtocolType { get; set; }
 
         /// <summary>
         ///     Gets or sets Address to send data.

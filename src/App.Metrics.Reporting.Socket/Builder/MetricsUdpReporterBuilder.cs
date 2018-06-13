@@ -38,7 +38,7 @@ namespace App.Metrics
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
 
-            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
+            options.SocketSettings.ProtocolType = ProtocolType.Udp;
 
             var provider = new SocketMetricsReporter(options);
 
@@ -68,7 +68,7 @@ namespace App.Metrics
 
             setupAction?.Invoke(options);
 
-            SocketSettings.Validate(ProtocolType.Udp, options.SocketSettings.Address, options.SocketSettings.Port);
+            options.SocketSettings.ProtocolType = ProtocolType.Udp;
 
             var provider = new SocketMetricsReporter(options);
 
@@ -99,8 +99,6 @@ namespace App.Metrics
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
-
-            SocketSettings.Validate(ProtocolType.Udp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {
@@ -141,8 +139,6 @@ namespace App.Metrics
             {
                 throw new ArgumentNullException(nameof(reportingBuilder));
             }
-
-            SocketSettings.Validate(ProtocolType.Udp, address, port);
 
             var options = new MetricsReportingSocketOptions
             {

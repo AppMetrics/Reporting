@@ -46,7 +46,7 @@ namespace App.Metrics.Reporting.Socket
 
             _socketClient = new DefaultSocketClient(options);
 
-            Logger.Info($"Using Metrics Reporter {this}. Url: {_socketClient.Endpoint} FlushInterval: {FlushInterval}");
+            Logger.Info($"Using Metrics Reporter {this}. Output: {_socketClient.Endpoint} FlushInterval: {FlushInterval}");
         }
 
         /// <inheritdoc />

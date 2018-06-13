@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics.Logging;
@@ -48,7 +49,7 @@ namespace App.Metrics.Reporting.Socket.Client
             {
                 if (!_tcpClient.Connected
                     || !_tcpClient.Client.Poll(0, SelectMode.SelectWrite)
-                    || !_tcpClient.Client.Poll(0, SelectMode.SelectError))
+                    || _tcpClient.Client.Poll(0, SelectMode.SelectError))
                 {
                     return false;
                 }
@@ -75,15 +76,17 @@ namespace App.Metrics.Reporting.Socket.Client
         }
 
         public async Task<SocketWriteResult> WriteAsync(
-            byte[] payload,
+            string payload,
             CancellationToken cancellationToken = default)
         {
+            byte[] output = Encoding.UTF8.GetBytes(payload);
+
             if (_tcpClient != null)
             {
                 NetworkStream stream = _tcpClient.GetStream();
                 await Task.Run(() =>
                 {
-                    return stream.WriteAsync(payload, 0, payload.Length, cancellationToken);
+                    return stream.WriteAsync(output, 0, output.Length, cancellationToken);
                 });
                 return new SocketWriteResult(true);
             }
@@ -91,8 +94,8 @@ namespace App.Metrics.Reporting.Socket.Client
             if (_udpClient != null)
             {
                 int sended = await _udpClient.SendAsync(
-                    payload, payload.Length, _socketSettings.Address, _socketSettings.Port);
-                var success = sended == payload.Length;
+                    output, output.Length, _socketSettings.Address, _socketSettings.Port);
+                var success = sended == output.Length;
                 return new SocketWriteResult(success);
             }
 

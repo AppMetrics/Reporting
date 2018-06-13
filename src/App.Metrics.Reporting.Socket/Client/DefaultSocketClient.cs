@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.Text;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,16 +52,14 @@ namespace App.Metrics.Reporting.Socket.Client
 
             try
             {
-                byte[] output = Encoding.UTF8.GetBytes(payload);
-
-                var response = await _socketClient.WriteAsync(output, cancellationToken);
+                var response = await _socketClient.WriteAsync(payload, cancellationToken);
 
                 if (!response.Success)
                 {
                     Interlocked.Increment(ref _failureAttempts);
 
                     var errorMessage =
-                        $"Failed to write {output.Length} bytes to {Endpoint}";
+                        $"Failed to write {payload.Length} bytes to {Endpoint}";
                     Logger.Error(errorMessage);
 
                     return new SocketWriteResult(false, errorMessage);
