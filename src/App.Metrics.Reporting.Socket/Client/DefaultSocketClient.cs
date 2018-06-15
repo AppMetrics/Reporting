@@ -59,7 +59,7 @@ namespace App.Metrics.Reporting.Socket.Client
                     Interlocked.Increment(ref _failureAttempts);
 
                     var errorMessage =
-                        $"Failed to write {payload.Length} bytes to {Endpoint}";
+                        $"Failed to write {payload.Length} bytes to {Endpoint} ({response.ErrorMessage})";
                     Logger.Error(errorMessage);
 
                     return new SocketWriteResult(false, errorMessage);

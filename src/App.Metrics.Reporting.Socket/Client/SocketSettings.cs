@@ -58,6 +58,11 @@ namespace App.Metrics.Reporting.Socket.Client
                     return $"udp://{Address}:{Port}";
                 }
 
+                if (ProtocolType == ProtocolType.IP)
+                {
+                    return $"unix://{Address}";
+                }
+
                 return "Failed Setings Instance";
             }
         }
@@ -67,14 +72,28 @@ namespace App.Metrics.Reporting.Socket.Client
             string address,
             int port)
         {
-            if (protocolType != ProtocolType.Tcp && protocolType != ProtocolType.Udp)
+            if (protocolType != ProtocolType.Tcp
+                && protocolType != ProtocolType.Udp
+                && protocolType != ProtocolType.IP)
             {
-                throw new ArgumentOutOfRangeException(nameof(protocolType), "Only available TCP and UDP");
+                throw new ArgumentOutOfRangeException(nameof(protocolType), "Only available TCP/UDP and IP for Unix domain sockets");
             }
 
             if (string.IsNullOrWhiteSpace(address))
             {
                 throw new ArgumentNullException(nameof(address));
+            }
+
+            if (protocolType == ProtocolType.IP)
+            {
+                if (port != 0)
+                {
+                    throw new ArgumentException(
+                        $"Port should be 0 when Unix domain socket is using",
+                        nameof(port));
+                }
+
+                return;
             }
 
             if (port <= IPEndPoint.MinPort || port > IPEndPoint.MaxPort)
