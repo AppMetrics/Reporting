@@ -5,6 +5,7 @@
 using System;
 using System.Threading.Tasks;
 using App.Metrics;
+using App.Metrics.Formatters.InfluxDB;
 using Microsoft.AspNetCore.Hosting;
 using ReportingSandbox.JustForTesting;
 using Serilog;
@@ -48,7 +49,9 @@ namespace ReportingSandbox
                 .Report.ToTextFile(@"C:\metrics\sample.txt", TimeSpan.FromSeconds(5))
                 .Report.OverHttp("http://localhost:50001/metrics-receive", TimeSpan.FromSeconds(10))
                 .Report.OverHttp("http://localhost:50002/api/metrics", TimeSpan.FromSeconds(10))
-                .Report.OverUdp("localhost", 8094)
+                // .Report.OverTcp(new MetricsInfluxDbLineProtocolOutputFormatter(), "localhost", 8094)
+                .Report.OverUdp(new MetricsInfluxDbLineProtocolOutputFormatter(), "localhost", 8094)
+                // .Report.OverUds(new MetricsInfluxDbLineProtocolOutputFormatter(), "/tmp/telegraf.sock")
                 .Build();
         }
     }
