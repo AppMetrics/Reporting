@@ -7,27 +7,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Logging;
 
 namespace App.Metrics.Reporting.Socket.Client
 {
     public class SocketClient
     {
-        private static readonly ILog Logger = LogProvider.For<SocketClient>();
+        private readonly SocketSettings _socketSettings;
+        private readonly UdpClient _udpClient;
+        private readonly UnixEndPoint _unixEndpoint;
 
         private TcpClient _tcpClient;
-        private readonly UdpClient _udpClient;
         private System.Net.Sockets.Socket _unixClient;
-        private readonly UnixEndPoint _unixEndpoint;
-        private readonly SocketSettings _socketSettings;
-
-        public string Endpoint
-        {
-            get
-            {
-                return _socketSettings.Endpoint;
-            }
-        }
 
         public SocketClient(SocketSettings socketSettings)
         {
@@ -51,6 +41,8 @@ namespace App.Metrics.Reporting.Socket.Client
 
             _socketSettings = socketSettings;
         }
+
+        public string Endpoint => _socketSettings.Endpoint;
 
         public bool IsConnected()
         {
@@ -92,10 +84,7 @@ namespace App.Metrics.Reporting.Socket.Client
             {
                 _unixClient.Dispose();
                 _unixClient = new System.Net.Sockets.Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-                await Task.Run(() =>
-                {
-                    _unixClient.Connect(_unixEndpoint);
-                });
+                await Task.Run(() => { _unixClient.Connect(_unixEndpoint); });
             }
         }
 
@@ -103,22 +92,22 @@ namespace App.Metrics.Reporting.Socket.Client
             string payload,
             CancellationToken cancellationToken = default)
         {
-            byte[] output = Encoding.UTF8.GetBytes(payload);
+            var output = Encoding.UTF8.GetBytes(payload);
 
             if (_tcpClient != null)
             {
                 NetworkStream stream = _tcpClient.GetStream();
-                await Task.Run(() =>
-                {
-                    return stream.WriteAsync(output, 0, output.Length, cancellationToken);
-                });
+                await Task.Run(() => { return stream.WriteAsync(output, 0, output.Length, cancellationToken); });
                 return new SocketWriteResult(true);
             }
 
             if (_udpClient != null)
             {
-                int sended = await _udpClient.SendAsync(
-                    output, output.Length, _socketSettings.Address, _socketSettings.Port);
+                var sended = await _udpClient.SendAsync(
+                    output,
+                    output.Length,
+                    _socketSettings.Address,
+                    _socketSettings.Port);
                 var success = sended == output.Length;
                 return new SocketWriteResult(success);
             }

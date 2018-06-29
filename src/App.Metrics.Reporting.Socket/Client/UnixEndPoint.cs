@@ -1,5 +1,8 @@
-// Copied from https://github.com/mono/mono/blob/master/mcs/class/Mono.Posix/Mono.Unix/UnixEndPoint.cs
+// <copyright file="UnixEndPoint.cs" company="App Metrics Contributors">
+// Copyright (c) App Metrics Contributors. All rights reserved.
+// </copyright>
 
+// Copied from https://github.com/mono/mono/blob/master/mcs/class/Mono.Posix/Mono.Unix/UnixEndPoint.cs
 //
 // Mono.Unix.UnixEndPoint: EndPoint derived class for AF_UNIX family sockets.
 //
@@ -29,12 +32,12 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-using System;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+// ReSharper disable CheckNamespace
 namespace System.Net
+    // ReSharper restore CheckNamespace
 {
     public class UnixEndPoint : EndPoint
     {
