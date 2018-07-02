@@ -73,7 +73,7 @@ namespace App.Metrics.Reporting.Socket
 
                 if (result.Success)
                 {
-                    Logger.Trace("Flushed metrics snapshot");
+                    Logger.Trace("Successfully flushed metrics snapshot");
                     return true;
                 }
 
