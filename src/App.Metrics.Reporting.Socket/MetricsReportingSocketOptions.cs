@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.Net.Http;
 using App.Metrics.Filters;
 using App.Metrics.Formatters;
 using App.Metrics.Reporting.Socket.Client;

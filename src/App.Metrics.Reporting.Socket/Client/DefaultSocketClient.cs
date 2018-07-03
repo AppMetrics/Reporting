@@ -3,10 +3,8 @@
 // </copyright>
 
 using System;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using App.Metrics.Formatters;
 using App.Metrics.Logging;
 
 namespace App.Metrics.Reporting.Socket.Client
@@ -15,7 +13,7 @@ namespace App.Metrics.Reporting.Socket.Client
     {
         private static readonly ILog Logger = LogProvider.For<DefaultSocketClient>();
 
-        private static long _backOffTicks;
+        private static long _backoffTicks;
         private static long _failureAttempts;
         private readonly SocketClient _socketClient;
         private readonly SocketPolicy _socketPolicy;
@@ -41,13 +39,13 @@ namespace App.Metrics.Reporting.Socket.Client
         {
             if (NeedToBackoff())
             {
-                return new SocketWriteResult(false, $"Too many failures in writing to {Endpoint}, Circuit Opened");
+                return new SocketWriteResult(false, $"Too many failures when attempting to write to {Endpoint}, circuit is open");
             }
 
             if (!_socketClient.IsConnected())
             {
-                Logger.Debug($"Try to connect to {Endpoint}");
-                await _socketClient.ReConnect();
+                Logger.Debug($"Trying to connect to {Endpoint}");
+                await _socketClient.Reconnect();
             }
 
             try
@@ -91,20 +89,20 @@ namespace App.Metrics.Reporting.Socket.Client
                 return false;
             }
 
-            Logger.Error($"{Endpoint} write backoff for {_socketPolicy.BackoffPeriod.Seconds} secs");
+            Logger.Error($"{Endpoint} write backoff for {_socketPolicy.BackoffPeriod.Seconds} seconds");
 
-            if (Interlocked.Read(ref _backOffTicks) == 0)
+            if (Interlocked.Read(ref _backoffTicks) == 0)
             {
-                Interlocked.Exchange(ref _backOffTicks, DateTime.UtcNow.Add(_socketPolicy.BackoffPeriod).Ticks);
+                Interlocked.Exchange(ref _backoffTicks, DateTime.UtcNow.Add(_socketPolicy.BackoffPeriod).Ticks);
             }
 
-            if (DateTime.UtcNow.Ticks <= Interlocked.Read(ref _backOffTicks))
+            if (DateTime.UtcNow.Ticks <= Interlocked.Read(ref _backoffTicks))
             {
                 return true;
             }
 
             Interlocked.Exchange(ref _failureAttempts, 0);
-            Interlocked.Exchange(ref _backOffTicks, 0);
+            Interlocked.Exchange(ref _backoffTicks, 0);
 
             return false;
         }

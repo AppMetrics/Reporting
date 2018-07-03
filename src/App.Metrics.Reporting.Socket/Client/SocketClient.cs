@@ -13,10 +13,15 @@ namespace App.Metrics.Reporting.Socket.Client
     public class SocketClient
     {
         private readonly SocketSettings _socketSettings;
-        private readonly UdpClient _udpClient;
-        private readonly UnixEndPoint _unixEndpoint;
 
+        // Implementation for TCP protocol
         private TcpClient _tcpClient;
+
+        // Implementation for UDP protocol
+        private readonly UdpClient _udpClient;
+
+        // Implementation for Unix Domain Sockets
+        private readonly UnixEndPoint _unixEndpoint;
         private System.Net.Sockets.Socket _unixClient;
 
         public SocketClient(SocketSettings socketSettings)
@@ -71,7 +76,7 @@ namespace App.Metrics.Reporting.Socket.Client
             return false;
         }
 
-        public async Task ReConnect()
+        public async Task Reconnect()
         {
             if (_tcpClient != null)
             {

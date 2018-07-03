@@ -37,7 +37,7 @@ namespace App.Metrics.Reporting.Socket.Client
         public string Address { get; set; }
 
         /// <summary>
-        ///     Gets or sets port to send data.
+        ///     Gets or sets Port to send data.
         /// </summary>
         /// <value>
         ///     The remote port.
@@ -63,7 +63,7 @@ namespace App.Metrics.Reporting.Socket.Client
                     return $"unix://{Address}";
                 }
 
-                return "Failed Setings Instance";
+                return "Wrong Settings Instance";
             }
         }
 
@@ -76,7 +76,7 @@ namespace App.Metrics.Reporting.Socket.Client
                 && protocolType != ProtocolType.Udp
                 && protocolType != ProtocolType.IP)
             {
-                throw new ArgumentOutOfRangeException(nameof(protocolType), "Only available TCP/UDP and IP for Unix domain sockets");
+                throw new ArgumentOutOfRangeException(nameof(protocolType), "Only TCP/IP/UDP protocols are available. IP only for Unix domain sockets");
             }
 
             if (string.IsNullOrWhiteSpace(address))
@@ -89,7 +89,7 @@ namespace App.Metrics.Reporting.Socket.Client
                 if (port != 0)
                 {
                     throw new ArgumentException(
-                        $"Port should be 0 when Unix domain socket is using",
+                        $"Port must be 0 when Unix domain socket is used",
                         nameof(port));
                 }
 
@@ -101,7 +101,7 @@ namespace App.Metrics.Reporting.Socket.Client
                 throw new ArgumentOutOfRangeException(
                     nameof(port),
                     port,
-                    $"Port should be in ({IPEndPoint.MinPort}; {IPEndPoint.MaxPort}) range.");
+                    $"Port must be in ({IPEndPoint.MinPort}; {IPEndPoint.MaxPort}) range.");
             }
 
             string endpoint = $"{address}:{port}";
