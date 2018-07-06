@@ -14,15 +14,16 @@ namespace App.Metrics.Reporting.Socket.Client
     {
         private readonly SocketSettings _socketSettings;
 
-        // Implementation for TCP protocol
-        private TcpClient _tcpClient;
-
         // Implementation for UDP protocol
         private readonly UdpClient _udpClient;
 
         // Implementation for Unix Domain Sockets
         private readonly UnixEndPoint _unixEndpoint;
+
         private System.Net.Sockets.Socket _unixClient;
+
+        // Implementation for TCP protocol
+        private TcpClient _tcpClient;
 
         public SocketClient(SocketSettings socketSettings)
         {
