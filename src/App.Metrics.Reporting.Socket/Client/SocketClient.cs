@@ -90,7 +90,7 @@ namespace App.Metrics.Reporting.Socket.Client
             {
                 _unixClient.Dispose();
                 _unixClient = new System.Net.Sockets.Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
-                await Task.Run(() => { _unixClient.Connect(_unixEndpoint); });
+                _unixClient.Connect(_unixEndpoint);
             }
         }
 
@@ -103,7 +103,7 @@ namespace App.Metrics.Reporting.Socket.Client
             if (_tcpClient != null)
             {
                 NetworkStream stream = _tcpClient.GetStream();
-                await Task.Run(() => { return stream.WriteAsync(output, 0, output.Length, cancellationToken); });
+                await stream.WriteAsync(output, 0, output.Length, cancellationToken);
                 return new SocketWriteResult(true);
             }
 
