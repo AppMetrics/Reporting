@@ -1,4 +1,4 @@
-# App Metrics Reporting <img src="https://avatars0.githubusercontent.com/u/29864085?v=4&s=200" alt="App Metrics" width="50px"/> 
+# App Metrics Reporting <img src="https://avatars0.githubusercontent.com/u/29864085?v=4&s=200" alt="App Metrics" width="50px"/>
 [![Official Site](https://img.shields.io/badge/site-appmetrics-blue.svg?style=flat-square)](http://app-metrics.io/getting-started/intro.html) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
 
 ## What is it?
@@ -7,16 +7,17 @@ The repo contains reporting extension packages to [App Metrics](https://github.c
 
 ## Latest Builds, Packages & Repo Stats
 
-|Branch|AppVeyor|Travis|Coverage|
-|------|:--------:|:--------:|:--------:|
-|dev|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/dev.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/dev)|[![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/dev.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/alhardy/AppMetrics.Reporters)|[![Coveralls](https://img.shields.io/coveralls/AppMetrics/Reporting/dev.svg?style=flat-square)](https://coveralls.io/github/AppMetrics/Reporting?branch=dev)
-|master|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/master.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/master)| [![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/master.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/AppMetrics.Reporters)| [![Coveralls](https://img.shields.io/coveralls/AppMetrics/Reporters/master.svg?style=flat-square)](https://coveralls.io/github/AppMetrics/Reporters?branch=master)|
+|Branch|AppVeyor|Travis|
+|------|:--------:|:--------:|
+|dev|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/dev.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/dev)|[![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/dev.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/alhardy/AppMetrics.Reporters)
+|master|[![AppVeyor](https://img.shields.io/appveyor/ci/alhardy/reporting/master.svg?style=flat-square&label=appveyor%20build)](https://ci.appveyor.com/project/alhardy/reporting/branch/master)| [![Travis](https://img.shields.io/travis/alhardy/AppMetrics.Reporters/master.svg?style=flat-square&label=travis%20build)](https://travis-ci.org/AppMetrics.Reporters)||
 
 |Package|Dev Release|Pre-Release|Release|
 |------|:--------:|:--------:|:--------:|
 |App.Metrics.Reporting.Console|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.myget.org/feed/appmetrics/package/nuget/App.Metrics.Reporting.Console)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Console/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Console.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Console/)
 |App.Metrics.Reporting.TextFile|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.TextFile)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.TextFile/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.TextFile.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.TextFile/)
-|App.Metrics.Reporting.Http|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.Http)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)|
+|App.Metrics.Reporting.Http|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.Http)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Http.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Http/)
+|App.Metrics.Reporting.Socket|[![MyGet Status](https://img.shields.io/myget/appmetrics/v/App.Metrics.Reporting.Socket.svg?style=flat-square)](https://www.myget.org/feed/alhardy/package/nuget/App.Metrics.Reporting.Socket)|[![NuGet Status](https://img.shields.io/nuget/vpre/App.Metrics.Reporting.Socket.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Socket/)|[![NuGet Status](https://img.shields.io/nuget/v/App.Metrics.Reporting.Socket.svg?style=flat-square)](https://www.nuget.org/packages/App.Metrics.Reporting.Socket/)|
 
 ## Other Reporters for App Metrics
 
@@ -84,7 +85,7 @@ See the [contribution guidlines](https://github.com/alhardy/AppMetrics/blob/mast
 
 ***Thanks for providing free open source licensing***
 
-* [Jetbrains](https://www.jetbrains.com/dotnet/) 
+* [Jetbrains](https://www.jetbrains.com/dotnet/)
 * [AppVeyor](https://www.appveyor.com/)
 * [Travis CI](https://travis-ci.org/)
 * [Coveralls](https://coveralls.io/)

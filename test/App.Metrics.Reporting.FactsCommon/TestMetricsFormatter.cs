@@ -1,5 +1,5 @@
-﻿// <copyright file="TestMetricsFormatter.cs" company="Allan Hardy">
-// Copyright (c) Allan Hardy. All rights reserved.
+﻿// <copyright file="TestMetricsFormatter.cs" company="App Metrics Contributors">
+// Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System.IO;
@@ -14,6 +14,7 @@ namespace App.Metrics.Reporting.FactsCommon
         public TestMetricsFormatter()
         {
             MediaType = new MetricsMediaTypeValue("test", "test", "v1", "format");
+            MetricFields = new MetricFields();
         }
 
         public Task WriteAsync(Stream output, MetricsDataValueSource metricsData, CancellationToken cancellationToken = default)
@@ -22,5 +23,8 @@ namespace App.Metrics.Reporting.FactsCommon
         }
 
         public MetricsMediaTypeValue MediaType { get; }
+
+        /// <inheritdoc />
+        public MetricFields MetricFields { get; set; }
     }
 }

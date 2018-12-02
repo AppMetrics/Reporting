@@ -1,5 +1,5 @@
-﻿// <copyright file="Startup.cs" company="Allan Hardy">
-// Copyright (c) Allan Hardy. All rights reserved.
+﻿// <copyright file="Startup.cs" company="App Metrics Contributors">
+// Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +27,6 @@ namespace MetricsReceiveSanboxApi
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) { services.AddMvc(); }
+        public void ConfigureServices(IServiceCollection services) { services.AddMvcCore(); }
     }
 }

@@ -1,5 +1,5 @@
-﻿// <copyright file="Startup.cs" company="Allan Hardy">
-// Copyright (c) Allan Hardy. All rights reserved.
+﻿// <copyright file="Startup.cs" company="App Metrics Contributors">
+// Copyright (c) App Metrics Contributors. All rights reserved.
 // </copyright>
 
 using System.IO;
@@ -19,9 +19,7 @@ namespace ReportingSandbox
         public void ConfigureServices(IServiceCollection services)
             // ReSharper restore UnusedMember.Global
         {
-            // TODO: At the moment using the IHostedService implemented in App.Metrics.AspNetCore.Reporting,
-            // similar will be provided when the "Generic Host" is available - https://github.com/aspnet/Hosting/issues/1163
-            services.AddMetricsReportScheduler();
+            services.AddMetricsReportingHostedService();
             services.AddMetrics(Program.Metrics);
         }
 
